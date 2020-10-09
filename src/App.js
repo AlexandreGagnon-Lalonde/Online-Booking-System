@@ -5,12 +5,14 @@ import LogIn from "./components/LogIn/index";
 import HomePage from "./components/HomePage/index";
 import Profile from "./components/Profile/index";
 import WelcomePage from "./components/WelcomePage/index";
+import LoadingSpinner from './components/LoadingSpinner';
 
 function App() {
   return (
     <>
       <Router>
         <Route exact path="/">
+          <LoadingSpinner size={'lg'} />
           <WelcomePage />
         </Route>
         <Route path="/signup">
