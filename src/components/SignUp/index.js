@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import SignUpForm from './SignUpForm';
 
 const SignUp = () => {
   return (
-    <div>Mmmhh a fresh component</div>
+    <SignUpForm />
   )
 }
 

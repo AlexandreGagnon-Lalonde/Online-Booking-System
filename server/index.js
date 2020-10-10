@@ -1,10 +1,12 @@
-'use strict';
+"use strict";
 
-const express = require('express');
-const morgan = require('morgan');
+const express = require("express");
+const morgan = require("morgan");
 const bodyParser = require("body-parser");
 
 const PORT = 1234;
+
+const { createUser } = require("./handlers");
 
 express()
   .use(function (req, res, next) {
@@ -25,6 +27,6 @@ express()
   .use("/", express.static(__dirname + "/"))
 
   // REST endpoints?
-  .get('/', (req,res) => res.send('wazza'))
+  .post("/api/createuser", createUser)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));
