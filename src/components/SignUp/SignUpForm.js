@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const SignUpForm = () => {
-  const [fullName, setFullName] = React.useState("");
+  const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
   const [phone, setPhone] = React.useState("");
   const [DOB, setDOB] = React.useState("");
@@ -30,7 +30,7 @@ const SignUpForm = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            fullName,
+            firstName,
             lastName,
             phone,
             DOB,
@@ -69,7 +69,7 @@ const SignUpForm = () => {
         placeholder="First Name"
         id="first-name"
         name="first-name"
-        onChange={(ev) => setFullName(ev.currentTarget.value)}
+        onChange={(ev) => setFirstName(ev.currentTarget.value)}
         required
       />
       <label for="last-name">Last Name</label>
@@ -105,6 +105,9 @@ const SignUpForm = () => {
         name="gender"
         onChange={(ev) => setGender(ev.currentTarget.value)}
       >
+        <option value="" disabled selected hidden>
+          Select your gender
+        </option>
         <option value="male">Male</option>
         <option value="female">Female</option>
         <option value="idk">I don't know</option>
