@@ -17,10 +17,15 @@ const createUser = async (req, res) => {
     const db = client.db("online-booking-system");
 
     const users = await db.collection("users").find().toArray();
-    console.log(req.body);
-    console.log(users);
 
-    res.status(204), json({ status: 204, success: true });
+    if (users.filter(user => user.email === req.body.email).length === 1) {
+      res.status(404).json({ status: 404, message: 'Email Already in Use'})
+    }
+    
+    const newUser = await db.collection('users').insertOne(req.body)
+    assert(1, newUser.insertedCount)
+
+    res.status(201), json({ status: 201, success: true, data: req.body });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }

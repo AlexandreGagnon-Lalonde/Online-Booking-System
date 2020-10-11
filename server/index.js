@@ -13,7 +13,7 @@ const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 
-const PORT = 1234;
+const PORT = 3000;
 
 const { createUser } = require("./handlers");
 
