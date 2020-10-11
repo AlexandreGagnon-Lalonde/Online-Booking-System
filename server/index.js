@@ -70,11 +70,30 @@ const importAdmin = async (req, res) => {
 
     const users = await db.collection("users").find().toArray();
 
-    if (users) {
+    if (users.length > 0) {
       res.status(404).json({ status: 404, message: "Already existing users" });
     }
 
-    const userAdmin = await db.collection("users").insertOne({ ADMIN });
+    const userAdmin = await db.collection("users").insertOne({
+      firstName: "Alexandre",
+      lastName: "Gagnon-Lalonde",
+      phone: 1234567890,
+      DOB: "01/01/2000",
+      gender: "male",
+      city: "montreal",
+      address: "1234 Wallabee Zoo",
+      zipcode: "B4N4N4",
+      email: "alexandre.gl@hotmail.ca",
+      password: "12341234",
+      admin: true,
+      "Emergency Contact": {
+        relName: '',
+        relation: '',
+        relPhone: '',
+      },
+      Conversations: [],
+      Classes: [],
+    });
     assert.equal(1, userAdmin.insertedCount);
 
     res.status(204).json({ status: 204, message: "Admin Created!" });
