@@ -1,9 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
+import Header from '../Header/index';
+
 const LogIn = () => {
   return (
-    <div>Mmmhh a fresh component</div>
+    <>
+      <Header />
+      <LogInForm />
+    </>
   )
 }
 

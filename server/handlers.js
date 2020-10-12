@@ -32,4 +32,22 @@ const createUser = async (req, res) => {
   client.close();
 };
 
-module.exports = { createUser };
+const getUser = async (req, res) => {
+  const client = await MongoClient(MONGO_URI, options);
+  try {
+    await client.connect();
+
+    const db = client.db('online-booking-system');
+
+    const users = await db.collection('users').findOne({ email: req.body.email }, (err, result) => {
+      result
+      ? res.status(200).json({ status: 200, lang: email, data: result })
+      : res.status(404).json({ status: 404, data: "Not Found" });
+})
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+  client.close();
+}
+
+module.exports = { createUser, getUser };

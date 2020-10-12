@@ -37,6 +37,7 @@ express()
 
   // REST endpoints?
   .post("/api/createuser", createUser)
+  .get("/api/getuser", getUser)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));
 
