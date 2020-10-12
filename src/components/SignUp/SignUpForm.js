@@ -1,6 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
+import { useSelector, useDispatch } from "react-redux";
+import {
+  requestUser,
+  receiveUser,
+  receiveUserError,
+} from '../../reducers/action';
+
 const SignUpForm = () => {
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
@@ -16,12 +23,14 @@ const SignUpForm = () => {
   const [relation, setRelation] = React.useState("");
   const [relPhone, setRelPhone] = React.useState("");
 
+  const dispatch = useDispatch();
+
   return (
     <Form
       onSubmit={(ev) => {
         ev.preventDefault();
 
-        // createUserRequest
+        dispatch(requestUser())
 
         // post request to server and create user on mongo if succesful
         fetch("/api/createuser", {
@@ -52,14 +61,18 @@ const SignUpForm = () => {
         })
           .then((res) => res.json())
           .then((json) => {
+            console.log(json)
             // if succesful redirect to homepage
-            // createUserSuccess
+
+            // dispatch(receiveUser(json.data))
+
             // if unsuccesful alert user to change email
-            // createUserError
+
+            // dispatch(receiveUserError())
           })
           .catch((err) => {
             console.log(err);
-            // createUserError
+            dispatch(receiveUserError())
           });
       }}
     >
