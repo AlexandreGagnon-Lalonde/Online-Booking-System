@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-
+import { Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import {
   requestUser,
@@ -66,7 +66,7 @@ const SignUpForm = () => {
             // if succesful redirect to homepage
 
             // dispatch(receiveUser(json.data))
-
+            return (<Redirect to="/homepage" />)
             // if unsuccesful alert user to change email
 
             // dispatch(receiveUserError())

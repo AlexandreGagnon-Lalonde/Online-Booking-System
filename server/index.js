@@ -37,7 +37,7 @@ express()
 
   // REST endpoints?
   .post("/api/createuser", createUser)
-  .get("/api/getuser", getUser)
+  .get("/api/getuser/:email", getUser)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));
 
@@ -70,7 +70,7 @@ const importAdmin = async (req, res) => {
     const db = client.db("online-booking-system");
 
     const users = await db.collection("users").find().toArray();
-
+    console.log(users.length)
     if (users.length > 0) {
       res.status(404).json({ status: 404, message: "Already existing users" });
     }

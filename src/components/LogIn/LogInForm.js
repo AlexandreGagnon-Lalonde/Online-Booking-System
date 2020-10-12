@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-
+import { Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import {
   requestUser,
@@ -22,24 +22,19 @@ const LogInForm = () => {
         dispatch(requestUser())
 
         // post request to server and create user on mongo if succesful
-        fetch("/api/getuser", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        })
+        fetch(`/api/getuser/${email}`)
           .then((res) => res.json())
+          .then(data => {
+            // put user data in reducer
+            // dispatch(receiveUser(data.user))
+          })
           .then((json) => {
             console.log(json)
-            // if succesful redirect to homepage
+            // if succesful and user password is good redirect to homepage
 
             // dispatch(receiveUser(json.data))
-
-            // if unsuccesful alert user to change email
+            return (<Redirect to="/homepage" />)
+            // if unsuccesful alert user to change email or to verify password
 
             // dispatch(receiveUserError())
           })
