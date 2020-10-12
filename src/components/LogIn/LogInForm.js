@@ -66,8 +66,9 @@ const LogInForm = () => {
         onChange={(ev) => setPassword(ev.currentTarget.value)}
         required
       />
+      <button type="submit">Log In</button>
     </ Form>
-)
+  )
 }
 
 const Form = styled.form`

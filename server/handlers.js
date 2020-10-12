@@ -19,9 +19,9 @@ const createUser = async (req, res) => {
     const users = await db.collection("users").find().toArray();
 
     if (users.filter(user => user.email === req.body.email).length === 1) {
-      res.status(404).json({ status: 404, message: 'Email Already in Use'})
+      res.status(404).json({ status: 404, message: 'Email Already in Use' })
     }
-    
+
     const newUser = await db.collection('users').insertOne(req.body)
     assert(1, newUser.insertedCount)
 
@@ -41,9 +41,9 @@ const getUser = async (req, res) => {
 
     const users = await db.collection('users').findOne({ email: req.body.email }, (err, result) => {
       result
-      ? res.status(200).json({ status: 200, lang: email, data: result })
-      : res.status(404).json({ status: 404, data: "Not Found" });
-})
+        ? res.status(200).json({ status: 200, lang: email, data: result })
+        : res.status(404).json({ status: 404, data: "Not Found" });
+    })
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }

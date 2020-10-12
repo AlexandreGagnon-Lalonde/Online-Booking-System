@@ -15,7 +15,7 @@ const bodyParser = require("body-parser");
 
 const PORT = 3000;
 
-const { createUser } = require("./handlers");
+const { createUser, getUser } = require("./handlers");
 
 express()
   .use(function (req, res, next) {
