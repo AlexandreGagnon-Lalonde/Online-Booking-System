@@ -2,9 +2,14 @@ export const requestUser = () => ({
   type: "REQUEST_USER",
 });
 
-export const receiveUser = (user) => ({
+export const receiveUser = (currentUser) => ({
   type: "RECEIVE_USER",
-  user,
+  currentUser,
+});
+
+export const receiveOtherUser = (otherUser) => ({
+  type: "RECEIVE_OTHER_USER_PROFILE",
+  otherUser,
 });
 
 export const receiveUserError = () => ({

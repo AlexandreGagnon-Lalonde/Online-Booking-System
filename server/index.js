@@ -15,6 +15,8 @@ const bodyParser = require("body-parser");
 
 const PORT = 3000;
 
+const { uuid } = require('uuidv4');
+
 const { createUser, getUser } = require("./handlers");
 
 express()
@@ -42,6 +44,7 @@ express()
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));
 
 const ADMIN = {
+  _id: "alexandre.gl@hotmail.ca".split('').map(char => char.charCodeAt(0).toString(2)).join(''),
   firstName: "Alexandre",
   lastName: "Gagnon-Lalonde",
   phone: 1234567890,
@@ -75,26 +78,7 @@ const importAdmin = async (req, res) => {
       res.status(404).json({ status: 404, message: "Already existing users" });
     }
 
-    const userAdmin = await db.collection("users").insertOne({
-      firstName: "Alexandre",
-      lastName: "Gagnon-Lalonde",
-      phone: 1234567890,
-      DOB: "01/01/2000",
-      gender: "male",
-      city: "montreal",
-      address: "1234 Wallabee Zoo",
-      zipcode: "B4N4N4",
-      email: "alexandre.gl@hotmail.ca",
-      password: "12341234",
-      admin: true,
-      "Emergency Contact": {
-        relName: '',
-        relation: '',
-        relPhone: '',
-      },
-      Conversations: [],
-      Classes: [],
-    });
+    const userAdmin = await db.collection("users").insertOne(ADMIN);
     assert.equal(1, userAdmin.insertedCount);
 
     res.status(204).json({ status: 204, message: "Admin Created!" });

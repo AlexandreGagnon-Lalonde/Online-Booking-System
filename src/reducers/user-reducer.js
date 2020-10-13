@@ -18,6 +18,13 @@ export default function userReducer(state = initialState, action) {
         status: "Idle",
       };
     }
+    case "RECEIVE_OTHER_USER_PROFILE": {
+      return {
+        ...state, 
+        otherUser: action.user,
+        status: 'Idle'
+      }
+    }
     case "RECEIVE_USER_ERROR": {
       return {
         ...state,

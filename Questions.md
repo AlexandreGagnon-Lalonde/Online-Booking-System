@@ -6,3 +6,5 @@ Another app running on same port
 
 Best way to handle password
 
+Package.json scripts
+

@@ -25,7 +25,6 @@ const SignUpForm = () => {
 
   const dispatch = useDispatch();
 
-
   return (
     <Form
       onSubmit={(ev) => {
@@ -40,6 +39,8 @@ const SignUpForm = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            // from string to base64
+            _id: Buffer.from(email).toString('base64'),
             firstName,
             lastName,
             phone,
