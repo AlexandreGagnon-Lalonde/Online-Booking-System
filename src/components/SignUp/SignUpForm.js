@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { Redirect } from 'react-router-dom';
+import { Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   requestUser,
   receiveUser,
   receiveUserError,
-} from '../../reducers/action';
+} from "../../reducers/action";
 
 const SignUpForm = () => {
   const [firstName, setFirstName] = React.useState("");
@@ -30,7 +30,7 @@ const SignUpForm = () => {
       onSubmit={(ev) => {
         ev.preventDefault();
 
-        dispatch(requestUser())
+        dispatch(requestUser());
 
         // post request to server and create user on mongo if succesful
         fetch("/api/createuser", {
@@ -40,7 +40,7 @@ const SignUpForm = () => {
           },
           body: JSON.stringify({
             // from string to base64
-            _id: Buffer.from(email).toString('base64'),
+            _id: Buffer.from(email).toString("base64"),
             firstName,
             lastName,
             phone,
@@ -63,18 +63,18 @@ const SignUpForm = () => {
         })
           .then((res) => res.json())
           .then((json) => {
-            console.log(json)
+            console.log(json);
             // if succesful redirect to homepage
 
             // dispatch(receiveUser(json.data))
-            return (<Redirect to="/homepage" />)
+            return <Redirect to="/homepage" />;
             // if unsuccesful alert user to change email
 
             // dispatch(receiveUserError())
           })
           .catch((err) => {
             console.log(err);
-            dispatch(receiveUserError())
+            dispatch(receiveUserError());
           });
       }}
     >

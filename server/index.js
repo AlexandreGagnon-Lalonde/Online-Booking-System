@@ -15,7 +15,7 @@ const bodyParser = require("body-parser");
 
 const PORT = 3000;
 
-const { uuid } = require('uuidv4');
+const { uuid } = require("uuidv4");
 
 const { createUser, getUser } = require("./handlers");
 
@@ -44,7 +44,7 @@ express()
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));
 
 const ADMIN = {
-  _id: "alexandre.gl@hotmail.ca".split('').map(char => char.charCodeAt(0).toString(2)).join(''),
+  _id: Buffer.from("alexandre.gl@hotmail.ca").toString("base64"),
   firstName: "Alexandre",
   lastName: "Gagnon-Lalonde",
   phone: 1234567890,
@@ -57,9 +57,9 @@ const ADMIN = {
   password: "12341234",
   admin: true,
   "Emergency Contact": {
-    relName: '',
-    relation: '',
-    relPhone: '',
+    relName: "",
+    relation: "",
+    relPhone: "",
   },
   Conversations: [],
   Classes: [],
@@ -73,7 +73,7 @@ const importAdmin = async (req, res) => {
     const db = client.db("online-booking-system");
 
     const users = await db.collection("users").find().toArray();
-    console.log(users.length)
+    console.log(users.length);
     if (users.length > 0) {
       res.status(404).json({ status: 404, message: "Already existing users" });
     }
@@ -83,7 +83,7 @@ const importAdmin = async (req, res) => {
 
     res.status(204).json({ status: 204, message: "Admin Created!" });
   } catch (err) {
-    console.log(err.stack)
+    console.log(err.stack);
     res.status(500).json({ status: 500, message: err.message });
   }
   client.close();
