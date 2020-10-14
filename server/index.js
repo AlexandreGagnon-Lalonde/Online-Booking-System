@@ -13,11 +13,11 @@ const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 
-const PORT = 3000;
+const PORT = 1234;
 
 const { uuid } = require("uuidv4");
 
-const { createUser, getUser } = require("./handlers");
+const { createUser, getUser, updateUser } = require("./handlers");
 
 express()
   .use(function (req, res, next) {
@@ -39,6 +39,7 @@ express()
 
   // REST endpoints?
   .post("/api/createuser", createUser)
+  .post("/api/updateuser/:param/:value", updateUser)
   .get("/api/getuser/:email", getUser)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));
@@ -65,26 +66,19 @@ const ADMIN = {
   Classes: [],
 };
 
-const importAdmin = async (req, res) => {
+const importAdmin = async () => {
   const client = await MongoClient(MONGO_URI, options);
   try {
     await client.connect();
 
     const db = client.db("online-booking-system");
 
-    const users = await db.collection("users").find().toArray();
-    console.log(users.length);
-    if (users.length > 0) {
-      res.status(404).json({ status: 404, message: "Already existing users" });
-    }
-
     const userAdmin = await db.collection("users").insertOne(ADMIN);
     assert.equal(1, userAdmin.insertedCount);
 
-    res.status(204).json({ status: 204, message: "Admin Created!" });
+    console.log('success')
   } catch (err) {
     console.log(err.stack);
-    res.status(500).json({ status: 500, message: err.message });
   }
   client.close();
 };

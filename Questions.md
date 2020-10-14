@@ -4,7 +4,6 @@ How to redirect with javascript if create user is success
 
 Another app running on same port
 
-Best way to handle password
-
 Package.json scripts
 
+Best way to handle password

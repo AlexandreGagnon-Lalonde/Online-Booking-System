@@ -67,7 +67,8 @@ const SignUpForm = () => {
             // if succesful redirect to homepage
 
             // dispatch(receiveUser(json.data))
-            return <Redirect to="/homepage" />;
+            // history.push('/homepage')
+            
             // if unsuccesful alert user to change email
 
             // dispatch(receiveUserError())

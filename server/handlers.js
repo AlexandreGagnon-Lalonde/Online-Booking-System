@@ -52,4 +52,8 @@ const getUser = async (req, res) => {
   client.close();
 }
 
-module.exports = { createUser, getUser };
+const updateUser = async (req, res) => {
+
+}
+
+module.exports = { createUser, getUser, updateUser };
