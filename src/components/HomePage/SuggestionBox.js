@@ -3,7 +3,18 @@ import styled from "styled-components";
 
 const SuggestionBox = () => {
   return (
-    <div>Mmmhh a fresh component</div>
+    <div>
+      <h2>Suggestion</h2>
+      <form onSubmit={(ev) => {
+        ev.preventDefault();
+
+        // tbd
+
+      }}>
+        <textarea></textarea>
+        <button type="submit">Send</button>
+      </form>
+    </div>
   )
 }
 

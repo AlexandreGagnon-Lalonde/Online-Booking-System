@@ -1,9 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
+import Workout from './Workout';
+
 const WorkoutBox = () => {
   return (
-    <div>Mmmhh a fresh component</div>
+    <div>
+      <h2>Workout</h2>
+      <Workout />
+    </div>
   )
 }
 
