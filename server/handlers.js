@@ -25,7 +25,7 @@ const createUser = async (req, res) => {
     const newUser = await db.collection('users').insertOne(req.body)
     assert(1, newUser.insertedCount)
 
-    res.status(201).json({ status: 201, success: true, data: req.body });
+    res.status(201).json({ status: 201, success: true, user: req.body });
   } catch (err) {
     console.log(err)
     res.status(500).json({ status: 500, message: err.message });

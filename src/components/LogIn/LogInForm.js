@@ -1,20 +1,20 @@
 import React from "react";
 import styled from "styled-components";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { SERVER_URL } from '../../constant';
+import { SERVER_URL } from "../../constant";
 import {
   requestUser,
   receiveUser,
   receiveUserError,
-} from '../../reducers/action';
-
-let history = useHistory();
+  logoutUser,
+} from "../../reducers/action";
 
 const LogInForm = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
+  const history = useHistory();
   const dispatch = useDispatch();
 
   return (
@@ -22,36 +22,25 @@ const LogInForm = () => {
       onSubmit={(ev) => {
         ev.preventDefault();
 
-        dispatch(requestUser())
+        dispatch(requestUser());
 
         // post request to server and create user on mongo if succesful
         fetch(SERVER_URL + `/api/getuser/${email}`)
-          .then((res) => {
-            return res.json()
-          })
-          .then(data => {
-            console.log('login', data)
-
-            history.push('/homepage')
-            // put user data in reducer
-            // dispatch(receiveUser(data.user))
-          })
+          .then((res) => res.json())
           .then((data) => {
-            // console.log('login', data)
             // // if succesful and user password is good redirect to homepage
-            // if (data.result.email === email && data.result.password === password) {
-            //   // dispatch(receiveUser(json.data))
-            //   history.push('/homepage')
-
-            // } else {
-            // // if unsuccesful alert user to change email or to verify password
-
-            // // dispatch(receiveUserError())
-            // }
+            if (data.user.email === email && data.user.password === password) {
+              dispatch(receiveUser(data.user));
+              history.push("/homepage");
+            } else {
+              // if unsuccesful alert user to change email or to verify password
+              dispatch(logoutUser());
+              dispatch(receiveUserError());
+            }
           })
           .catch((err) => {
             console.log(err);
-            dispatch(receiveUserError())
+            dispatch(receiveUserError());
           });
       }}
     >
@@ -73,9 +62,9 @@ const LogInForm = () => {
         required
       />
       <button type="submit">Log In</button>
-    </ Form>
-  )
-}
+    </Form>
+  );
+};
 
 const Form = styled.form`
   display: flex;
@@ -83,4 +72,4 @@ const Form = styled.form`
   margin: 50px;
 `;
 
-export default LogInForm
+export default LogInForm;

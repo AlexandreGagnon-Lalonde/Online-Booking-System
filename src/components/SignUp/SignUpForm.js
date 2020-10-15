@@ -10,8 +10,6 @@ import {
   receiveUserError,
 } from "../../reducers/action";
 
-let history = useHistory();
-
 const SignUpForm = () => {
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
@@ -28,6 +26,7 @@ const SignUpForm = () => {
   const [relPhone, setRelPhone] = React.useState("");
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   return (
     <Form
@@ -36,14 +35,12 @@ const SignUpForm = () => {
 
         dispatch(requestUser());
 
-        // post request to server and create user on mongo if succesful
         fetch(SERVER_URL + "/api/createuser", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            // from string to base64
             _id: Buffer.from(email).toString("base64"),
             firstName,
             lastName,
@@ -66,16 +63,13 @@ const SignUpForm = () => {
           }),
         })
           .then((res) => res.json())
-          .then((json) => {
-            console.log(json);
-            // if succesful redirect to homepage
-
-            // dispatch(receiveUser(json.data))
-            // history.push('/homepage')
-            
-            // if unsuccesful alert user to change email
-
-            // dispatch(receiveUserError())
+          .then((data) => {
+            if (data.success) {
+              dispatch(receiveUser(data.user))
+              history.push('/homepage')
+            } else {
+              dispatch(receiveUserError())
+            }
           })
           .catch((err) => {
             console.log(err);
