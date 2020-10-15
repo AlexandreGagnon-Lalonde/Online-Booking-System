@@ -24,16 +24,13 @@ const LogInForm = () => {
 
         dispatch(requestUser());
 
-        // post request to server and create user on mongo if succesful
         fetch(SERVER_URL + `/api/getuser/${email}`)
           .then((res) => res.json())
           .then((data) => {
-            // // if succesful and user password is good redirect to homepage
             if (data.user.email === email && data.user.password === password) {
               dispatch(receiveUser(data.user));
               history.push("/homepage");
             } else {
-              // if unsuccesful alert user to change email or to verify password
               dispatch(logoutUser());
               dispatch(receiveUserError());
             }
