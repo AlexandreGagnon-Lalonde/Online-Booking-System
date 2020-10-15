@@ -1,12 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { createBrowserHistory } from 'history';
+import { SERVER_URL } from '../../constant';
 import {
   requestUser,
   receiveUser,
   receiveUserError,
 } from "../../reducers/action";
+
+let history = useHistory();
 
 const SignUpForm = () => {
   const [firstName, setFirstName] = React.useState("");
@@ -33,7 +37,7 @@ const SignUpForm = () => {
         dispatch(requestUser());
 
         // post request to server and create user on mongo if succesful
-        fetch("/api/createuser", {
+        fetch(SERVER_URL + "/api/createuser", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -79,7 +83,7 @@ const SignUpForm = () => {
           });
       }}
     >
-      <label for="first-name">First Name</label>
+      <label htmlFor="first-name">First Name</label>
       <input
         type="text"
         placeholder="First Name"
@@ -88,7 +92,7 @@ const SignUpForm = () => {
         onChange={(ev) => setFirstName(ev.currentTarget.value)}
         required
       />
-      <label for="last-name">Last Name</label>
+      <label htmlFor="last-name">Last Name</label>
       <input
         type="text"
         placeholder="Last Name"
@@ -97,7 +101,7 @@ const SignUpForm = () => {
         onChange={(ev) => setLastName(ev.currentTarget.value)}
         required
       />
-      <label for="phone">Phone Number</label>
+      <label htmlFor="phone">Phone Number</label>
       <input
         type="tel"
         id="phone"
@@ -107,7 +111,7 @@ const SignUpForm = () => {
         onChange={(ev) => setPhone(ev.currentTarget.value)}
         required
       />
-      <label for="dob">Date Of Birth</label>
+      <label htmlFor="dob">Date Of Birth</label>
       <input
         type="date"
         id="dob"
@@ -115,7 +119,7 @@ const SignUpForm = () => {
         onChange={(ev) => setDOB(ev.currentTarget.value)}
         required
       />
-      <label for="gender">Gender</label>
+      <label htmlFor="gender">Gender</label>
       <select
         id="gender"
         name="gender"
@@ -128,7 +132,7 @@ const SignUpForm = () => {
         <option value="female">Female</option>
         <option value="idk">I don't know</option>
       </select>
-      <label for="city">City</label>
+      <label htmlFor="city">City</label>
       <input
         type="text"
         placeholder="City"
@@ -137,7 +141,7 @@ const SignUpForm = () => {
         onChange={(ev) => setCity(ev.currentTarget.value)}
         required
       />
-      <label for="address">Address</label>
+      <label htmlFor="address">Address</label>
       <input
         type="text"
         placeholder="Address"
@@ -146,7 +150,7 @@ const SignUpForm = () => {
         onChange={(ev) => setAddress(ev.currentTarget.value)}
         required
       />
-      <label for="zipcode">Zip Code</label>
+      <label htmlFor="zipcode">Zip Code</label>
       <input
         type="text"
         placeholder="Zip Code"
@@ -155,7 +159,7 @@ const SignUpForm = () => {
         onChange={(ev) => setZipcode(ev.currentTarget.value)}
         required
       />
-      <label for="email">Email</label>
+      <label htmlFor="email">Email</label>
       <input
         type="text"
         placeholder="Email"
@@ -164,7 +168,7 @@ const SignUpForm = () => {
         onChange={(ev) => setEmail(ev.currentTarget.value)}
         required
       />
-      <label for="password">Password</label>
+      <label htmlFor="password">Password</label>
       <input
         type="password"
         id="password"
@@ -175,7 +179,7 @@ const SignUpForm = () => {
       <label>Confirm Password</label>
       <input type="password" required />
       {/* Emergency Contact */}
-      <label for="relation-name">Name</label>
+      <label htmlFor="relation-name">Name</label>
       <input
         type="text"
         placeholder="Name"
@@ -183,7 +187,7 @@ const SignUpForm = () => {
         name="relation-name"
         onChange={(ev) => setRelName(ev.currentTarget.value)}
       />
-      <label for="relation">Relation</label>
+      <label htmlFor="relation">Relation</label>
       <select
         id="relation"
         name="relation"
@@ -201,7 +205,7 @@ const SignUpForm = () => {
         <option value="friend">Friend</option>
         <option value="significantOther">Significant Other</option>
       </select>
-      <label for="relation-number">Phone Number</label>
+      <label htmlFor="relation-number">Phone Number</label>
       <input
         type="tel"
         id="relation-number"

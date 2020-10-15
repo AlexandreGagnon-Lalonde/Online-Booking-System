@@ -1,12 +1,15 @@
 import React from "react";
 import styled from "styled-components";
-import { Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
+import { SERVER_URL } from '../../constant';
 import {
   requestUser,
   receiveUser,
   receiveUserError,
 } from '../../reducers/action';
+
+let history = useHistory();
 
 const LogInForm = () => {
   const [email, setEmail] = React.useState("");
@@ -22,21 +25,29 @@ const LogInForm = () => {
         dispatch(requestUser())
 
         // post request to server and create user on mongo if succesful
-        fetch(`/api/getuser/${email}`)
-          .then((res) => res.json())
+        fetch(SERVER_URL + `/api/getuser/${email}`)
+          .then((res) => {
+            return res.json()
+          })
           .then(data => {
+            console.log('login', data)
+
+            history.push('/homepage')
             // put user data in reducer
             // dispatch(receiveUser(data.user))
           })
-          .then((json) => {
-            console.log(json)
-            // if succesful and user password is good redirect to homepage
+          .then((data) => {
+            // console.log('login', data)
+            // // if succesful and user password is good redirect to homepage
+            // if (data.result.email === email && data.result.password === password) {
+            //   // dispatch(receiveUser(json.data))
+            //   history.push('/homepage')
 
-            // dispatch(receiveUser(json.data))
-            return (<Redirect to="/homepage" />)
-            // if unsuccesful alert user to change email or to verify password
+            // } else {
+            // // if unsuccesful alert user to change email or to verify password
 
-            // dispatch(receiveUserError())
+            // // dispatch(receiveUserError())
+            // }
           })
           .catch((err) => {
             console.log(err);

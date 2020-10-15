@@ -15,14 +15,14 @@ export default function userReducer(state = initialState, action) {
       return {
         ...state,
         user: action.user,
-        status: "Idle",
+        status: "Logged In",
       };
     }
     case "RECEIVE_OTHER_USER_PROFILE": {
       return {
         ...state, 
         otherUser: action.user,
-        status: 'Idle'
+        status: 'Logged In'
       }
     }
     case "RECEIVE_USER_ERROR": {
@@ -30,6 +30,13 @@ export default function userReducer(state = initialState, action) {
         ...state,
         status: "Error",
       };
+    }
+    case "LOGOUT": {
+      return {
+        ...state,
+        status: "idle",
+        user: null,
+      }
     }
     default: {
       return state;

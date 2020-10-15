@@ -12,10 +12,9 @@ const assert = require("assert");
 const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 const PORT = 1234;
-
-const { uuid } = require("uuidv4");
 
 const { createUser, getUser, updateUser } = require("./handlers");
 
@@ -34,13 +33,14 @@ express()
   .use(morgan("tiny"))
   .use(express.static("./server/assets"))
   .use(bodyParser.json())
+  .use(cors())
   .use(express.urlencoded({ extended: false }))
   .use("/", express.static(__dirname + "/"))
 
   // REST endpoints?
+  .get("/api/getuser/:email", getUser)
   .post("/api/createuser", createUser)
   .post("/api/updateuser/:param/:value", updateUser)
-  .get("/api/getuser/:email", getUser)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));
 
@@ -76,11 +76,11 @@ const importAdmin = async () => {
     const userAdmin = await db.collection("users").insertOne(ADMIN);
     assert.equal(1, userAdmin.insertedCount);
 
-    console.log('success')
+    console.log("success");
   } catch (err) {
     console.log(err.stack);
   }
   client.close();
 };
 
-importAdmin();
+// importAdmin();
