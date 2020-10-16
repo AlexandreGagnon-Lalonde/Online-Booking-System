@@ -1,5 +1,6 @@
 const initialState = {
   user: null,
+  otherUser: null,
   status: "idle",
 };
 
@@ -36,6 +37,7 @@ export default function userReducer(state = initialState, action) {
         ...state,
         status: "idle",
         user: null,
+        otherUser: null,
       }
     }
     default: {

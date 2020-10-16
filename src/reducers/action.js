@@ -32,3 +32,24 @@ export const receiveCalendar = (calendar) => ({
 export const receiveCalendarError = () => ({
   type: "RECEIVE_CALENDAR_ERROR",
 });
+
+export const requestMessage = () => ({
+  type: "REQUEST_MESSAGE"
+})
+
+export const sendMessage = () => ({
+  type: "SEND_MESSAGE"
+})
+
+export const messageError = () => ({
+  type: "MESSAGE_ERROR"
+})
+
+export const receiveMessages = (messages) => ({
+  type: "RECEIVE_MESSAGES",
+  messages,
+})
+
+export const deleteMessages = () => ({
+  type: "DELETE_MESSAGES"
+})

@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 
 const Calendar = () => {
-  const user = useSelector((state) => state.user)
+  const user = useSelector((state) => state.user.user)
       console.log(user)
 
   return (
