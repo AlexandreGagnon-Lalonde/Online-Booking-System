@@ -1,5 +1,6 @@
 const classes = {
   "01/01": {
+    workout: '',
     comments: [
       {
         author: "",
@@ -13,17 +14,14 @@ const classes = {
     ],
     "6:00": {
       members: [],
-      workout: "",
-      coach: "",
     },
     "7:00": {
       members: [],
-      workout: "",
-      coach: "",
     },
     // etc
   },
   "02/01": {
+    workout: '',
     comments: [
       {
         author: "",
@@ -37,13 +35,9 @@ const classes = {
     ],
     "6:00": {
       members: [],
-      workout: "",
-      coach: "",
     },
     "7:00": {
       members: [],
-      workout: "",
-      coach: "",
     },
     // etc
   },
