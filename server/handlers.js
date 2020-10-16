@@ -76,49 +76,49 @@ const updateUser = async (req, res) => {
     assert.equal(1, user.matchedCount);
     assert.equal(1, user.modifiedCount);
 
-    res
-      .status(200)
-      .json({
-        status: 200,
-        _id: userId,
-        message: `${field} property updated to ${updatedField}`,
-      });
+    res.status(200).json({
+      status: 200,
+      _id: userId,
+      message: updatedField,
+    });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }
   client.close();
 };
 
-const sendMessage = async (req, res) => {
+const createMessage = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
+
+  // const { _id, userId, message, date } = req.body;
   try {
     await client.connect();
 
     const db = client.db("online-booking-system");
-  } catch (err) {
-    res.status(500).json({ status: 500, message: err.message });
-  }
-  client.close();
-};
 
-const bookClass = async (req, res) => {
-  const client = await MongoClient(MONGO_URI, options);
-  try {
-    await client.connect();
+    const user = await db.collection("users").findOne({ _id: _id });
 
-    const db = client.db("online-booking-system");
-  } catch (err) {
-    res.status(500).json({ status: 500, message: err.message });
-  }
-  client.close();
-};
+    const query = { _id: userId };
 
-const unbookClass = async (req, res) => {
-  const client = await MongoClient(MONGO_URI, options);
-  try {
-    await client.connect();
+    const newMessage = {
+      $set: {
+        Conversations: user.Conversations.push({
+          from: _id,
+          to: userId,
+          message: message,
+          date: date,
+          status: "sent",
+        }),
+      },
+    };
 
-    const db = client.db("online-booking-system");
+    const messageCreated = await db
+      .collection("users")
+      .updateOne(query, newMessage);
+    assert.equal(1, messageCreated.matchedCount);
+    assert.equal(1, messageCreated.modifiedCount);
+
+    res.status(200).json({ status: 200, success: true, message: message });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }
@@ -149,4 +149,24 @@ const updateMessage = async (req, res) => {
   client.close();
 };
 
-module.exports = { createUser, getUser, updateUser, sendMessage, bookClass, unbookClass, updateMessage, deleteMessage };
+const updateClass = async (req, res) => {
+  const client = await MongoClient(MONGO_URI, options);
+  try {
+    await client.connect();
+
+    const db = client.db("online-booking-system");
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+  client.close();
+};
+
+module.exports = {
+  createUser,
+  getUser,
+  updateUser,
+  createMessage,
+  updateClass,
+  updateMessage,
+  deleteMessage,
+};
