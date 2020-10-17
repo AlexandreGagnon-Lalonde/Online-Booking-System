@@ -1,5 +1,6 @@
-const classes = {
-  "01/01": {
+const classes = [
+  {
+    date: "01/01",
     workout: "",
     comments: [
       {
@@ -20,7 +21,8 @@ const classes = {
     },
     // etc
   },
-  "02/01": {
+  {
+    date: "02/01",
     workout: "",
     comments: [
       {
@@ -42,7 +44,7 @@ const classes = {
     // etc
   },
   // etc
-};
+];
 
 const user = {
   info: "info",

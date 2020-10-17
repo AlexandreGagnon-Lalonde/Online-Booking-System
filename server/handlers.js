@@ -162,22 +162,24 @@ const deleteMessage = async (req, res) => {
     const currentUserQuery = { _id: _id };
     const otherUserQuery = { _id: userId };
 
-    const currentUserNewConversations = currentUser.Conversations.map(message => {
-      if (message._id === messageId) {
-        return {
-          _id: messageId,
-          from: message.from,
-          to: message.to,
-          message: messageContent,
-          date: message.date,
-          status: 'edited',
+    const currentUserNewConversations = currentUser.Conversations.map(
+      (message) => {
+        if (message._id === messageId) {
+          return {
+            _id: messageId,
+            from: message.from,
+            to: message.to,
+            message: messageContent,
+            date: message.date,
+            status: "edited",
+          };
+        } else {
+          return message;
         }
-      } else {
-        return message
       }
-    })
+    );
 
-    const otherUserNewConversations = otherUser.Conversations.map(message => {
+    const otherUserNewConversations = otherUser.Conversations.map((message) => {
       if (message._id === messageId) {
         return {
           _id: messageId,
@@ -185,12 +187,12 @@ const deleteMessage = async (req, res) => {
           to: message.to,
           message: messageContent,
           date: message.date,
-          status: 'edited',
-        }
+          status: "edited",
+        };
       } else {
-        return message
+        return message;
       }
-    })
+    });
 
     const currentUserNewMessage = {
       $set: {
@@ -229,42 +231,44 @@ const updateMessage = async (req, res) => {
     await client.connect();
 
     const db = client.db("online-booking-system");
-    
+
     const currentUser = await db.collection("users").findOne({ _id: _id });
     const otherUser = await db.collection("users").findOne({ _id: userId });
 
     const currentUserQuery = { _id: _id };
     const otherUserQuery = { _id: userId };
 
-    const currentUserNewConversations = currentUser.Conversations.map(message => {
-      if (message._id === messageId) {
-        return {
-          _id: messageId,
-          from: message.from,
-          to: message.to,
-          message: '',
-          date: message.date,
-          status: 'deleted',
+    const currentUserNewConversations = currentUser.Conversations.map(
+      (message) => {
+        if (message._id === messageId) {
+          return {
+            _id: messageId,
+            from: message.from,
+            to: message.to,
+            message: "",
+            date: message.date,
+            status: "deleted",
+          };
+        } else {
+          return message;
         }
-      } else {
-        return message
       }
-    })
+    );
 
-    const otherUserNewConversations = otherUser.Conversations.map(message => {
+    const otherUserNewConversations = otherUser.Conversations.map((message) => {
       if (message._id === messageId) {
         return {
           _id: messageId,
           from: message.from,
           to: message.to,
-          message: '',
+          message: "",
           date: message.date,
-          status: 'deleted',
-        }
+          status: "deleted",
+        };
       } else {
-        return message
+        return message;
       }
-    })
+    });
 
     const currentUserNewMessage = {
       $set: {
@@ -309,6 +313,29 @@ const updateClass = async (req, res) => {
   client.close();
 };
 
+const getWorkouts = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+
+  try {
+    await client.connect();
+
+    const db = client.db("online-booking-system");
+
+    const classes = await db.collection("classes").find().toArray();
+
+    const workouts = classes.map((classe) => {
+      return classe.workout;
+    });
+
+    workouts.length > 0
+      ? res.status(200).json({ status: 200, workouts: workouts })
+      : res.status(404).json({ status: 404, message: "No workouts" });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+  client.close();
+};
+
 module.exports = {
   createUser,
   getUser,
@@ -317,4 +344,5 @@ module.exports = {
   updateClass,
   updateMessage,
   deleteMessage,
+  getWorkouts,
 };

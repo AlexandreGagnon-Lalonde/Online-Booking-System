@@ -44,6 +44,7 @@ const SignUpForm = () => {
             _id: Buffer.from(email).toString("base64"),
             firstName,
             lastName,
+            avatar: '',
             phone,
             DOB,
             gender,

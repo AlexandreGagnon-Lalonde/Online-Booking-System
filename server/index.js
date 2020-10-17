@@ -16,7 +16,7 @@ const cors = require("cors");
 
 const PORT = 1234;
 
-const { createUser, getUser, updateUser } = require("./handlers");
+const { createUser, getUser, updateUser, getWorkouts } = require("./handlers");
 
 express()
   .use(function (req, res, next) {
@@ -39,6 +39,7 @@ express()
 
   // REST endpoints?
   .get("/api/getuser/:email", getUser)
+  .get('/api/allworkouts', getWorkouts)
   .post("/api/createuser", createUser)
   .post("/api/updateuser/:param/:value", updateUser)
 
@@ -48,6 +49,7 @@ const ADMIN = {
   _id: Buffer.from("alexandre.gl@hotmail.ca").toString("base64"),
   firstName: "Alexandre",
   lastName: "Gagnon-Lalonde",
+  avatar: '',
   phone: 1234567890,
   DOB: "01/01/2000",
   gender: "male",
