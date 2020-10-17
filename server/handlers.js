@@ -229,6 +229,68 @@ const updateMessage = async (req, res) => {
     await client.connect();
 
     const db = client.db("online-booking-system");
+    
+    const currentUser = await db.collection("users").findOne({ _id: _id });
+    const otherUser = await db.collection("users").findOne({ _id: userId });
+
+    const currentUserQuery = { _id: _id };
+    const otherUserQuery = { _id: userId };
+
+    const currentUserNewConversations = currentUser.Conversations.map(message => {
+      if (message._id === messageId) {
+        return {
+          _id: messageId,
+          from: message.from,
+          to: message.to,
+          message: '',
+          date: message.date,
+          status: 'deleted',
+        }
+      } else {
+        return message
+      }
+    })
+
+    const otherUserNewConversations = otherUser.Conversations.map(message => {
+      if (message._id === messageId) {
+        return {
+          _id: messageId,
+          from: message.from,
+          to: message.to,
+          message: '',
+          date: message.date,
+          status: 'deleted',
+        }
+      } else {
+        return message
+      }
+    })
+
+    const currentUserNewMessage = {
+      $set: {
+        Conversations: currentUserNewConversations,
+      },
+    };
+
+    const otherUserNewMessage = {
+      $set: {
+        Conversations: otherUserNewConversations,
+      },
+    };
+
+    const currentUserMessageCreated = await db
+      .collection("users")
+      .updateOne(currentUserQuery, currentUserNewMessage);
+    assert.equal(1, currentUserMessageCreated.matchedCount);
+    assert.equal(1, currentUserMessageCreated.modifiedCount);
+
+    const otherUserMessageCreated = await db
+      .collection("users")
+      .updateOne(otherUserQuery, otherUserNewMessage);
+    assert.equal(1, otherUserMessageCreated.matchedCount);
+    assert.equal(1, otherUserMessageCreated.modifiedCount);
+
+    res.status(200).json({ status: 200, success: true, message: newMessage });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }
