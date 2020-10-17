@@ -92,5 +92,10 @@ const user = {
       workout: "",
       otherMembersId: [],
     },
+    {
+      date: "",
+      workout: "",
+      otherMembersId: [],
+    },
   ],
 };

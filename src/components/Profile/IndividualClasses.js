@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-const IndividualClasses = () => {
+const IndividualClasses = (classe) => {
   return (
     <div>
-      <p>date</p>
-      <p>wod</p>
+      <p>{classe.date}</p>
+      <p>{classe.workout}</p>
     </div>
   )
 }
