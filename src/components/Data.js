@@ -1,6 +1,6 @@
 const classes = [
   {
-    date: "01/01",
+    _id: "date",
     workout: "",
     comments: [
       {
@@ -22,7 +22,7 @@ const classes = [
     // etc
   },
   {
-    date: "02/01",
+    _id: "date",
     workout: "",
     comments: [
       {

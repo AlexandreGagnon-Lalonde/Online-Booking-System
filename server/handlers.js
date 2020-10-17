@@ -147,7 +147,7 @@ const createMessage = async (req, res) => {
   client.close();
 };
 
-const deleteMessage = async (req, res) => {
+const updateMessage = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
 
   // const { messageContent, messageId, _id, userId } = req.body;
@@ -225,8 +225,9 @@ const deleteMessage = async (req, res) => {
   client.close();
 };
 
-const updateMessage = async (req, res) => {
+const deleteMessage = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
+
   try {
     await client.connect();
 
@@ -336,6 +337,30 @@ const getWorkouts = async (req, res) => {
   client.close();
 };
 
+const getOneWorkout = async (req ,res) => {
+  const client = new MongoClient(MONGO_URI, options);
+
+  // const { workoutId } = req.body;
+  try {
+    await client.connect();
+
+    const db = client.db('online-booking-system');
+
+    const classes = await db.collection("classes").find().toArray();
+
+    const workout = classes.map((classe) => {
+      return classe._id === workoutId;
+    });
+
+    workouts.length > 0
+      ? res.status(200).json({ status: 200, workout: workout })
+      : res.status(404).json({ status: 404, message: "No workouts" });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+  client.close();
+}
+
 module.exports = {
   createUser,
   getUser,
@@ -345,4 +370,5 @@ module.exports = {
   updateMessage,
   deleteMessage,
   getWorkouts,
+  getOneWorkout,
 };
