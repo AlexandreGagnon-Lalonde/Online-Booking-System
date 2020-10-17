@@ -1,10 +1,26 @@
 import React from "react";
 import styled from "styled-components";
+import { useSelector, useDispatch } from "react-redux";
+
+import IndividualConversation from "./IndiviudalConversation";
 
 const ProfileMessages = () => {
-  return (
-    <div>Mmmhh a fresh message</div>
-  )
-}
+  const userState = useSelector((state) => state.user.user);
+  const otherUserState = useSelector((state) => state.user.otherUser);
 
-export default ProfileMessages
+  return (
+    <div>
+      {userState.Conversations.length > 0
+        ? userState.Conversations.map((conversationObject) => {
+            return (
+              <IndividualConversation
+                conversation={conversationObject.messages}
+              />
+            );
+          })
+        : <p>No Conversations</p>}
+    </div>
+  );
+};
+
+export default ProfileMessages;

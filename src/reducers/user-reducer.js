@@ -35,9 +35,9 @@ export default function userReducer(state = initialState, action) {
     case "LOGOUT": {
       return {
         ...state,
-        status: "idle",
         user: null,
         otherUser: null,
+        status: "idle",
       }
     }
     default: {

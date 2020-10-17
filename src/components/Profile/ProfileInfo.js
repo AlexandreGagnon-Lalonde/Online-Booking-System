@@ -9,11 +9,11 @@ const ProfileInfo = () => {
 
   return (
     <StyledDiv>
-      <p>{userState.firstName + ' ' + userState.lastName}</p>
-      <p>{userState.phone}</p>
-      <p>{userState.DOB}</p>
-      <p>{userState.address + ' ' + userState.city}</p>
-      <p>{userState.gender}</p>
+      <p>Name: {userState.firstName + ' ' + userState.lastName}</p>
+      <p>Phone number: {userState.phone}</p>
+      <p>Date of Birth: {userState.DOB}</p>
+      <p>Address: {userState.address + ' ' + userState.city}</p>
+      <p>Gender: {userState.gender}</p>
     </StyledDiv>
   )
 }
@@ -21,6 +21,7 @@ const ProfileInfo = () => {
 const StyledDiv = styled.div`
   border: 1px solid black;
   padding 10px;
+  margin: 0 50px;
 `
 
 export default ProfileInfo
