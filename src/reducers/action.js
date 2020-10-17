@@ -53,3 +53,20 @@ export const receiveMessages = (messages) => ({
 export const deleteMessages = () => ({
   type: "DELETE_MESSAGES"
 })
+
+export const sendSuggestion = () => ({
+  type: "REQUEST_SUGGESTION",
+});
+
+export const suggestionSent = (suggestion) => ({
+  type: "SEND_SUGGESTION",
+  suggestion,
+});
+
+export const receiveSuggestion = () => ({
+  type: "SUGGESTION_SENT",
+});
+
+export const receiveSuggestionError = () => ({
+  type: "RECEIVE_SUGGESTION_ERROR",
+});

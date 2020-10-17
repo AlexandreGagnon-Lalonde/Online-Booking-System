@@ -21,13 +21,12 @@ const createUser = async (req, res) => {
     if (users.filter((user) => user.email === req.body.email).length === 1) {
       res.status(404).json({ status: 404, message: "Email Already in Use" });
     }
-    console.log("createuser 24");
+
     const newUser = await db.collection("users").insertOne(req.body);
     assert(1, newUser.insertedCount);
 
     res.status(201).json({ status: 201, success: true, user: req.body });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ status: 500, message: err.message });
   }
   client.close();
@@ -361,6 +360,43 @@ const getOneWorkout = async (req ,res) => {
   client.close();
 }
 
+const createSuggestion = async (req, res) => {
+  const client = await MongoClient(MONGO_URI, options);
+
+  try {
+    await client.connect();
+
+    const db = client.db('online-booking-system');
+
+    const newSuggestion = await db.collection('suggestions').insertOne(req.body);
+    assert.equal(1, newSuggestion.insertedCount);
+
+    res.status(201).json({ status: 201, success: true, suggestion: req.body });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+  client.close();
+}
+
+const deleteSuggestion = async (req, res) => {
+  const client = await MongoClient(MONGO_URI, options);
+
+  const { _id } = req.body;
+  try {
+    await client.connect();
+
+    const db = client.db('online-booking-system');
+
+    const deletedSuggestion = await db.collection('suggestions').deleteOne({ _id });
+    assert.equal(1, deletedSuggestion.deletedCount);
+
+    res.status(201).json({ status: 201, success: true, suggestion: req.body });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+  client.close();
+}
+
 module.exports = {
   createUser,
   getUser,
@@ -371,4 +407,6 @@ module.exports = {
   deleteMessage,
   getWorkouts,
   getOneWorkout,
+  createSuggestion,
+  deleteSuggestion,
 };

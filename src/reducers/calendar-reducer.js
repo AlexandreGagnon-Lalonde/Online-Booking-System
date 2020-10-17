@@ -1,9 +1,9 @@
 const initialState = {
-  currentArtist: null,
+  calendar: null,
   status: "idle",
 };
 
-export default function artistsReducer(state = initialState, action) {
+export default function calendarReducer(state = initialState, action) {
   switch (action.type) {
     case "REQUEST_CALENDAR": {
       return {

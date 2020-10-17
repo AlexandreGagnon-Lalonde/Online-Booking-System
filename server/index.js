@@ -16,7 +16,7 @@ const cors = require("cors");
 
 const PORT = 1234;
 
-const { createUser, getUser, updateUser, getWorkouts } = require("./handlers");
+const { createUser, getUser, updateUser, getWorkouts, getOneWorkout, deleteSuggestion, createSuggestion } = require("./handlers");
 
 express()
   .use(function (req, res, next) {
@@ -40,8 +40,14 @@ express()
   // REST endpoints?
   .get("/api/getuser/:email", getUser)
   .get('/api/allworkouts', getWorkouts)
+  .get('/api/workout/:id', getOneWorkout)
+  
   .post("/api/createuser", createUser)
-  .post("/api/updateuser/:param/:value", updateUser)
+  .post('/api/suggestion/create', createSuggestion)
+
+  .patch("/api/updateuser/:param/:value", updateUser)
+  
+  .delete('/api/suggestion/delete/:id', deleteSuggestion)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));
 

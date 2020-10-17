@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 const SuggestionBox = () => {
+  const [suggestion, setSuggestion] = React.useState("");
+
   return (
     <div>
       <h2>Suggestion</h2>

@@ -101,3 +101,19 @@ const user = {
     },
   ],
 };
+
+const suggestions = [
+  {
+    _id: 'date',
+    from: 'anonymous or user email',
+    suggestion: 'suggestion',
+  },
+  {
+    _id: 'date',
+    from: 'anonymous or user email',
+    suggestion: 'suggestion',
+  },
+  // etc
+]
+
+// localstorage react calendar
