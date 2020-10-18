@@ -4,8 +4,9 @@ import { useSelector, useDispatch } from "react-redux";
 
 
 const Calendar = () => {
-  const user = useSelector((state) => state.user.user)
-      console.log(user)
+  const currentUser = useSelector((state) => state.user.user)
+
+// Exclude times, filter times, include times, 
 
   return (
     <div>Mmmhh a fresh calendar</div>

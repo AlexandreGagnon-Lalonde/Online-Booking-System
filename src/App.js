@@ -46,6 +46,7 @@ function App() {
         .then((data) => {
           dispatch(receiveUser(data.user));
           localStorage.setItem("currentUserId", data.user._id);
+          history.push('/homepage')
         })
         .catch((err) => {
           console.log(err);
@@ -56,7 +57,7 @@ function App() {
 
   return (
     <>
-      {userState.user ? (
+      {userState.user || !localStorage.getItem('currentUserId') ? (
         <>
           <Route exact path="/">
             <WelcomePage />
