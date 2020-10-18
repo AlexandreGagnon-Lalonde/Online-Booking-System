@@ -29,6 +29,7 @@ const LogInForm = () => {
           .then((data) => {
             if (data.user.email === email && data.user.password === password) {
               dispatch(receiveUser(data.user));
+              localStorage.setItem('currentUserId', data.user._id)
               history.push("/homepage");
             } else {
               dispatch(logoutUser());

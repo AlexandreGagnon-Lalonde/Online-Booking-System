@@ -18,6 +18,7 @@ const LoggedInHeader = () => {
       <Link to={`/profile/${userState.user._id}`}>{userState.user.firstName}</Link>
       <button onClick={() => {
         dispatch(logoutUser())
+        localStorage.clear()
         history.push('/')
       }}>Log out</button>
     </>

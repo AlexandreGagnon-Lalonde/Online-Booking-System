@@ -67,6 +67,7 @@ const SignUpForm = () => {
           .then((data) => {
             if (data.success) {
               dispatch(receiveUser(data.user))
+              localStorage.setItem('currentUserId', data.user._id)
               history.push('/homepage')
             } else {
               dispatch(receiveUserError())

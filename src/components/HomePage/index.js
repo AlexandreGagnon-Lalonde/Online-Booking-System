@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 import Header from '../Header/index';
 import Calendar from './Calendar';

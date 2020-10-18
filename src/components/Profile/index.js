@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../../reducers/action";
+import { useHistory } from "react-router-dom";
 
 import LoggedInHeader from "../Header/LoggedInHeader";
 import ProfileInfo from './ProfileInfo';
@@ -10,7 +11,13 @@ import ProfileClasses from './ProfileClasses';
 
 const Profile = () => {
   const userState = useSelector((state) => state.user.user);
-  const otherUserState = useSelector((state) => state.user.otherUser)
+  const otherUserState = useSelector((state) => state.user.otherUser);
+
+  const history = useHistory();
+
+  if (!localStorage.getItem('currentUserId')) {
+    history.push('/')
+  }
 
   // gets me the _id of user from url
   // console.log(window.location.href.split("/").pop());
