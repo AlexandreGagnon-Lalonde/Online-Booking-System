@@ -53,6 +53,7 @@ const user = {
       otherUser: "otherUserId",
       messages: [
         {
+          _id: 'data',
           from: "",
           to: "",
           date: "date",
@@ -60,6 +61,7 @@ const user = {
           status: "",
         },
         {
+          _id: 'data',
           from: "",
           to: "",
           date: "date",
@@ -72,6 +74,7 @@ const user = {
       otherUser: "otherUserId",
       messages: [
         {
+          _id: 'data',
           from: "",
           to: "",
           date: "date",
@@ -79,6 +82,7 @@ const user = {
           status: "",
         },
         {
+          _id: 'data',
           from: "",
           to: "",
           date: "date",

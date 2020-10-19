@@ -155,10 +155,10 @@ const updateMessage = async (req, res) => {
 
     const db = client.db("online-booking-system");
 
-    const currentUser = await db.collection("users").findOne({ _id: _id });
+    const currentUser = await db.collection("users").findOne({ _id });
     const otherUser = await db.collection("users").findOne({ _id: userId });
 
-    const currentUserQuery = { _id: _id };
+    const currentUserQuery = { _id };
     const otherUserQuery = { _id: userId };
 
     const currentUserNewConversations = currentUser.Conversations.map(
@@ -397,6 +397,41 @@ const deleteSuggestion = async (req, res) => {
   client.close();
 }
 
+const postComment = async (req ,res) => {
+  const client = await MongoClient(MONGO_URI, options);
+
+  // const { userId, commentId, comment, author } = req.body;
+  try {
+    await client.connect();
+
+    const db = client.db("online-booking-system");
+
+    const user = await db.collection('classes').findOne({ userId });
+
+    const query = { userId };
+
+    const newValue = {
+      $set: {
+        comments: user.comments.push({ _id: commentId, author, comment }),
+      },
+    };
+
+    const userNewComment = await db.collection("users").updateOne(query, newValue);
+    assert.equal(1, userNewComment.matchedCount);
+    assert.equal(1, userNewComment.modifiedCount);
+
+    res.status(200).json({
+      status: 200,
+      userId,
+      userNewComment,
+    });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+  client.close();
+}
+
+
 module.exports = {
   createUser,
   getUser,
@@ -409,4 +444,5 @@ module.exports = {
   getOneWorkout,
   createSuggestion,
   deleteSuggestion,
+  postComment
 };
