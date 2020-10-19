@@ -400,30 +400,30 @@ const deleteSuggestion = async (req, res) => {
 const postComment = async (req ,res) => {
   const client = await MongoClient(MONGO_URI, options);
 
-  // const { userId, commentId, comment, author } = req.body;
+  // const { dayId, commentId, comment, author } = req.body;
   try {
     await client.connect();
 
     const db = client.db("online-booking-system");
 
-    const user = await db.collection('classes').findOne({ userId });
+    const day = await db.collection('classes').findOne({ _id: dayId });
 
-    const query = { userId };
+    const query = { _id: dayId };
 
     const newValue = {
       $set: {
-        comments: user.comments.push({ _id: commentId, author, comment }),
+        comments: day.comments.push({ _id: commentId, author, comment, status: 'posted' }),
       },
     };
 
-    const userNewComment = await db.collection("users").updateOne(query, newValue);
-    assert.equal(1, userNewComment.matchedCount);
-    assert.equal(1, userNewComment.modifiedCount);
+    const dayNewComment = await db.collection("classes").updateOne(query, newValue);
+    assert.equal(1, dayNewComment.matchedCount);
+    assert.equal(1, dayNewComment.modifiedCount);
 
     res.status(200).json({
       status: 200,
-      userId,
-      userNewComment,
+      dayId,
+      dayNewComment,
     });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
@@ -434,39 +434,81 @@ const postComment = async (req ,res) => {
 const editComment = async (req, res) => {
   const client = await MongoClient(MONGO_URI, option);
 
-  // const { userId, commentId, newComment, author } = req.body;
+  // const { dayId, commentId, newComment, author } = req.body;
   try {
     await client.connect();
 
     const db = client.db("online-booking-system");
 
-    const user = await db.collection('classes').findOne({ userId });
+    const day = await db.collection('classes').findOne({ _id: dayId });
 
-    const query = { userId };
+    const query = { _id: dayId };
 
-    user.comments.map(comment => {
+    day.comments.map(comment => {
       if (comment._id === commentId) {
-        comment.comment = newComment
+        comment.comment = newComment;
+        comment.status = 'edited';
       }
       return comment
     })
 
     const editedValue = {
       $set: {
-        comments: user.comments,
+        comments: day.comments,
       },
     };
 
-    const userEditedComment = await db.collection("users").updateOne(query, editedValue);
-    assert.equal(1, userEditedComment.matchedCount);
-    assert.equal(1, userEditedComment.modifiedCount);
+    const dayEditedComment = await db.collection("classes").updateOne(query, editedValue);
+    assert.equal(1, dayEditedComment.matchedCount);
+    assert.equal(1, dayEditedComment.modifiedCount);
 
     res.status(200).json({
       status: 200,
-      userId,
-      userEditedComment,
+      dayId,
+      dayEditedComment,
     });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+  client.close();
+}
 
+const deleteComment = async (req, res) => {
+  const client = await MongoClient(MONGO_URI, option);
+
+  // const { dayId, commentId } = req.body;
+  try {
+    await client.connect();
+
+    const db = client.db("online-booking-system");
+
+    const day = await db.collection('classes').findOne({ _id: dayId });
+
+    const query = { _id: dayId };
+
+    day.comments.map(comment => {
+      if (comment._id === commentId) {
+        comment.comment = '';
+        comment.status = 'deleted';
+      }
+      return comment
+    })
+
+    const editedValue = {
+      $set: {
+        comments: day.comments,
+      },
+    };
+
+    const dayDeletedComment = await db.collection("classes").updateOne(query, editedValue);
+    assert.equal(1, dayDeletedComment.matchedCount);
+    assert.equal(1, dayDeletedComment.modifiedCount);
+
+    res.status(200).json({
+      status: 200,
+      dayId,
+      dayDeletedComment,
+    });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }
@@ -487,4 +529,5 @@ module.exports = {
   deleteSuggestion,
   postComment,
   editComment,
+  deleteComment,
 };
