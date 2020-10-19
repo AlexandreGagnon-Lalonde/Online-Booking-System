@@ -431,6 +431,47 @@ const postComment = async (req ,res) => {
   client.close();
 }
 
+const editComment = async (req, res) => {
+  const client = await MongoClient(MONGO_URI, option);
+
+  // const { userId, commentId, newComment, author } = req.body;
+  try {
+    await client.connect();
+
+    const db = client.db("online-booking-system");
+
+    const user = await db.collection('classes').findOne({ userId });
+
+    const query = { userId };
+
+    user.comments.map(comment => {
+      if (comment._id === commentId) {
+        comment.comment = newComment
+      }
+      return comment
+    })
+
+    const editedValue = {
+      $set: {
+        comments: user.comments,
+      },
+    };
+
+    const userEditedComment = await db.collection("users").updateOne(query, editedValue);
+    assert.equal(1, userEditedComment.matchedCount);
+    assert.equal(1, userEditedComment.modifiedCount);
+
+    res.status(200).json({
+      status: 200,
+      userId,
+      userEditedComment,
+    });
+
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+  client.close();
+}
 
 module.exports = {
   createUser,
@@ -444,5 +485,6 @@ module.exports = {
   getOneWorkout,
   createSuggestion,
   deleteSuggestion,
-  postComment
+  postComment,
+  editComment,
 };
