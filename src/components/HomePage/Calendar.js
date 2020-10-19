@@ -1,6 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
+import WeekCalendar from 'react-week-calendar';
+
+import 'react-week-calendar/dist/style.css';
 
 
 const Calendar = () => {
@@ -8,8 +11,9 @@ const Calendar = () => {
 
 // Exclude times, filter times, include times, 
 
+// numberOfDays for mobile version
   return (
-    <div>Mmmhh a fresh calendar</div>
+    <WeekCalendar onIntervalRemove={true} scaleUnit={60} numberOfDays={1} />
   )
 }
 

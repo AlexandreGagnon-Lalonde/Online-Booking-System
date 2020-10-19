@@ -24,6 +24,7 @@
     "react-scripts": "3.4.3",
     "react-spring": "^8.0.27",
     "react-useanimations": "^2.0.5",
+    "react-week-calendar": "^0.1.3",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
     "styled-components": "^5.2.0"
