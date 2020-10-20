@@ -86,27 +86,27 @@ const updateUser = async (req, res) => {
   client.close();
 };
 
-const createMessage = async (req, res) => {
+const sendMessage = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
 
-  // const { _id, userId, message, date } = req.body;
+  const { dateId, currentUserId, otherUserId, message, date } = req.body;
   try {
     await client.connect();
 
     const db = client.db("online-booking-system");
 
-    const currentUser = await db.collection("users").findOne({ _id: _id });
-    const otherUser = await db.collection("users").findOne({ _id: userId });
+    const currentUser = await db.collection("users").findOne({ _id: currentUserId });
+    const otherUser = await db.collection("users").findOne({ _id: otherUserId });
 
-    const currentUserQuery = { _id: _id };
-    const otherUserQuery = { _id: userId };
+    const currentUserQuery = { _id: currentUserId };
+    const otherUserQuery = { _id: otherUserId };
 
     const currentUserNewMessage = {
       $set: {
         Conversations: currentUser.Conversations.push({
-          _id: Buffer.from(date).toString("base64"),
-          from: _id,
-          to: userId,
+          _id: dateId,
+          from: currentUserId,
+          to: otherUserId,
           message: message,
           date: date,
           status: "sent",
@@ -117,9 +117,9 @@ const createMessage = async (req, res) => {
     const otherUserNewMessage = {
       $set: {
         Conversations: otherUser.Conversations.push({
-          _id: Buffer.from(date).toString("base64"),
-          from: _id,
-          to: userId,
+          _id: dateId,
+          from: currentUserId,
+          to: otherUserId,
           message: message,
           date: date,
           status: "sent",
@@ -139,14 +139,14 @@ const createMessage = async (req, res) => {
     assert.equal(1, otherUserMessageCreated.matchedCount);
     assert.equal(1, otherUserMessageCreated.modifiedCount);
 
-    res.status(200).json({ status: 200, success: true, message: newMessage });
+    res.status(200).json({ status: 200, success: true, messages: newMessage });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }
   client.close();
 };
 
-const updateMessage = async (req, res) => {
+const editMessage = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
 
   // const { messageContent, messageId, _id, userId } = req.body;
@@ -519,9 +519,9 @@ module.exports = {
   createUser,
   getUser,
   updateUser,
-  createMessage,
+  sendMessage,
   updateClass,
-  updateMessage,
+  editMessage,
   deleteMessage,
   getWorkouts,
   getOneWorkout,

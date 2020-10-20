@@ -21,9 +21,9 @@ const Profile = () => {
 
   // gets me the _id of user from url
   // console.log(window.location.href.split("/").pop());
-  let currentProfileID = window.location.href.split("/").pop();
+  let currentProfileId = window.location.href.split("/").pop();
   // change id to email
-  let currentProfileEmail = Buffer.from(currentProfileID, "base64").toString(
+  let currentProfileEmail = Buffer.from(currentProfileId, "base64").toString(
     "ascii"
   );
 
@@ -35,7 +35,7 @@ const Profile = () => {
     <>
       <LoggedInHeader />
       <ProfileInfo />
-      <ProfileMessages />
+      <ProfileMessages currentUser={currentProfileId === userState._id ? true : false} />
       <ProfileClasses />
     </>
   );

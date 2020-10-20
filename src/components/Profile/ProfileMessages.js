@@ -3,8 +3,9 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 
 import IndividualConversation from "./IndiviudalConversation";
+import SendMessage from './SendMessage';
 
-const ProfileMessages = () => {
+const ProfileMessages = (props) => {
   const userState = useSelector((state) => state.user.user);
   const otherUserState = useSelector((state) => state.user.otherUser);
 
@@ -19,6 +20,10 @@ const ProfileMessages = () => {
             );
           })
         : <p>No Conversations</p>}
+        {
+          props.currentUser ? null : null
+        }
+      <SendMessage />
     </div>
   );
 };

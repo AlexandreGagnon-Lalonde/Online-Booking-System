@@ -16,7 +16,21 @@ const cors = require("cors");
 
 const PORT = 1234;
 
-const { createUser, getUser, updateUser, getWorkouts, getOneWorkout, deleteSuggestion, createSuggestion } = require("./handlers");
+const {
+  createUser,
+  getUser,
+  updateUser,
+  getWorkouts,
+  getOneWorkout,
+  deleteSuggestion,
+  createSuggestion,
+  postComment,
+  editComment,
+  deleteComment,
+  sendMessage,
+  editMessage,
+  deleteMessage,
+} = require("./handlers");
 
 express()
   .use(function (req, res, next) {
@@ -39,15 +53,21 @@ express()
 
   // REST endpoints?
   .get("/api/getuser/:email", getUser)
-  .get('/api/allworkouts', getWorkouts)
-  .get('/api/workout/:id', getOneWorkout)
-  
-  .post("/api/createuser", createUser)
-  .post('/api/suggestion/create', createSuggestion)
+  .get("/api/allworkouts", getWorkouts)
+  .get("/api/workout/:id", getOneWorkout)
 
+  .post("/api/createuser", createUser)
+  .post("/api/suggestion/create", createSuggestion)
+
+  .patch('/api/postcomment', postComment)
+  .patch("/api/editcomment", editComment)
+  .patch("/api/deletecomment", deleteComment)
+  .patch("/api/sendmessage", sendMessage)
+  .patch("/api/editmessage", editMessage)
+  .patch("/api/deletemessage", deleteMessage)
   .patch("/api/updateuser/:param/:value", updateUser)
-  
-  .delete('/api/suggestion/delete/:id', deleteSuggestion)
+
+  .delete("/api/suggestion/delete/:id", deleteSuggestion)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));
 
@@ -55,7 +75,7 @@ const ADMIN = {
   _id: Buffer.from("alexandre.gl@hotmail.ca").toString("base64"),
   firstName: "Alexandre",
   lastName: "Gagnon-Lalonde",
-  avatar: '',
+  avatar: "",
   phone: 1234567890,
   DOB: "01/01/2000",
   gender: "male",

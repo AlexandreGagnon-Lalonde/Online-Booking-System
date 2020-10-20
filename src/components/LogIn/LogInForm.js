@@ -37,7 +37,6 @@ const LogInForm = () => {
             }
           })
           .catch((err) => {
-            console.log(err);
             dispatch(receiveUserError());
           });
       }}
