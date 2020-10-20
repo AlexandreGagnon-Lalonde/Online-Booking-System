@@ -54,17 +54,13 @@ export const deleteMessages = () => ({
   type: "DELETE_MESSAGES"
 })
 
-export const sendSuggestion = () => ({
+export const requestSuggestion = () => ({
   type: "REQUEST_SUGGESTION",
 });
 
-export const suggestionSent = (suggestion) => ({
-  type: "SEND_SUGGESTION",
+export const receiveSuggestion = (suggestion) => ({
+  type: "RECEIVE_SUGGESTION",
   suggestion,
-});
-
-export const receiveSuggestion = () => ({
-  type: "SUGGESTION_SENT",
 });
 
 export const receiveSuggestionError = () => ({

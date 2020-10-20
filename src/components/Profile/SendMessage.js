@@ -19,9 +19,10 @@ const SendMessage = () => {
   return (
     <form
       onSubmit={(ev) => {
-        ev.stopPropagation();
+        ev.preventDefault();
 
-        const dateId = Buffer.from(new Date()).toString("base64");
+        const date = new Date()
+        const dateId = Buffer.from(date.toString()).toString("base64");
 
         // dispatch(requestMessage());
 

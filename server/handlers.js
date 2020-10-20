@@ -371,7 +371,9 @@ const createSuggestion = async (req, res) => {
     const newSuggestion = await db.collection('suggestions').insertOne(req.body);
     assert.equal(1, newSuggestion.insertedCount);
 
-    res.status(201).json({ status: 201, success: true, suggestion: req.body });
+    const suggestions = await db.collection('suggestions').find().toArray();
+
+    res.status(201).json({ status: 201, success: true, suggestions });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }

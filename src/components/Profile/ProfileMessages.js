@@ -21,9 +21,8 @@ const ProfileMessages = (props) => {
           })
         : <p>No Conversations</p>}
         {
-          props.currentUser ? null : null
+          props.currentUser ? null : <SendMessage />
         }
-      <SendMessage />
     </div>
   );
 };
