@@ -35,21 +35,21 @@ function App() {
     history.push("/");
   }
 
-  if (suggestionState.status === 'idle') {
-    dispatch(requestSuggestion());
-
-    fetch(SERVER_URL + `/api/getsuggestions`)
-      .then((res) => res.json())
-      .then((data) => {
-        dispatch(receiveSuggestion(data.suggestions));
-        localStorage.setItem("Suggestion", data.suggestions);
-      })
-      .catch((err) => {
-        dispatch(receiveSuggestionError());
-      });
-
-  }
   React.useEffect(() => {
+    if (suggestionState.status === "idle") {
+      dispatch(requestSuggestion());
+
+      fetch(SERVER_URL + `/api/getsuggestions`)
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(receiveSuggestion(data.suggestions));
+          localStorage.setItem("Suggestion", data.suggestions);
+        })
+        .catch((err) => {
+          dispatch(receiveSuggestionError());
+        });
+    }
+
     if (localStorage.getItem("currentUserId") && !userState.user) {
       const email = Buffer.from(
         localStorage.getItem("currentUserId"),
@@ -63,7 +63,7 @@ function App() {
         .then((data) => {
           dispatch(receiveUser(data.user));
           localStorage.setItem("currentUserId", data.user._id);
-          history.push('/homepage')
+          history.push("/homepage");
         })
         .catch((err) => {
           dispatch(receiveUserError());
@@ -73,7 +73,7 @@ function App() {
 
   return (
     <>
-      {userState.user || !localStorage.getItem('currentUserId') ? (
+      {userState.user || !localStorage.getItem("currentUserId") ? (
         <>
           <Route exact path="/">
             <WelcomePage />

@@ -13,6 +13,7 @@ import ProfilSuggestion from './ProfilSuggestion';
 const Profile = () => {
   const userState = useSelector((state) => state.user.user);
   const otherUserState = useSelector((state) => state.user.otherUser);
+  const suggestionState = useSelector((state) => state.suggestion.suggestion);
 
   const history = useHistory();
 
@@ -31,6 +32,10 @@ const Profile = () => {
   // if (currentProfileID !== currentUser._id)
 
   // fetch(`/api/getuser/${currentProfileEmail}`)
+
+  React.useEffect(() => {
+
+  }, [suggestionState])
 
   return (
     <>
