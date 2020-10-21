@@ -7,6 +7,10 @@ import IndividualSuggestion from "./IndividualSuggestion";
 const ProfilSuggestion = () => {
   const suggestionState = useSelector((state) => state.suggestion.suggestion);
 
+  React.useEffect(() => {
+
+  }, [suggestionState])
+  
   return (
     <StyledDiv>
       {

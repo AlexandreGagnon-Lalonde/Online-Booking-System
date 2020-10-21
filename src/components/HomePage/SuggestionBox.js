@@ -42,6 +42,7 @@ const SuggestionBox = () => {
             .then((data) => {
               if (data.success) {
                 dispatch(receiveSuggestion(data.messages))
+                setSuggestion('')
               } else {
                 dispatch(receiveSuggestionError())
               }
@@ -51,7 +52,7 @@ const SuggestionBox = () => {
             });
         }}
       >
-        <textarea onChange={(ev) => setSuggestion(ev.currentTarget.value)} placeholder={'Enter a/some suggestion(s)'} ></textarea>
+        <textarea onChange={(ev) => setSuggestion(ev.currentTarget.value)} value={suggestion} placeholder={'Enter a/some suggestion(s)'} ></textarea>
         <label for={"suggestion"}>Anonymous</label>
         <input
           type={"checkbox"}
