@@ -360,6 +360,23 @@ const getOneWorkout = async (req ,res) => {
   client.close();
 }
 
+const getSuggestions = async (req, res) => {
+  const client = await MongoClient(MONGO_URI, options);
+
+  try {
+    await client.connect();
+
+    const db = client.db('online-booking-system');
+
+    const suggestions = await db.collection('suggestions').find().toArray();
+
+    res.status(200).json({ status: 200, success: true, suggestions });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+  client.close();
+}
+
 const createSuggestion = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
 
@@ -527,6 +544,7 @@ module.exports = {
   deleteMessage,
   getWorkouts,
   getOneWorkout,
+  getSuggestions,
   createSuggestion,
   deleteSuggestion,
   postComment,

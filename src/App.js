@@ -19,11 +19,14 @@ import {
   requestUser,
   receiveUser,
   receiveUserError,
-  logoutUser,
+  requestSuggestion,
+  receiveSuggestion,
+  receiveSuggestionError,
 } from "./reducers/action";
 
 function App() {
   const userState = useSelector((state) => state.user);
+  const suggestionState = useSelector((state) => state.suggestion);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -31,7 +34,21 @@ function App() {
   if (!localStorage.getItem("currentUserId")) {
     history.push("/");
   }
-  console.log(userState, localStorage)
+
+  if (suggestionState.status === 'idle') {
+    dispatch(requestSuggestion());
+
+    fetch(SERVER_URL + `/api/getsuggestions`)
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch(receiveSuggestion(data.suggestions));
+        localStorage.setItem("Suggestion", data.suggestions);
+      })
+      .catch((err) => {
+        dispatch(receiveSuggestionError());
+      });
+
+  }
   React.useEffect(() => {
     if (localStorage.getItem("currentUserId") && !userState.user) {
       const email = Buffer.from(
@@ -49,7 +66,6 @@ function App() {
           history.push('/homepage')
         })
         .catch((err) => {
-          console.log(err);
           dispatch(receiveUserError());
         });
     }

@@ -8,6 +8,7 @@ import LoggedInHeader from "../Header/LoggedInHeader";
 import ProfileInfo from './ProfileInfo';
 import ProfileMessages from './ProfileMessages';
 import ProfileClasses from './ProfileClasses';
+import ProfilSuggestion from './ProfilSuggestion';
 
 const Profile = () => {
   const userState = useSelector((state) => state.user.user);
@@ -37,6 +38,9 @@ const Profile = () => {
       <ProfileInfo />
       <ProfileMessages currentUser={currentProfileId === userState._id ? true : false} />
       <ProfileClasses />
+      {
+        userState.admin ? <ProfilSuggestion /> : null
+      }
     </>
   );
 };

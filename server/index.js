@@ -22,6 +22,7 @@ const {
   updateUser,
   getWorkouts,
   getOneWorkout,
+  getSuggestions,
   deleteSuggestion,
   createSuggestion,
   postComment,
@@ -55,9 +56,10 @@ express()
   .get("/api/getuser/:email", getUser)
   .get("/api/allworkouts", getWorkouts)
   .get("/api/workout/:id", getOneWorkout)
+  .get('/api/getsuggestions', getSuggestions)
 
   .post("/api/createuser", createUser)
-  .post("/api/suggestion/create", createSuggestion)
+  .post("/api/createsuggestion", createSuggestion)
 
   .patch('/api/postcomment', postComment)
   .patch("/api/editcomment", editComment)
