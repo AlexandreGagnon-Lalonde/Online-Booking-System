@@ -14,15 +14,9 @@ export default function suggestionReducer(state = initialState, action) {
     case "RECEIVE_SUGGESTION": {
       return {
         ...state,
-        status: "sent",
+        status: "received",
         suggestion: action.suggestion
       };
-    }
-    case "SUGGESTION_SENT": {
-      return {
-        ...state,
-        status: 'idle'
-      }
     }
     case "RECEIVE_SUGGESTION_ERROR": {
       return {
