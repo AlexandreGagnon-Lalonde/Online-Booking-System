@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { SERVER_URL } from '../../constant';
+import { SERVER_URL } from "../../constant";
 
 import {
   requestSuggestion,
@@ -34,34 +34,45 @@ const SuggestionBox = () => {
             },
             body: JSON.stringify({
               _id: dateId,
-              from: checkbox ? 'Anonymous' : currentUser.firstName + ' ' + currentUser.lastName,
+              from: checkbox
+                ? "Anonymous"
+                : currentUser.firstName + " " + currentUser.lastName,
               suggestion,
             }),
           })
             .then((res) => res.json())
             .then((data) => {
               if (data.success) {
-                dispatch(receiveSuggestion(data.messages))
-                setSuggestion('')
+                dispatch(receiveSuggestion(data.messages));
+                setSuggestion("");
+                setCheckbox("");
+                document.getElementById("suggestion-form").reset();
               } else {
-                dispatch(receiveSuggestionError())
+                dispatch(receiveSuggestionError());
               }
             })
             .catch((err) => {
               dispatch(receiveSuggestionError());
             });
         }}
+        id={"suggestion-form"}
       >
-        <textarea onChange={(ev) => setSuggestion(ev.currentTarget.value)} value={suggestion} placeholder={'Enter a/some suggestion(s)'} ></textarea>
+        <textarea
+          onChange={(ev) => setSuggestion(ev.currentTarget.value)}
+          value={suggestion}
+          placeholder={"Enter a/some suggestion(s)"}
+        ></textarea>
         <label for={"suggestion"}>Anonymous</label>
         <input
           type={"checkbox"}
           id={"anonymous"}
           name={"suggestion"}
-          value={true}
+          value={checkbox ? true : false}
           onChange={(ev) => setCheckbox(ev.currentTarget.value)}
         ></input>
-        <button type="submit">Send</button>
+        <button type="submit" disabled={!suggestion}>
+          Send
+        </button>
       </form>
     </div>
   );
