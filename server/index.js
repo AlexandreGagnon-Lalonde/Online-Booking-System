@@ -43,6 +43,7 @@ express()
       "Access-Control-Allow-Headers",
       "Origin, X-Requested-With, Content-Type, Accept"
     );
+    res.header("Access-Control-Allow-Origin", "*");
     next();
   })
   .use(morgan("tiny"))
@@ -56,12 +57,12 @@ express()
   .get("/api/getuser/:email", getUser)
   .get("/api/allworkouts", getWorkouts)
   .get("/api/workout/:id", getOneWorkout)
-  .get('/api/getsuggestions', getSuggestions)
+  .get("/api/getsuggestions", getSuggestions)
 
   .post("/api/createuser", createUser)
   .post("/api/createsuggestion", createSuggestion)
 
-  .patch('/api/postcomment', postComment)
+  .patch("/api/postcomment", postComment)
   .patch("/api/editcomment", editComment)
   .patch("/api/deletecomment", deleteComment)
   .patch("/api/sendmessage", sendMessage)

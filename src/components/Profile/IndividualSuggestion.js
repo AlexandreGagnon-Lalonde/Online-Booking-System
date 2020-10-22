@@ -12,27 +12,18 @@ import { SERVER_URL } from "../../constant";
 const IndividualSuggestion = (props) => {
   const dispatch = useDispatch();
 
-  const suggestionState = useSelector((state) => state.suggestion.suggestion);
-
   return (
     <StyledDiv>
-      <p>{props.suggestion.suggestion}</p>
-      <p>{props.suggestion.from}</p>
-      <button
-        onClick={(ev) => {
+      <form
+        onSubmit={(ev) => {
           ev.preventDefault();
 
           dispatch(requestSuggestion());
-console.log(props.suggestion)
+
           fetch(SERVER_URL + `/api/suggestion/delete/${props.suggestion._id}`, {
             method: "DELETE",
             headers: {
               "Content-Type": "application/json",
-            },
-            body: {
-              _id: props.suggestion._id,
-              suggestion: props.suggestion.suggestion,
-              from: props.suggestion.from,
             },
           })
             .then((res) => res.json())
@@ -49,8 +40,10 @@ console.log(props.suggestion)
             });
         }}
       >
-        Delete
-      </button>
+        <p>{props.suggestion.suggestion}</p>
+        <p>{props.suggestion.from}</p>
+        <button type={"submit"}>Delete</button>
+      </form>
     </StyledDiv>
   );
 };

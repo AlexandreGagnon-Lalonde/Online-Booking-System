@@ -400,19 +400,20 @@ const createSuggestion = async (req, res) => {
 const deleteSuggestion = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
 
-  const { _id } = req.body;
+  const { id } = req.params;
   try {
     await client.connect();
 
     const db = client.db('online-booking-system');
 
-    const deletedSuggestion = await db.collection('suggestions').deleteOne({ _id });
+    const deletedSuggestion = await db.collection('suggestions').deleteOne({ _id: id });
     assert.equal(1, deletedSuggestion.deletedCount);
 
     const suggestions = await db.collection('suggestions').find().toArray();
 
     res.status(201).json({ status: 201, success: true, suggestions });
   } catch (err) {
+    console.log(err)
     res.status(500).json({ status: 500, message: err.message });
   }
   client.close();
