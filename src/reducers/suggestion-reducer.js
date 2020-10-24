@@ -1,5 +1,5 @@
 const initialState = {
-  suggestion: null,
+  suggestion: [],
   status: "idle",
 };
 
