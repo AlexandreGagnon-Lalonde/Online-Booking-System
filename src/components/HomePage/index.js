@@ -9,11 +9,6 @@ import WorkoutBox from './WorkoutBox';
 import SuggestionBox from './SuggestionBox';
 
 const HomePage = () => {
-  const userState = useSelector((state) => state.user)
-
-  React.useEffect(() => {
-
-  }, [userState])
 
   return (
     <>

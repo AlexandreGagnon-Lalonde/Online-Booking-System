@@ -7,3 +7,8 @@ Another app running on same port
 Package.json scripts
 
 Best way to handle password
+
+*****************************
+
+Calendar day/week state 
+

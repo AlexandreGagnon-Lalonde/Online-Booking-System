@@ -33,6 +33,14 @@ export const receiveCalendarError = () => ({
   type: "RECEIVE_CALENDAR_ERROR",
 });
 
+export const calendarDay = () => ({
+  type: "CALENDAR_DAY",
+});
+
+export const calendarWeek = () => ({
+  type: "CALENDAR_WEEK",
+});
+
 export const requestMessage = () => ({
   type: "REQUEST_MESSAGE"
 })

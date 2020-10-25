@@ -1,5 +1,6 @@
 const initialState = {
   calendar: null,
+  calendarDisplay: 'timeGridWeek',
   status: "idle",
 };
 
@@ -15,7 +16,7 @@ export default function calendarReducer(state = initialState, action) {
     case "RECEIVE_CALENDAR": {
       return {
         ...state,
-        status: "Idle",
+        status: "idle",
         calendar: action.calendar
       };
     }
@@ -23,6 +24,20 @@ export default function calendarReducer(state = initialState, action) {
       return {
         ...state,
         status: "Error",
+      };
+    }
+    case "CALENDAR_DAY": {
+      return {
+        ...state,
+        status: "idle",
+        calendarDisplay: 'timeGridDay',
+      };
+    }
+    case "CALENDAR_WEEK": {
+      return {
+        ...state,
+        status: "idle",
+        calendarDisplay: 'timeGridWeek',
       };
     }
     default: {
