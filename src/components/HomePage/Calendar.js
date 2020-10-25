@@ -1,31 +1,32 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import Modal from "react-bootstrap/Modal";
 
 import { calendarDay, calendarWeek } from "../../reducers/action";
 
-const handleClick = () => {
-  console.log('click')
-};
-const handleMouseEnter = () => {
-  console.log('enter')
-};
-const handleMouseLeave = () => {
-  console.log('leave')
-};
-
 const Calendar = (props) => {
+  const [show, setShow] = React.useState(false);
   const calendarState = useSelector((state) => state.calendar);
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
-
-  }, [calendarState.calendarDisplay]);
+  const handleClick = () => {};
+  const handleClose = () => {
+    setShow(false);
+  };
+  const handleShow = () => {
+    setShow(true);
+  };
+  const handleMouseEnter = () => {
+    console.log("enter");
+  };
+  const handleMouseLeave = () => {
+    console.log("leave");
+  };
 
   // timeGridDay timeGridWeek dayGridMonth
   return (
@@ -54,6 +55,23 @@ const Calendar = (props) => {
           Week
         </button>
       </div>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal Title</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          my body
+        </Modal.Body>
+        <Modal.Footer>
+          <button onClick={handleClose} variant={'secondary'}>
+            Ok
+          </button>
+          <button onClick={handleClose} variant={'primary'}>
+            Cancel
+          </button>
+        </Modal.Footer>
+      </Modal>
 
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -162,7 +180,7 @@ const Calendar = (props) => {
             daysOfWeek: [0, 6],
           },
         ]}
-        eventClick={handleClick}
+        eventClick={handleShow}
         eventMouseEnter={handleMouseEnter}
         eventMouseLeave={handleMouseLeave}
       />
