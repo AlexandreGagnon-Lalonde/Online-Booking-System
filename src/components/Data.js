@@ -14,7 +14,9 @@ const classes = [
       // etc
     ],
     "6:00": {
-      members: [],
+      members: [
+        {_id: 'userId', name: 'fullname'},
+      ],
     },
     "7:00": {
       members: [],

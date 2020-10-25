@@ -9,12 +9,22 @@ import interactionPlugin from "@fullcalendar/interaction";
 
 import { calendarDay, calendarWeek } from "../../reducers/action";
 
+const handleClick = () => {
+  console.log('click')
+};
+const handleMouseEnter = () => {
+  console.log('enter')
+};
+const handleMouseLeave = () => {
+  console.log('leave')
+};
+
 const Calendar = (props) => {
   const calendarState = useSelector((state) => state.calendar);
   const dispatch = useDispatch();
-  console.log(calendarState);
+
   React.useEffect(() => {
-    console.log(calendarState.calendarDisplay);
+
   }, [calendarState.calendarDisplay]);
 
   // timeGridDay timeGridWeek dayGridMonth
@@ -48,7 +58,6 @@ const Calendar = (props) => {
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView={calendarState.calendarDisplay}
-        dateClick={handleClick}
         events={[
           {
             title: "class",
@@ -153,21 +162,11 @@ const Calendar = (props) => {
             daysOfWeek: [0, 6],
           },
         ]}
+        eventClick={handleClick}
+        eventMouseEnter={handleMouseEnter}
+        eventMouseLeave={handleMouseLeave}
       />
     </StyledDiv>
-  );
-};
-
-const handleClick = (arg) => {
-  alert(arg.dateStr);
-};
-
-const renderEventContent = (eventInfo) => {
-  return (
-    <>
-      <b>{eventInfo}</b>
-      <i>{"class"}</i>
-    </>
   );
 };
 

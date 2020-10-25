@@ -62,7 +62,7 @@ const SuggestionBox = () => {
           value={suggestion}
           placeholder={"Enter a/some suggestion(s)"}
         ></textarea>
-        <label for={"suggestion"}>Anonymous</label>
+        <label htmlFor={"suggestion"}>Anonymous</label>
         <input
           type={"checkbox"}
           id={"anonymous"}
