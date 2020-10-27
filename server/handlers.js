@@ -95,8 +95,12 @@ const sendMessage = async (req, res) => {
 
     const db = client.db("online-booking-system");
 
-    const currentUser = await db.collection("users").findOne({ _id: currentUserId });
-    const otherUser = await db.collection("users").findOne({ _id: otherUserId });
+    const currentUser = await db
+      .collection("users")
+      .findOne({ _id: currentUserId });
+    const otherUser = await db
+      .collection("users")
+      .findOne({ _id: otherUserId });
 
     const currentUserQuery = { _id: currentUserId };
     const otherUserQuery = { _id: otherUserId };
@@ -301,12 +305,50 @@ const deleteMessage = async (req, res) => {
   client.close();
 };
 
-const updateClass = async (req, res) => {
+const bookClass = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
+
+  const { classId } = req.params;
   try {
     await client.connect();
 
     const db = client.db("online-booking-system");
+
+    const query = { _id: classId };
+
+    const classes = await db.collection("classes").find().toArray();
+
+    if (classes.filter((classe) => classe._id === classId).length === 1) {
+      let currentClass;
+      // update class data
+      classes.forEach((classe) => {
+        if (classe._id === classId) {
+          currentClass = {
+            $set: {
+              classTime: classe["classTime"].push(userId),
+            },
+          };
+        }
+      });
+
+      const classEdited = await db
+        .collection("classes")
+        .updateOne(query, currentClass);
+      assert.equal(1, classEdited.matchedCount);
+      assert.equal(1, classEdited.modifiedCount);
+
+      res
+        .status(201)
+        .json({ status: 201, message: "Class created", calendar: classe });
+    } else {
+      // create class data
+      const newClass = await db.collection("classes").insertOne(req.body);
+      assert(1, newUser.insertedCount);
+
+      res
+        .status(201)
+        .json({ status: 201, message: "Class updated", calendar: newClass });
+    }
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }
@@ -336,14 +378,14 @@ const getWorkouts = async (req, res) => {
   client.close();
 };
 
-const getOneWorkout = async (req ,res) => {
+const getOneWorkout = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
 
   // const { workoutId } = req.body;
   try {
     await client.connect();
 
-    const db = client.db('online-booking-system');
+    const db = client.db("online-booking-system");
 
     const classes = await db.collection("classes").find().toArray();
 
@@ -358,7 +400,7 @@ const getOneWorkout = async (req ,res) => {
     res.status(500).json({ status: 500, message: err.message });
   }
   client.close();
-}
+};
 
 const getSuggestions = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
@@ -366,16 +408,16 @@ const getSuggestions = async (req, res) => {
   try {
     await client.connect();
 
-    const db = client.db('online-booking-system');
+    const db = client.db("online-booking-system");
 
-    const suggestions = await db.collection('suggestions').find().toArray();
+    const suggestions = await db.collection("suggestions").find().toArray();
 
     res.status(200).json({ status: 200, success: true, suggestions });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }
   client.close();
-}
+};
 
 const createSuggestion = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
@@ -383,19 +425,21 @@ const createSuggestion = async (req, res) => {
   try {
     await client.connect();
 
-    const db = client.db('online-booking-system');
+    const db = client.db("online-booking-system");
 
-    const newSuggestion = await db.collection('suggestions').insertOne(req.body);
+    const newSuggestion = await db
+      .collection("suggestions")
+      .insertOne(req.body);
     assert.equal(1, newSuggestion.insertedCount);
 
-    const suggestions = await db.collection('suggestions').find().toArray();
+    const suggestions = await db.collection("suggestions").find().toArray();
 
     res.status(201).json({ status: 201, success: true, suggestions });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }
   client.close();
-}
+};
 
 const deleteSuggestion = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
@@ -404,22 +448,24 @@ const deleteSuggestion = async (req, res) => {
   try {
     await client.connect();
 
-    const db = client.db('online-booking-system');
+    const db = client.db("online-booking-system");
 
-    const deletedSuggestion = await db.collection('suggestions').deleteOne({ _id: id });
+    const deletedSuggestion = await db
+      .collection("suggestions")
+      .deleteOne({ _id: id });
     assert.equal(1, deletedSuggestion.deletedCount);
 
-    const suggestions = await db.collection('suggestions').find().toArray();
+    const suggestions = await db.collection("suggestions").find().toArray();
 
     res.status(201).json({ status: 201, success: true, suggestions });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(500).json({ status: 500, message: err.message });
   }
   client.close();
-}
+};
 
-const postComment = async (req ,res) => {
+const postComment = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
 
   // const { dayId, commentId, comment, author } = req.body;
@@ -428,17 +474,24 @@ const postComment = async (req ,res) => {
 
     const db = client.db("online-booking-system");
 
-    const day = await db.collection('classes').findOne({ _id: dayId });
+    const day = await db.collection("classes").findOne({ _id: dayId });
 
     const query = { _id: dayId };
 
     const newValue = {
       $set: {
-        comments: day.comments.push({ _id: commentId, author, comment, status: 'posted' }),
+        comments: day.comments.push({
+          _id: commentId,
+          author,
+          comment,
+          status: "posted",
+        }),
       },
     };
 
-    const dayNewComment = await db.collection("classes").updateOne(query, newValue);
+    const dayNewComment = await db
+      .collection("classes")
+      .updateOne(query, newValue);
     assert.equal(1, dayNewComment.matchedCount);
     assert.equal(1, dayNewComment.modifiedCount);
 
@@ -451,7 +504,7 @@ const postComment = async (req ,res) => {
     res.status(500).json({ status: 500, message: err.message });
   }
   client.close();
-}
+};
 
 const editComment = async (req, res) => {
   const client = await MongoClient(MONGO_URI, option);
@@ -462,17 +515,17 @@ const editComment = async (req, res) => {
 
     const db = client.db("online-booking-system");
 
-    const day = await db.collection('classes').findOne({ _id: dayId });
+    const day = await db.collection("classes").findOne({ _id: dayId });
 
     const query = { _id: dayId };
 
-    day.comments.map(comment => {
+    day.comments.map((comment) => {
       if (comment._id === commentId) {
         comment.comment = newComment;
-        comment.status = 'edited';
+        comment.status = "edited";
       }
-      return comment
-    })
+      return comment;
+    });
 
     const editedValue = {
       $set: {
@@ -480,7 +533,9 @@ const editComment = async (req, res) => {
       },
     };
 
-    const dayEditedComment = await db.collection("classes").updateOne(query, editedValue);
+    const dayEditedComment = await db
+      .collection("classes")
+      .updateOne(query, editedValue);
     assert.equal(1, dayEditedComment.matchedCount);
     assert.equal(1, dayEditedComment.modifiedCount);
 
@@ -493,7 +548,7 @@ const editComment = async (req, res) => {
     res.status(500).json({ status: 500, message: err.message });
   }
   client.close();
-}
+};
 
 const deleteComment = async (req, res) => {
   const client = await MongoClient(MONGO_URI, option);
@@ -504,17 +559,17 @@ const deleteComment = async (req, res) => {
 
     const db = client.db("online-booking-system");
 
-    const day = await db.collection('classes').findOne({ _id: dayId });
+    const day = await db.collection("classes").findOne({ _id: dayId });
 
     const query = { _id: dayId };
 
-    day.comments.map(comment => {
+    day.comments.map((comment) => {
       if (comment._id === commentId) {
-        comment.comment = '';
-        comment.status = 'deleted';
+        comment.comment = "";
+        comment.status = "deleted";
       }
-      return comment
-    })
+      return comment;
+    });
 
     const editedValue = {
       $set: {
@@ -522,7 +577,9 @@ const deleteComment = async (req, res) => {
       },
     };
 
-    const dayDeletedComment = await db.collection("classes").updateOne(query, editedValue);
+    const dayDeletedComment = await db
+      .collection("classes")
+      .updateOne(query, editedValue);
     assert.equal(1, dayDeletedComment.matchedCount);
     assert.equal(1, dayDeletedComment.modifiedCount);
 
@@ -535,14 +592,13 @@ const deleteComment = async (req, res) => {
     res.status(500).json({ status: 500, message: err.message });
   }
   client.close();
-}
+};
 
 module.exports = {
   createUser,
   getUser,
   updateUser,
   sendMessage,
-  updateClass,
   editMessage,
   deleteMessage,
   getWorkouts,
@@ -553,4 +609,5 @@ module.exports = {
   postComment,
   editComment,
   deleteComment,
+  bookClass,
 };

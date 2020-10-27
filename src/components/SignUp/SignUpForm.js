@@ -74,7 +74,6 @@ const SignUpForm = () => {
             }
           })
           .catch((err) => {
-            console.log(err);
             dispatch(receiveUserError());
           });
       }}

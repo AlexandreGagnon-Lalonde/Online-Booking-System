@@ -31,6 +31,7 @@ const {
   sendMessage,
   editMessage,
   deleteMessage,
+  bookClass
 } = require("./handlers");
 
 express()
@@ -69,6 +70,7 @@ express()
   .patch("/api/editmessage", editMessage)
   .patch("/api/deletemessage", deleteMessage)
   .patch("/api/updateuser/:param/:value", updateUser)
+  .patch('/api/bookclass/:classId', bookClass)
 
   .delete("/api/suggestion/delete/:id", deleteSuggestion)
 

@@ -6,27 +6,138 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import Modal from "react-bootstrap/Modal";
+import moment from 'moment'
 
 import { calendarDay, calendarWeek } from "../../reducers/action";
 
+const newWeekClass = {
+  _id: '',
+  workout: '',
+  comments: [],
+  '02:00': {
+    members: []
+  },
+  '03:00': {
+    members: []
+  },
+  '04:00': {
+    members: []
+  },
+  '05:00': {
+    members: []
+  },
+  '06:00': {
+    members: []
+  },
+  '08:00': {
+    members: []
+  },
+  '09:00': {
+    members: []
+  },
+  '12:00': {
+    members: []
+  },
+  '13:00': {
+    members: []
+  },
+  '14:00': {
+    members: []
+  },
+  '15:00': {
+    members: []
+  },
+  '16:00': {
+    members: []
+  },
+}
+const newWeekendClass = {
+  _id: '',
+  workout: '',
+  comments: [],
+  '04:00': {
+    members: []
+  },
+  '05:00': {
+    members: []
+  },
+  '06:00': {
+    members: []
+  },
+  '07:00': {
+    members: []
+  },
+  '08:00': {
+    members: []
+  },
+}
+
 const Calendar = (props) => {
-  const [show, setShow] = React.useState(false);
+  const [show, setShow] = React.useState({info: '', modal: false});
   const calendarState = useSelector((state) => state.calendar);
   const dispatch = useDispatch();
 
-  const handleClick = () => {};
   const handleClose = () => {
-    setShow(false);
+    setShow({info: '', modal: false});
   };
-  const handleShow = () => {
-    setShow(true);
+  const handleShow = (info) => {
+    console.log(moment(info.el.fcSeg.start).format('HH:mm'))
+    setShow({info: info.el.fcSeg, modal: true});
   };
-  const handleMouseEnter = () => {
-    console.log("enter");
-  };
-  const handleMouseLeave = () => {
-    console.log("leave");
-  };
+  const handleCalendarSubmit = (ev, info) => {
+    ev.preventDefault();
+    console.log('asdf',info)
+    //     dispatch(requestCalendar());
+
+    //     fetch(SERVER_URL + "/api/bookclass/${classId}", {
+    //       method: "PATCH",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify({
+    //         _id: classId,
+    //         workout: '',
+    //         lastName,
+    //         avatar: '',
+    //         phone,
+    //         DOB,
+    //         gender,
+    //         city,
+    //         address,
+    //         zipcode,
+    //         email,
+    //         password,
+    //         admin: false,
+    //         "Emergency Contact": {
+    //           relName,
+    //           relation,
+    //           relPhone,
+    //         },
+    //         Conversations: [],
+    //         Classes: [],
+    //       }),
+    //     })
+    //       .then((res) => res.json())
+    //       .then((data) => {
+    //         if (data.success) {
+    //           dispatch(receiveCalendar(data.calendar))
+    //           localStorage.setItem('currentCalendarId', data.calendar._id)
+    //           history.push('/homepage')
+    //         } else {
+    //           dispatch(receiveCalendarError())
+    //         }
+    //       })
+    //       .catch((err) => {
+    //         dispatch(receiveCalendarError());
+    //       });
+  }
+
+  // const handleMouseEnter = () => {
+  //   console.log("enter");
+  // };
+  // const handleMouseLeave = () => {
+  //   console.log("leave");
+  // };
 
   // timeGridDay timeGridWeek dayGridMonth
   return (
@@ -56,7 +167,7 @@ const Calendar = (props) => {
         </button>
       </div>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show.modal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Modal Title</Modal.Title>
         </Modal.Header>
@@ -64,8 +175,8 @@ const Calendar = (props) => {
           my body
         </Modal.Body>
         <Modal.Footer>
-          <button onClick={handleClose} variant={'secondary'}>
-            Ok
+          <button onClick={handleCalendarSubmit} variant={'secondary'}>
+            Book
           </button>
           <button onClick={handleClose} variant={'primary'}>
             Cancel
@@ -76,6 +187,15 @@ const Calendar = (props) => {
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView={calendarState.calendarDisplay}
+        slotMinTime={'05:00:00'}
+        slotMaxTime={'22:00:00'}
+        slotDuration={'1:00'}
+        contentHeight={800}
+        expandRows={true}
+        timeZone={'America/New_York'}
+        eventClick={handleShow}
+        // eventMouseEnter={handleMouseEnter}
+        // eventMouseLeave={handleMouseLeave}
         events={[
           {
             title: "class",
@@ -180,9 +300,6 @@ const Calendar = (props) => {
             daysOfWeek: [0, 6],
           },
         ]}
-        eventClick={handleShow}
-        eventMouseEnter={handleMouseEnter}
-        eventMouseLeave={handleMouseLeave}
       />
     </StyledDiv>
   );

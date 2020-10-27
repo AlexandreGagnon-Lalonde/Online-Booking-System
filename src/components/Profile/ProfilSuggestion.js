@@ -18,7 +18,7 @@ const ProfilSuggestion = () => {
         <StyledDiv>
           {suggestionState.length > 0 ? (
             suggestionState.map((suggestion) => {
-              return <IndividualSuggestion suggestion={suggestion} />;
+              return <IndividualSuggestion key={suggestion._id} suggestion={suggestion} />;
             })
           ) : (
             <p>No suggestions</p>
