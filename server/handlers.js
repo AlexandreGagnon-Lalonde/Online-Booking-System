@@ -309,6 +309,7 @@ const bookClass = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
 
   const { classId } = req.params;
+  const { newClass, classTime, currentUser } = req.body;
   try {
     await client.connect();
 
@@ -317,15 +318,23 @@ const bookClass = async (req, res) => {
     const query = { _id: classId };
 
     const classes = await db.collection("classes").find().toArray();
+    const users = await db.collection('users').find().toArray();
 
-    if (classes.filter((classe) => classe._id === classId).length === 1) {
+    const classExist = classes.filter((classe) => classe._id === classId).length === 1
+    const currentUserInClass = classes.filter((classe) => classe._id === classId).classTime.members.filter(user => user._id === currentUser._id).length > 0;
+
+    if (classExist && !currentUserInClass) {
       let currentClass;
       // update class data
       classes.forEach((classe) => {
         if (classe._id === classId) {
           currentClass = {
             $set: {
-              classTime: classe["classTime"].push(userId),
+              [classTime]: classe[classTime].push({
+                _id: currentUser._id,
+                fullname: currentUser.firstName + ' ' + currentUser.lastName,
+                email: currentUser.email,
+              }),
             },
           };
         }
@@ -340,14 +349,16 @@ const bookClass = async (req, res) => {
       res
         .status(201)
         .json({ status: 201, message: "Class created", calendar: classe });
-    } else {
+    } else if (!classExist) {
       // create class data
-      const newClass = await db.collection("classes").insertOne(req.body);
-      assert(1, newUser.insertedCount);
+      const firstClass = await db.collection("classes").insertOne(newClass);
+      assert(1, firstClass.insertedCount);
 
       res
         .status(201)
         .json({ status: 201, message: "Class updated", calendar: newClass });
+    } else {
+      res.status(500).json({ status: 500, message: 'User is already in that class' })
     }
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
