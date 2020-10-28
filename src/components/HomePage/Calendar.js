@@ -6,7 +6,6 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import Modal from "react-bootstrap/Modal";
-import moment from "moment";
 import { SERVER_URL } from "../../constant";
 
 import {
@@ -17,79 +16,79 @@ import {
   requestCalendar,
 } from "../../reducers/action";
 
-// days of the week in the same format as fullcalendar
-const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri"];
-// week class object template
-const newWeekClass = {
-  _id: "",
-  workout: "",
-  comments: [],
-  "02:00": {
-    members: [],
-  },
-  "03:00": {
-    members: [],
-  },
-  "04:00": {
-    members: [],
-  },
-  "05:00": {
-    members: [],
-  },
-  "06:00": {
-    members: [],
-  },
-  "08:00": {
-    members: [],
-  },
-  "09:00": {
-    members: [],
-  },
-  "12:00": {
-    members: [],
-  },
-  "13:00": {
-    members: [],
-  },
-  "14:00": {
-    members: [],
-  },
-  "15:00": {
-    members: [],
-  },
-  "16:00": {
-    members: [],
-  },
-};
-// weekend class object template
-const newWeekendClass = {
-  _id: "",
-  workout: "",
-  comments: [],
-  "04:00": {
-    members: [],
-  },
-  "05:00": {
-    members: [],
-  },
-  "06:00": {
-    members: [],
-  },
-  "07:00": {
-    members: [],
-  },
-  "08:00": {
-    members: [],
-  },
-};
-let newClass;
-
 const Calendar = (props) => {
   const [show, setShow] = React.useState({ info: "", modal: false });
   const calendarState = useSelector((state) => state.calendar);
   const currentUser = useSelector((state) => state.user.user);
 
   const dispatch = useDispatch();
+
+  // days of the week in the same format as fullcalendar
+  const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+  // week class object template
+  const newWeekClass = {
+    _id: "",
+    workout: "",
+    comments: [],
+    "02:00": {
+      members: [],
+    },
+    "03:00": {
+      members: [],
+    },
+    "04:00": {
+      members: [],
+    },
+    "05:00": {
+      members: [],
+    },
+    "06:00": {
+      members: [],
+    },
+    "08:00": {
+      members: [],
+    },
+    "09:00": {
+      members: [],
+    },
+    "12:00": {
+      members: [],
+    },
+    "13:00": {
+      members: [],
+    },
+    "14:00": {
+      members: [],
+    },
+    "15:00": {
+      members: [],
+    },
+    "16:00": {
+      members: [],
+    },
+  };
+  // weekend class object template
+  const newWeekendClass = {
+    _id: "",
+    workout: "",
+    comments: [],
+    "04:00": {
+      members: [],
+    },
+    "05:00": {
+      members: [],
+    },
+    "06:00": {
+      members: [],
+    },
+    "07:00": {
+      members: [],
+    },
+    "08:00": {
+      members: [],
+    },
+  };
+  let newClass;
 
   // close modal
   const handleClose = () => {
@@ -218,7 +217,7 @@ const Calendar = (props) => {
         <Modal.Header closeButton>
           <Modal.Title>Modal Title</Modal.Title>
         </Modal.Header>
-        <Modal.Body>my body</Modal.Body>
+        <Modal.Body>{console.log(calendarState)}my body</Modal.Body>
         <Modal.Footer>
           <button onClick={handleCalendarSubmit} variant={"secondary"}>
             Book
@@ -235,6 +234,7 @@ const Calendar = (props) => {
         slotMinTime={"05:00:00"}
         slotMaxTime={"22:00:00"}
         slotDuration={"1:00"}
+        firstDay={1}
         contentHeight={800}
         expandRows={true}
         timeZone={"America/New_York"}
