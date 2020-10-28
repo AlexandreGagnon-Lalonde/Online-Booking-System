@@ -310,31 +310,44 @@ const bookClass = async (req, res) => {
 
   const { classId } = req.params;
   const { newClass, classTime, currentUser } = req.body;
+
   try {
     await client.connect();
 
     const db = client.db("online-booking-system");
 
-    const query = { _id: classId };
+    const classQuery = { _id: classId };
+    const userQuery = { _id: currentUser._id };
 
     const classes = await db.collection("classes").find().toArray();
-    const users = await db.collection('users').find().toArray();
+    const users = await db.collection("users").find().toArray();
 
-    const classExist = classes.filter((classe) => classe._id === classId).length === 1
-    const currentUserInClass = classes.filter((classe) => classe._id === classId).classTime.members.filter(user => user._id === currentUser._id).length > 0;
+    const classExist =
+      classes.filter((classe) => classe._id === classId).length === 1;
 
+    let currentUserInClass;
+    if (classExist && classes.length > 0) {
+      currentUserInClass =
+        classes
+          .filter((classe) => classe._id === classId)[0]
+          [classTime].members.filter((user) => user._id === currentUser._id)
+          .length > 0;
+    }
     if (classExist && !currentUserInClass) {
       let currentClass;
       // update class data
       classes.forEach((classe) => {
         if (classe._id === classId) {
+          classe[classTime].members.push({
+            _id: currentUser._id,
+            fullname: currentUser.firstName + " " + currentUser.lastName,
+            email: currentUser.email,
+          });
           currentClass = {
             $set: {
-              [classTime]: classe[classTime].push({
-                _id: currentUser._id,
-                fullname: currentUser.firstName + ' ' + currentUser.lastName,
-                email: currentUser.email,
-              }),
+              [classTime]: {
+                members: classe[classTime].members,
+              },
             },
           };
         }
@@ -342,23 +355,81 @@ const bookClass = async (req, res) => {
 
       const classEdited = await db
         .collection("classes")
-        .updateOne(query, currentClass);
+        .updateOne(classQuery, currentClass);
       assert.equal(1, classEdited.matchedCount);
       assert.equal(1, classEdited.modifiedCount);
 
-      res
-        .status(201)
-        .json({ status: 201, message: "Class created", calendar: classe });
+      let userClasses = users.filter((user) => user._id === currentUser._id)[0]
+        .Classes;
+      let currentUserHasClass =
+        userClasses.filter((classe) => classe === classId).length > 0;
+
+      if (!currentUserHasClass) {
+        userClasses.push(classId);
+
+        let newUserClass = {
+          $set: {
+            Classes: userClasses,
+          },
+        };
+
+        const userEdited = await db
+          .collection("users")
+          .updateOne(userQuery, newUserClass);
+        assert.equal(1, userEdited.matchedCount);
+        assert.equal(1, userEdited.modifiedCount);
+      }
+
+      let userEditedData = users.filter(
+        (user) => user._id === currentUser._id
+      )[0];
+
+      res.status(201).json({
+        status: 201,
+        message: "Class created, user edited",
+        calendar: currentClass,
+        user: userEditedData,
+      });
     } else if (!classExist) {
       // create class data
+      console.log("yep");
       const firstClass = await db.collection("classes").insertOne(newClass);
       assert(1, firstClass.insertedCount);
+      let userClasses = users.filter((user) => user._id === currentUser._id)[0]
+        .Classes;
+      let currentUserHasClass =
+        userClasses.filter((classe) => classe === classId).length > 0;
 
-      res
-        .status(201)
-        .json({ status: 201, message: "Class updated", calendar: newClass });
+      if (!currentUserHasClass) {
+        userClasses.push(classId);
+
+        let newUserClass = {
+          $set: {
+            Classes: userClasses,
+          },
+        };
+
+        const userEdited = await db
+          .collection("users")
+          .updateOne(userQuery, newUserClass);
+        assert.equal(1, userEdited.matchedCount);
+        assert.equal(1, userEdited.modifiedCount);
+      }
+
+      let userEditedData = users.filter(
+        (user) => user._id === currentUser._id
+      )[0];
+
+      res.status(201).json({
+        status: 201,
+        message: "Class updated",
+        calendar: newClass,
+        user: userEditedData,
+      });
     } else {
-      res.status(500).json({ status: 500, message: 'User is already in that class' })
+      res
+        .status(500)
+        .json({ status: 500, message: "You are already in that class!" });
     }
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });

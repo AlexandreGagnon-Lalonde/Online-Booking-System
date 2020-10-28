@@ -112,7 +112,7 @@ const Calendar = (props) => {
     let classId = Buffer.from(show.info.start.toString().slice(0, 15)).toString(
       "base64"
     );
-    console.log(classId)
+    console.log(classId);
     // see if the class day is during the week or the weekend
     let weekDayConfirmation = weekDays.includes(
       show.info.start.toString().slice(0, 3)
