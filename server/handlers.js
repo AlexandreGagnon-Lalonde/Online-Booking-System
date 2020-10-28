@@ -437,6 +437,31 @@ const bookClass = async (req, res) => {
   client.close();
 };
 
+const unBookClass = async (req, res) => {
+  const client = await MongoClient(MONGO_URI, options);
+  try {
+
+  } catch (err) {
+    
+  }
+  client.close();
+}
+
+const getCalendar = async (req, res) => {
+  const client = await MongoClient(MONGO_URI, options);
+  try {
+    await client.connect();
+
+    const db = client.db("online-booking-system");
+
+    const classes = await db.collection("classes").find().toArray();
+
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+  client.close();
+}
+
 const getWorkouts = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
 
@@ -692,4 +717,5 @@ module.exports = {
   editComment,
   deleteComment,
   bookClass,
+  getCalendar,
 };
