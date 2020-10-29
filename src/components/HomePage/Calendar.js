@@ -21,12 +21,13 @@ const Calendar = (props) => {
   const [show, setShow] = React.useState({ info: "", modal: false });
   const calendarState = useSelector((state) => state.calendar);
   const currentUser = useSelector((state) => state.user.user);
+  const [firstDayOfCalendar, setFirstDayOfCalendar] = React.useState(null);
 
   const dispatch = useDispatch();
 
   const { useRef } = React;
 
-  const calendarDisplayView = useRef();
+  const calendarDisplayRef = useRef();
 
   // days of the week in the same format as fullcalendar
   const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri"];
@@ -190,13 +191,28 @@ const Calendar = (props) => {
   //   console.log("leave");
   // };
 
-  // timeGridDay timeGridWeek dayGridMonth
-
   React.useEffect(() => {
-    calendarDisplayView.current
+    calendarDisplayRef.current
       .getApi()
       .changeView(calendarState.calendarDisplay);
-  }, [calendarState.calendarDisplay]);
+    console.log("asdf", firstDayOfCalendar);
+    if (firstDayOfCalendar) {
+      dispatch(requestCalendar());
+
+      fetch(
+        SERVER_URL +
+          `/api/getcalendar/${calendarState.calendarDisplay}/${firstDayOfCalendar}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(receiveCalendar(data.calendar));
+        })
+        .catch((err) => {
+          dispatch(receiveCalendarError());
+        });
+
+    }
+  }, [calendarState.calendarDisplay, firstDayOfCalendar]);
 
   return (
     <StyledDiv>
@@ -206,6 +222,7 @@ const Calendar = (props) => {
             calendarState.calendarDisplay === "timeGridDay" //? true : false
           }
           onClick={() => {
+            setFirstDayOfCalendar(null)
             dispatch(calendarDay());
             localStorage.setItem("calendarDisplay", "timeGridDay");
           }}
@@ -217,6 +234,7 @@ const Calendar = (props) => {
             calendarState.calendarDisplay === "timeGridWeek" //? true : false
           }
           onClick={() => {
+            setFirstDayOfCalendar(null)
             dispatch(calendarWeek());
             localStorage.setItem("calendarDisplay", "timeGridWeek");
           }}
@@ -242,7 +260,7 @@ const Calendar = (props) => {
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView={calendarState.calendarDisplay}
-        ref={calendarDisplayView}
+        ref={calendarDisplayRef}
         slotMinTime={"05:00:00"}
         slotMaxTime={"22:00:00"}
         slotDuration={"1:00"}
@@ -252,13 +270,31 @@ const Calendar = (props) => {
         timeZone={"America/New_York"}
         eventClick={handleShow}
         datesSet={(arg) => {
-          console.log(moment(arg.view.activeStart).day(1)._d);
-          console.log(moment(arg.view.activeStart).day(2)._d);
-          console.log(moment(arg.view.activeStart).day(3)._d);
-          console.log(moment(arg.view.activeStart).day(4)._d);
-          console.log(moment(arg.view.activeStart).day(5)._d);
-          console.log(moment(arg.view.activeStart).day(6)._d);
-          console.log(moment(arg.view.activeStart).day(7)._d);
+          if (!firstDayOfCalendar) {
+            setFirstDayOfCalendar(arg.view.activeStart);
+          }
+          console.log(
+            moment(arg.view.activeStart).day(1)._d.toString().slice(0, 15)
+          );
+          console.log(
+            moment(arg.view.activeStart).day(2)._d.toString().slice(0, 15)
+          );
+          console.log(
+            moment(arg.view.activeStart).day(3)._d.toString().slice(0, 15)
+          );
+          console.log(
+            moment(arg.view.activeStart).day(4)._d.toString().slice(0, 15)
+          );
+          console.log(
+            moment(arg.view.activeStart).day(5)._d.toString().slice(0, 15)
+          );
+          console.log(
+            moment(arg.view.activeStart).day(6)._d.toString().slice(0, 15)
+          );
+          console.log(
+            moment(arg.view.activeStart).day(7)._d.toString().slice(0, 15)
+          );
+          console.log(moment(arg.view.activeStart))
         }}
         // eventMouseEnter={handleMouseEnter}
         // eventMouseLeave={handleMouseLeave}

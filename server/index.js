@@ -61,7 +61,7 @@ express()
   .get("/api/allworkouts", getWorkouts)
   .get("/api/workout/:id", getOneWorkout)
   .get("/api/getsuggestions", getSuggestions)
-  .get('/api/getcalendar/:firstDay', getCalendar)
+  .get('/api/getcalendar/:calendarDisplay/:firstDay', getCalendar)
 
   .post("/api/createuser", createUser)
   .post("/api/createsuggestion", createSuggestion)

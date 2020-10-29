@@ -8,6 +8,7 @@ const options = {
   useUnifiedTopology: true,
 };
 const assert = require("assert");
+const moment = require('moment');
 
 const createUser = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
@@ -449,12 +450,17 @@ const unbookClass = async (req, res) => {
 
 const getCalendar = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
+
+  const { calendarDisplay, firstDay } = req.params;
   try {
     await client.connect();
 
     const db = client.db("online-booking-system");
 
     const classes = await db.collection("classes").find().toArray();
+
+    console.log(firstDay);
+    console.log(moment(firstDay).day(3))
 
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });

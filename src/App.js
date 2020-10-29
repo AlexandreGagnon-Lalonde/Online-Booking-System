@@ -70,10 +70,6 @@ function App() {
           dispatch(receiveUserError());
         });
     }
-
-    if (calendarState) {
-      
-    }
   }, [userState.user]);
 
   return (
