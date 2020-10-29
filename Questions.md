@@ -12,3 +12,4 @@ Best way to handle password
 
 Calendar day/week state 
 
+Fetch classes before calendar render (show members in modal)

@@ -4,6 +4,8 @@ const initialState = {
   status: "idle",
 };
 
+// add boolean for isLoading
+
 export default function calendarReducer(state = initialState, action) {
   switch (action.type) {
     case "REQUEST_CALENDAR": {

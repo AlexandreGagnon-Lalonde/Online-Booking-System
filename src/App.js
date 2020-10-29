@@ -27,6 +27,7 @@ import {
 function App() {
   const userState = useSelector((state) => state.user);
   const suggestionState = useSelector((state) => state.suggestion);
+  const calendarState = useSelector((state) => state.calendar);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -68,6 +69,10 @@ function App() {
         .catch((err) => {
           dispatch(receiveUserError());
         });
+    }
+
+    if (calendarState) {
+      
     }
   }, [userState.user]);
 

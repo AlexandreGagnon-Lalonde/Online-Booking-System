@@ -31,7 +31,9 @@ const {
   sendMessage,
   editMessage,
   deleteMessage,
-  bookClass
+  bookClass,
+  unbookClass,
+  getCalendar,
 } = require("./handlers");
 
 express()
@@ -59,6 +61,7 @@ express()
   .get("/api/allworkouts", getWorkouts)
   .get("/api/workout/:id", getOneWorkout)
   .get("/api/getsuggestions", getSuggestions)
+  .get('/api/getcalendar/:firstDay', getCalendar)
 
   .post("/api/createuser", createUser)
   .post("/api/createsuggestion", createSuggestion)
@@ -71,6 +74,7 @@ express()
   .patch("/api/deletemessage", deleteMessage)
   .patch("/api/updateuser/:param/:value", updateUser)
   .patch('/api/bookclass/:classId', bookClass)
+  .patch('/api/unbookclass/:classId', unbookClass)
 
   .delete("/api/suggestion/delete/:id", deleteSuggestion)
 

@@ -7,6 +7,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import Modal from "react-bootstrap/Modal";
 import { SERVER_URL } from "../../constant";
+import moment from "moment";
 
 import {
   calendarDay,
@@ -22,6 +23,10 @@ const Calendar = (props) => {
   const currentUser = useSelector((state) => state.user.user);
 
   const dispatch = useDispatch();
+
+  const { useRef } = React;
+
+  const calendarDisplayView = useRef();
 
   // days of the week in the same format as fullcalendar
   const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri"];
@@ -186,12 +191,19 @@ const Calendar = (props) => {
   // };
 
   // timeGridDay timeGridWeek dayGridMonth
+
+  React.useEffect(() => {
+    calendarDisplayView.current
+      .getApi()
+      .changeView(calendarState.calendarDisplay);
+  }, [calendarState.calendarDisplay]);
+
   return (
     <StyledDiv>
       <div>
         <button
           disabled={
-            calendarState.calendarDisplay === "timeGridDay" ? true : false
+            calendarState.calendarDisplay === "timeGridDay" //? true : false
           }
           onClick={() => {
             dispatch(calendarDay());
@@ -202,7 +214,7 @@ const Calendar = (props) => {
         </button>
         <button
           disabled={
-            calendarState.calendarDisplay === "timeGridWeek" ? true : false
+            calendarState.calendarDisplay === "timeGridWeek" //? true : false
           }
           onClick={() => {
             dispatch(calendarWeek());
@@ -212,7 +224,6 @@ const Calendar = (props) => {
           Week
         </button>
       </div>
-
       <Modal show={show.modal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Modal Title</Modal.Title>
@@ -231,6 +242,7 @@ const Calendar = (props) => {
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView={calendarState.calendarDisplay}
+        ref={calendarDisplayView}
         slotMinTime={"05:00:00"}
         slotMaxTime={"22:00:00"}
         slotDuration={"1:00"}
@@ -239,6 +251,15 @@ const Calendar = (props) => {
         expandRows={true}
         timeZone={"America/New_York"}
         eventClick={handleShow}
+        datesSet={(arg) => {
+          console.log(moment(arg.view.activeStart).day(1)._d);
+          console.log(moment(arg.view.activeStart).day(2)._d);
+          console.log(moment(arg.view.activeStart).day(3)._d);
+          console.log(moment(arg.view.activeStart).day(4)._d);
+          console.log(moment(arg.view.activeStart).day(5)._d);
+          console.log(moment(arg.view.activeStart).day(6)._d);
+          console.log(moment(arg.view.activeStart).day(7)._d);
+        }}
         // eventMouseEnter={handleMouseEnter}
         // eventMouseLeave={handleMouseLeave}
         events={[

@@ -437,7 +437,7 @@ const bookClass = async (req, res) => {
   client.close();
 };
 
-const unBookClass = async (req, res) => {
+const unbookClass = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
   try {
 
@@ -717,5 +717,6 @@ module.exports = {
   editComment,
   deleteComment,
   bookClass,
+  unbookClass,
   getCalendar,
 };
