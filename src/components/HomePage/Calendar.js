@@ -271,30 +271,18 @@ const Calendar = (props) => {
         eventClick={handleShow}
         datesSet={(arg) => {
           if (!firstDayOfCalendar) {
+            if (calendarState.calendarDisplay === 'timeGridWeek') {
             setFirstDayOfCalendar(arg.view.activeStart);
+
+            } else {
+              setFirstDayOfCalendar(arg.view.activeEnd);
+            }
           }
           console.log(
-            moment(arg.view.activeStart).day(1)._d.toString().slice(0, 15)
-          );
-          console.log(
-            moment(arg.view.activeStart).day(2)._d.toString().slice(0, 15)
-          );
-          console.log(
-            moment(arg.view.activeStart).day(3)._d.toString().slice(0, 15)
-          );
-          console.log(
-            moment(arg.view.activeStart).day(4)._d.toString().slice(0, 15)
-          );
-          console.log(
-            moment(arg.view.activeStart).day(5)._d.toString().slice(0, 15)
-          );
-          console.log(
-            moment(arg.view.activeStart).day(6)._d.toString().slice(0, 15)
-          );
-          console.log(
-            moment(arg.view.activeStart).day(7)._d.toString().slice(0, 15)
+            moment(arg.view.activeStart).day(1)._d
           );
           console.log(moment(arg.view.activeStart))
+          console.log(arg.view)
         }}
         // eventMouseEnter={handleMouseEnter}
         // eventMouseLeave={handleMouseLeave}

@@ -8,7 +8,7 @@ const options = {
   useUnifiedTopology: true,
 };
 const assert = require("assert");
-const moment = require('moment');
+const moment = require("moment");
 
 const createUser = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
@@ -441,12 +441,9 @@ const bookClass = async (req, res) => {
 const unbookClass = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
   try {
-
-  } catch (err) {
-    
-  }
+  } catch (err) {}
   client.close();
-}
+};
 
 const getCalendar = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
@@ -458,15 +455,52 @@ const getCalendar = async (req, res) => {
     const db = client.db("online-booking-system");
 
     const classes = await db.collection("classes").find().toArray();
+    
+    let passedToFrontEndClasses = [];
 
-    console.log(firstDay);
-    console.log(moment(firstDay).day(3))
+    if (calendarDisplay === "timeGridWeek") {
+      for (let i = 1; i <= 7; i++) {
+        let classExist;
+        let classe;
+        let classStringComparison = classes.filter(
+          (classe) =>
+            classe._id ===
+            Buffer.from(
+              moment(new Date(firstDay))
+                .day(i)
+                .format("ddd MMM DD YYYY")
+                .toString()
+            ).toString("base64")
+        );
 
+        classExist = classStringComparison.length === 1;
+        if (classExist) {
+          classe = classStringComparison[0];
+          passedToFrontEndClasses.push(classe);
+        }
+      }
+    } else if (calendarDisplay === "timeGridDay") {
+      // push the class with the correct _id to the array
+      passedToFrontEndClasses =
+        classes.filter(
+          (classe) =>
+            classe._id ===
+            Buffer.from(firstDay.toString().slice(0, 15)).toString("base64")
+        )[0] || [];
+    } else {
+      res.status(404).json({ status: 404, message: "Invalid request" });
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: "Day received",
+      calendar: passedToFrontEndClasses,
+    });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }
   client.close();
-}
+};
 
 const getWorkouts = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
