@@ -16,3 +16,6 @@ Fetch classes before calendar render (show members in modal)
 
 *****************************
 
+long algorithm to find wtv simplify?
+
+re request state after book class

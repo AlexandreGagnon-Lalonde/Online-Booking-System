@@ -7,7 +7,6 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import Modal from "react-bootstrap/Modal";
 import { SERVER_URL } from "../../constant";
-import moment from "moment";
 
 import {
   calendarDay,
@@ -104,8 +103,17 @@ const Calendar = (props) => {
 
   // open modal
   const handleShow = (info) => {
+    let currentDay = calendarState.calendar.filter(
+      (day) =>
+        day._id ===
+        Buffer.from(info.el.fcSeg.start.toString().slice(0, 15)).toString(
+          "base64"
+        )
+    )[0];
+    let currentClassMembers =
+      currentDay[info.el.fcSeg.start.toString().slice(16, 21)].members;
     // set modal date/time info
-    setShow({ info: info.el.fcSeg, modal: true });
+    setShow({ info: info.el.fcSeg, modal: true, data: currentClassMembers });
   };
 
   // class booking
@@ -195,7 +203,7 @@ const Calendar = (props) => {
     calendarDisplayRef.current
       .getApi()
       .changeView(calendarState.calendarDisplay);
-    console.log("asdf", firstDayOfCalendar);
+
     if (firstDayOfCalendar) {
       dispatch(requestCalendar());
 
@@ -210,7 +218,6 @@ const Calendar = (props) => {
         .catch((err) => {
           dispatch(receiveCalendarError());
         });
-
     }
   }, [calendarState.calendarDisplay, firstDayOfCalendar]);
 
@@ -222,7 +229,7 @@ const Calendar = (props) => {
             calendarState.calendarDisplay === "timeGridDay" //? true : false
           }
           onClick={() => {
-            setFirstDayOfCalendar(null)
+            setFirstDayOfCalendar(null);
             dispatch(calendarDay());
             localStorage.setItem("calendarDisplay", "timeGridDay");
           }}
@@ -234,7 +241,7 @@ const Calendar = (props) => {
             calendarState.calendarDisplay === "timeGridWeek" //? true : false
           }
           onClick={() => {
-            setFirstDayOfCalendar(null)
+            setFirstDayOfCalendar(null);
             dispatch(calendarWeek());
             localStorage.setItem("calendarDisplay", "timeGridWeek");
           }}
@@ -246,7 +253,13 @@ const Calendar = (props) => {
         <Modal.Header closeButton>
           <Modal.Title>Modal Title</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{console.log(calendarState)}my body</Modal.Body>
+        <Modal.Body>
+          {show.data
+            ? show.data.map((member) => {
+                return <p>{member.fullname}</p>;
+              })
+            : null}
+        </Modal.Body>
         <Modal.Footer>
           <button onClick={handleCalendarSubmit} variant={"secondary"}>
             Book
@@ -271,18 +284,12 @@ const Calendar = (props) => {
         eventClick={handleShow}
         datesSet={(arg) => {
           if (!firstDayOfCalendar) {
-            if (calendarState.calendarDisplay === 'timeGridWeek') {
-            setFirstDayOfCalendar(arg.view.activeStart);
-
+            if (calendarState.calendarDisplay === "timeGridWeek") {
+              setFirstDayOfCalendar(arg.view.activeStart);
             } else {
               setFirstDayOfCalendar(arg.view.activeEnd);
             }
           }
-          console.log(
-            moment(arg.view.activeStart).day(1)._d
-          );
-          console.log(moment(arg.view.activeStart))
-          console.log(arg.view)
         }}
         // eventMouseEnter={handleMouseEnter}
         // eventMouseLeave={handleMouseLeave}
