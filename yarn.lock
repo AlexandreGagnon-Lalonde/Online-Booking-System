@@ -1168,6 +1168,14 @@
     "@fullcalendar/common" "~5.3.1"
     tslib "^2.0.0"
 
+"@fullcalendar/moment-timezone@^5.3.1":
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/moment-timezone/-/moment-timezone-5.3.1.tgz#6dadf04cee80d5cf70ed68b160a77ee9341bfb08"
+  integrity sha512-/a9bzQa4ZCZfT5gNeC2Sxa4CENAiNBAApBQ+BjncWf2orGNHRa0PPnFvRANQr2RZ2BMCr7QE5hbxcgxzECj4yw==
+  dependencies:
+    "@fullcalendar/common" "~5.3.1"
+    tslib "^2.0.0"
+
 "@fullcalendar/premium-common@~5.3.1":
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/@fullcalendar/premium-common/-/premium-common-5.3.1.tgz#32e49a452b7b53b5c1d345c80648eb91d20dedbb"

@@ -35,54 +35,6 @@ const Calendar = (props) => {
     _id: "",
     workout: "",
     comments: [],
-    "02:00": {
-      members: [],
-    },
-    "03:00": {
-      members: [],
-    },
-    "04:00": {
-      members: [],
-    },
-    "05:00": {
-      members: [],
-    },
-    "06:00": {
-      members: [],
-    },
-    "08:00": {
-      members: [],
-    },
-    "09:00": {
-      members: [],
-    },
-    "12:00": {
-      members: [],
-    },
-    "13:00": {
-      members: [],
-    },
-    "14:00": {
-      members: [],
-    },
-    "15:00": {
-      members: [],
-    },
-    "16:00": {
-      members: [],
-    },
-  };
-  // weekend class object template
-  const newWeekendClass = {
-    _id: "",
-    workout: "",
-    comments: [],
-    "04:00": {
-      members: [],
-    },
-    "05:00": {
-      members: [],
-    },
     "06:00": {
       members: [],
     },
@@ -92,8 +44,55 @@ const Calendar = (props) => {
     "08:00": {
       members: [],
     },
+    "09:00": {
+      members: [],
+    },
+    "10:00": {
+      members: [],
+    },
+    "12:00": {
+      members: [],
+    },
+    "13:00": {
+      members: [],
+    },
+    "16:00": {
+      members: [],
+    },
+    "17:00": {
+      members: [],
+    },
+    "18:00": {
+      members: [],
+    },
+    "19:00": {
+      members: [],
+    },
+    "20:00": {
+      members: [],
+    },
   };
-  let newClass;
+  // weekend class object template
+  const newWeekendClass = {
+    _id: "",
+    workout: "",
+    comments: [],
+    "08:00": {
+      members: [],
+    },
+    "09:00": {
+      members: [],
+    },
+    "10:00": {
+      members: [],
+    },
+    "11:00": {
+      members: [],
+    },
+    "12:00": {
+      members: [],
+    },
+  };
 
   // close modal
   const handleClose = () => {
@@ -103,6 +102,7 @@ const Calendar = (props) => {
 
   // open modal
   const handleShow = (info) => {
+    console.log(info.el.innerText.toString().slice(0, 5))
     let currentDay = calendarState.calendar.filter(
       (day) =>
         day._id ===
@@ -110,22 +110,24 @@ const Calendar = (props) => {
           "base64"
         )
     )[0];
+        let classSchedule = info.el.innerText.toString().slice(0, 5);
+
     let currentClassMembers =
-      currentDay[info.el.fcSeg.start.toString().slice(16, 21)].members;
+      currentDay ? currentDay[classSchedule].members : false
     // set modal date/time info
-    setShow({ info: info.el.fcSeg, modal: true, data: currentClassMembers });
+    setShow({ info: info.el.fcSeg, modal: true, members: currentClassMembers, classSchedule });
   };
 
   // class booking
   const handleCalendarSubmit = (ev) => {
     ev.preventDefault();
+    let newClass;
     // string of that format '00:00'
-    let classTime = show.info.start.toString().slice(16, 21);
+    let classTime = show.classSchedule
     // create an _id from the date without the time
     let classId = Buffer.from(show.info.start.toString().slice(0, 15)).toString(
       "base64"
     );
-    console.log(classId);
     // see if the class day is during the week or the weekend
     let weekDayConfirmation = weekDays.includes(
       show.info.start.toString().slice(0, 3)
@@ -254,11 +256,11 @@ const Calendar = (props) => {
           <Modal.Title>Modal Title</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {show.data
-            ? show.data.map((member) => {
+          {show.members
+            ? show.members.map((member) => {
                 return <p>{member.fullname}</p>;
               })
-            : null}
+            : 'No members'}
         </Modal.Body>
         <Modal.Footer>
           <button onClick={handleCalendarSubmit} variant={"secondary"}>
@@ -273,10 +275,12 @@ const Calendar = (props) => {
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView={calendarState.calendarDisplay}
+        defaultView={'basicWeek'}
         ref={calendarDisplayRef}
         slotMinTime={"05:00:00"}
         slotMaxTime={"22:00:00"}
         slotDuration={"1:00"}
+        eventTimeFormat={{ hour: '2-digit', minute: '2-digit', meridiem: false, hour12: false }}
         firstDay={1}
         contentHeight={800}
         expandRows={true}
