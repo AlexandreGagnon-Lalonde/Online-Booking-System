@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -17,7 +19,12 @@ import {
 } from "../../reducers/action";
 
 const Calendar = (props) => {
-  const [show, setShow] = React.useState({ info: "", modal: false });
+  const [show, setShow] = React.useState({
+    info: "",
+    modal: false,
+    members: [],
+    classSchedule: null,
+  });
   const calendarState = useSelector((state) => state.calendar);
   const currentUser = useSelector((state) => state.user.user);
   const [firstDayOfCalendar, setFirstDayOfCalendar] = React.useState(null);
@@ -97,12 +104,12 @@ const Calendar = (props) => {
   // close modal
   const handleClose = () => {
     // empty modal info
-    setShow({ info: "", modal: false });
+    setShow({ info: "", modal: false, members: [], classSchedule: null });
   };
 
   // open modal
   const handleShow = (info) => {
-    console.log(info.el.innerText.toString().slice(0, 5))
+    console.log(info.el.innerText.toString().slice(0, 5));
     let currentDay = calendarState.calendar.filter(
       (day) =>
         day._id ===
@@ -110,12 +117,18 @@ const Calendar = (props) => {
           "base64"
         )
     )[0];
-        let classSchedule = info.el.innerText.toString().slice(0, 5);
+    let classSchedule = info.el.innerText.toString().slice(0, 5);
 
-    let currentClassMembers =
-      currentDay ? currentDay[classSchedule].members : false
+    let currentClassMembers = currentDay
+      ? currentDay[classSchedule].members
+      : false;
     // set modal date/time info
-    setShow({ info: info.el.fcSeg, modal: true, members: currentClassMembers, classSchedule });
+    setShow({
+      info: info.el.fcSeg,
+      modal: true,
+      members: currentClassMembers,
+      classSchedule,
+    });
   };
 
   // class booking
@@ -123,7 +136,7 @@ const Calendar = (props) => {
     ev.preventDefault();
     let newClass;
     // string of that format '00:00'
-    let classTime = show.classSchedule
+    let classTime = show.classSchedule;
     // create an _id from the date without the time
     let classId = Buffer.from(show.info.start.toString().slice(0, 15)).toString(
       "base64"
@@ -200,7 +213,7 @@ const Calendar = (props) => {
   // const handleMouseLeave = () => {
   //   console.log("leave");
   // };
-
+  console.log(show);
   React.useEffect(() => {
     calendarDisplayRef.current
       .getApi()
@@ -256,11 +269,13 @@ const Calendar = (props) => {
           <Modal.Title>Modal Title</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {show.members
+          {show.members.length > 0
             ? show.members.map((member) => {
-                return <p>{member.fullname}</p>;
+                return (
+                  <Link to={`/profile/${member._id}`}>{member.fullname}</Link>
+                );
               })
-            : 'No members'}
+            : "No members"}
         </Modal.Body>
         <Modal.Footer>
           <button onClick={handleCalendarSubmit} variant={"secondary"}>
@@ -275,12 +290,17 @@ const Calendar = (props) => {
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView={calendarState.calendarDisplay}
-        defaultView={'basicWeek'}
+        defaultView={"basicWeek"}
         ref={calendarDisplayRef}
         slotMinTime={"05:00:00"}
         slotMaxTime={"22:00:00"}
         slotDuration={"1:00"}
-        eventTimeFormat={{ hour: '2-digit', minute: '2-digit', meridiem: false, hour12: false }}
+        eventTimeFormat={{
+          hour: "2-digit",
+          minute: "2-digit",
+          meridiem: false,
+          hour12: false,
+        }}
         firstDay={1}
         contentHeight={800}
         expandRows={true}

@@ -1,51 +1,85 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { logoutUser } from "../../reducers/action";
+import {
+  requestUser,
+  receiveOtherUser,
+  receiveUserError,
+} from "../../reducers/action";
 import { useHistory } from "react-router-dom";
+import LoadingSpinner from "../LoadingSpinner";
+import { SERVER_URL } from "../../constant";
 
 import LoggedInHeader from "../Header/LoggedInHeader";
-import ProfileInfo from './ProfileInfo';
-import ProfileMessages from './ProfileMessages';
-import ProfileClasses from './ProfileClasses';
-import ProfilSuggestion from './ProfilSuggestion';
+import ProfileInfo from "./ProfileInfo";
+import ProfileMessages from "./ProfileMessages";
+import ProfileClasses from "./ProfileClasses";
+import ProfilSuggestion from "./ProfilSuggestion";
 
 const Profile = () => {
-  const userState = useSelector((state) => state.user.user);
-  const otherUserState = useSelector((state) => state.user.otherUser);
+  const userStatus = useSelector((state) => state.user.status);
+  const currentUser = useSelector((state) => state.user.user);
+  const otherUser = useSelector((state) => state.user.otherUser);
   const suggestionState = useSelector((state) => state.suggestion.suggestion);
 
   const history = useHistory();
 
-  if (!localStorage.getItem('currentUserId')) {
-    history.push('/')
+  const dispatch = useDispatch();
+
+  if (!localStorage.getItem("currentUserId")) {
+    history.push("/");
   }
 
   // gets me the _id of user from url
-  // console.log(window.location.href.split("/").pop());
   let currentProfileId = window.location.href.split("/").pop();
   // change id to email
   let currentProfileEmail = Buffer.from(currentProfileId, "base64").toString(
     "ascii"
   );
-
-  // if (currentProfileID !== currentUser._id)
-
-  // fetch(`/api/getuser/${currentProfileEmail}`)
+  console.log(!otherUser);
 
   React.useEffect(() => {
+    if (!otherUser || currentProfileId !== otherUser._id) {
+      console.log("looking for other user");
+      // dispatch(requestUser());
 
-  }, [suggestionState])
+      fetch(SERVER_URL + `/api/getuser/${currentProfileEmail}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("then", data.user);
+          dispatch(receiveOtherUser(data.user));
+          localStorage.setItem("otherUserId", data.user._id);
+        })
+        .catch((err) => {
+          console.log(err);
+          dispatch(receiveUserError());
+        });
+    }
+  }, [currentProfileId]);
 
   return (
     <>
-      <LoggedInHeader />
-      <ProfileInfo />
-      <ProfileMessages currentUser={currentProfileId === userState._id ? true : false} />
-      <ProfileClasses />
-      {
-        userState.admin ? <ProfilSuggestion /> : null
-      }
+      {!otherUser || currentProfileId !== otherUser._id ? (
+        <LoadingSpinner size={"lg"} />
+      ) : (
+        <>
+          <LoggedInHeader />
+          <ProfileInfo
+            user={
+              currentProfileId === currentUser._id ? currentUser : otherUser
+            }
+          />
+          <ProfileMessages
+            currentUser={currentProfileId === currentUser._id ? true : false}
+          />
+          <ProfileClasses
+            currentUser={
+              currentProfileId === currentUser._id ? currentUser : otherUser
+            }
+          />
+          {currentUser.admin ? <ProfilSuggestion /> : null}
+        </>
+      )}
     </>
   );
 };

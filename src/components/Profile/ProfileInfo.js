@@ -3,25 +3,22 @@ import styled from "styled-components";
 
 import { useSelector, useDispatch } from "react-redux";
 
-const ProfileInfo = () => {
-  const userState = useSelector((state) => state.user.user);
-  const otherUserState = useSelector((state) => state.user.otherUser)
-
+const ProfileInfo = (props) => {
   return (
     <StyledDiv>
-      <p>Name: {userState.firstName + ' ' + userState.lastName}</p>
-      <p>Phone number: {userState.phone}</p>
-      <p>Date of Birth: {userState.DOB}</p>
-      <p>Address: {userState.address + ' ' + userState.city}</p>
-      <p>Gender: {userState.gender}</p>
+      <p>Name: {props.user.firstName + " " + props.user.lastName}</p>
+      <p>Phone number: {props.user.phone}</p>
+      <p>Date of Birth: {props.user.DOB}</p>
+      <p>Address: {props.user.address + " " + props.user.city}</p>
+      <p>Gender: {props.user.gender}</p>
     </StyledDiv>
-  )
-}
+  );
+};
 
 const StyledDiv = styled.div`
   border: 1px solid black;
   padding 10px;
   margin: 0 50px;
-`
+`;
 
-export default ProfileInfo
+export default ProfileInfo;
