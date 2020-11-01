@@ -17,6 +17,7 @@ import {
   receiveCalendarError,
   requestCalendar,
 } from "../../reducers/action";
+import LoadingSpinner from "../LoadingSpinner";
 
 const Calendar = (props) => {
   const [show, setShow] = React.useState({
@@ -108,23 +109,21 @@ const Calendar = (props) => {
   };
 
   // open modal
-  const handleShow = (info) => {
-    console.log(info.el.innerText.toString().slice(0, 5));
-    let currentDay = calendarState.calendar.filter(
-      (day) =>
-        day._id ===
-        Buffer.from(info.el.fcSeg.start.toString().slice(0, 15)).toString(
-          "base64"
-        )
-    )[0];
-    let classSchedule = info.el.innerText.toString().slice(0, 5);
+  const handleShow = (eventInfo) => {
+    const encryptedDay = Buffer.from(
+      eventInfo.el.fcSeg.start.toString().slice(0, 15)
+    ).toString("base64");
+    let [currentDay] = calendarState.calendar.filter(
+      (day) => day._id === encryptedDay
+    );
+    let classSchedule = eventInfo.el.innerText.toString().slice(0, 5);
 
     let currentClassMembers = currentDay
       ? currentDay[classSchedule].members
       : false;
-    // set modal date/time info
+    // set modal date/time eventInfo
     setShow({
-      info: info.el.fcSeg,
+      info: eventInfo.el.fcSeg,
       modal: true,
       members: currentClassMembers,
       classSchedule,
@@ -213,7 +212,7 @@ const Calendar = (props) => {
   // const handleMouseLeave = () => {
   //   console.log("leave");
   // };
-  console.log(show);
+
   React.useEffect(() => {
     calendarDisplayRef.current
       .getApi()
@@ -269,13 +268,19 @@ const Calendar = (props) => {
           <Modal.Title>Modal Title</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {show.members.length > 0
-            ? show.members.map((member) => {
+          {show.members ? (
+            show.members.length > 0 ? (
+              show.members.map((member) => {
                 return (
                   <Link to={`/profile/${member._id}`}>{member.fullname}</Link>
                 );
               })
-            : "No members"}
+            ) : (
+              "No members"
+            )
+          ) : (
+            <LoadingSpinner size={"sm"} />
+          )}
         </Modal.Body>
         <Modal.Footer>
           <button onClick={handleCalendarSubmit} variant={"secondary"}>
@@ -290,7 +295,6 @@ const Calendar = (props) => {
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView={calendarState.calendarDisplay}
-        defaultView={"basicWeek"}
         ref={calendarDisplayRef}
         slotMinTime={"05:00:00"}
         slotMaxTime={"22:00:00"}

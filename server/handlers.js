@@ -96,55 +96,91 @@ const sendMessage = async (req, res) => {
 
     const db = client.db("online-booking-system");
 
-    const currentUser = await db
-      .collection("users")
-      .findOne({ _id: currentUserId });
-    const otherUser = await db
-      .collection("users")
-      .findOne({ _id: otherUserId });
+    const conversations = await db.collection("conversations").find().toArray();
 
-    const currentUserQuery = { _id: currentUserId };
-    const otherUserQuery = { _id: otherUserId };
+    const conversationExist = conversations.find(
+      (convo) =>
+        (convo.user1 === currentUserId || otherUserId) &&
+        (convo.user2 === currentUserId || otherUserId)
+    );
 
-    const currentUserNewMessage = {
-      $set: {
-        Conversations: currentUser.Conversations.push({
-          _id: dateId,
-          from: currentUserId,
-          to: otherUserId,
-          message: message,
-          date: date,
-          status: "sent",
-        }),
-      },
+    const newMessage = {
+      from: currentUserId,
+      message,
+      status: "sent",
     };
 
-    const otherUserNewMessage = {
-      $set: {
-        Conversations: otherUser.Conversations.push({
-          _id: dateId,
-          from: currentUserId,
-          to: otherUserId,
-          message: message,
-          date: date,
-          status: "sent",
-        }),
-      },
-    };
+    if (conversationExist) {
+      const newMessages = conversationExist.messages.push(newMessage);
 
-    const currentUserMessageCreated = await db
-      .collection("users")
-      .updateOne(currentUserQuery, currentUserNewMessage);
-    assert.equal(1, currentUserMessageCreated.matchedCount);
-    assert.equal(1, currentUserMessageCreated.modifiedCount);
+      const conversationQuery = { _id: conversationExist._id };
 
-    const otherUserMessageCreated = await db
-      .collection("users")
-      .updateOne(otherUserQuery, otherUserNewMessage);
-    assert.equal(1, otherUserMessageCreated.matchedCount);
-    assert.equal(1, otherUserMessageCreated.modifiedCount);
+      const conversationModification = {
+        $set: {
+          messages: newMessages,
+        },
+      };
 
-    res.status(200).json({ status: 200, success: true, messages: newMessage });
+      const conversationEdited = await db
+        .collection("conversations")
+        .updateOne(conversationQuery, conversationModification);
+      assert.equal(1, conversationEdited.matchedCount);
+      assert.equal(1, conversationEdited.modifiedCount);
+    } else {
+      const currentUser = await db
+        .collection("users")
+        .findOne({ _id: currentUserId });
+      const otherUser = await db
+        .collection("users")
+        .findOne({ _id: otherUserId });
+
+      const currentUserQuery = { _id: currentUserId };
+      const otherUserQuery = { _id: otherUserId };
+
+      const conversationId = currentUserId + otherUserId;
+
+      currentUser.conversations.push(conversationId);
+      otherUser.conversations.push(conversationId);
+      const currentUserConversations = currentUser.conversations;
+      const otherUserConversations = otherUser.conversations;
+
+      const currentUserConversationsModification = {
+        $set: {
+          conversations: currentUserConversations,
+        },
+      };
+      const otherUserConversationsModification = {
+        $set: {
+          conversations: otherUserConversations,
+        },
+      };
+
+      const currentUserUpdated = await db
+        .collection("users")
+        .updateOne(currentUserQuery, currentUserConversationsModification);
+      assert.equal(1, currentUserUpdated.matchedCount);
+      assert.equal(1, currentUserUpdated.modifiedCount);
+
+      const otherUserUpdated = await db
+        .collection("users")
+        .updateOne(otherUserQuery, otherUserConversationsModification);
+      assert.equal(1, otherUserUpdated.matchedCount);
+      assert.equal(1, otherUserUpdated.modifiedCount);
+
+      const newConversationData = {
+        _id: conversationId,
+        user1: currentUserId,
+        user2: otherUserId,
+        messages: [newMessage],
+      };
+
+      const newConversation = await db
+        .collection("conversations")
+        .insertOne(newConversationData);
+      assert(1, newConversation.insertedCount);
+    }
+
+    res.status(200).json({ status: 200, success: true, messages: req.body });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }
@@ -200,13 +236,13 @@ const editMessage = async (req, res) => {
 
     const currentUserNewMessage = {
       $set: {
-        Conversations: currentUserNewConversations,
+        conversations: currentUserNewConversations,
       },
     };
 
     const otherUserNewMessage = {
       $set: {
-        Conversations: otherUserNewConversations,
+        conversations: otherUserNewConversations,
       },
     };
 
@@ -277,13 +313,13 @@ const deleteMessage = async (req, res) => {
 
     const currentUserNewMessage = {
       $set: {
-        Conversations: currentUserNewConversations,
+        conversations: currentUserNewConversations,
       },
     };
 
     const otherUserNewMessage = {
       $set: {
-        Conversations: otherUserNewConversations,
+        conversations: otherUserNewConversations,
       },
     };
 
@@ -361,7 +397,7 @@ const bookClass = async (req, res) => {
       assert.equal(1, classEdited.modifiedCount);
 
       let userClasses = users.filter((user) => user._id === currentUser._id)[0]
-        .Classes;
+        .classes;
       let currentUserHasClass =
         userClasses.filter((classe) => classe === classId).length > 0;
 
@@ -370,7 +406,7 @@ const bookClass = async (req, res) => {
 
         let newUserClass = {
           $set: {
-            Classes: userClasses,
+            classes: userClasses,
           },
         };
 
@@ -397,7 +433,7 @@ const bookClass = async (req, res) => {
       const firstClass = await db.collection("classes").insertOne(newClass);
       assert(1, firstClass.insertedCount);
       let userClasses = users.filter((user) => user._id === currentUser._id)[0]
-        .Classes;
+        .classes;
       let currentUserHasClass =
         userClasses.filter((classe) => classe === classId).length > 0;
 
@@ -406,7 +442,7 @@ const bookClass = async (req, res) => {
 
         let newUserClass = {
           $set: {
-            Classes: userClasses,
+            classes: userClasses,
           },
         };
 
@@ -455,7 +491,7 @@ const getCalendar = async (req, res) => {
     const db = client.db("online-booking-system");
 
     const classes = await db.collection("classes").find().toArray();
-    
+
     let passedToFrontEndClasses = [];
 
     if (calendarDisplay === "timeGridWeek") {

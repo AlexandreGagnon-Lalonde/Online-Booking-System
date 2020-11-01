@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 
 import IndividualConversation from "./IndiviudalConversation";
-import SendMessage from './SendMessage';
+import SendMessage from "./SendMessage";
 
 const ProfileMessages = (props) => {
   const userState = useSelector((state) => state.user.user);
@@ -11,18 +11,20 @@ const ProfileMessages = (props) => {
 
   return (
     <div>
-      {userState.Conversations.length > 0
-        ? userState.Conversations.map((conversationObject) => {
+      {props.currentUser ? (
+        userState.Conversations.length > 0 ? (
+          userState.Conversations.map((conversationObject) => {
             return (
               <IndividualConversation
                 conversation={conversationObject.messages}
               />
             );
           })
-        : <p>No Conversations</p>}
-        {
-          props.currentUser ? null : <SendMessage />
-        }
+        ) : (
+          <p>No Conversations</p>
+        )
+      ) : null}
+      {props.currentUser ? null : <SendMessage />}
     </div>
   );
 };

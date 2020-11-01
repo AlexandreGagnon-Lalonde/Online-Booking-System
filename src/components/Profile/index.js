@@ -6,7 +6,7 @@ import {
   receiveOtherUser,
   receiveUserError,
 } from "../../reducers/action";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner";
 import { SERVER_URL } from "../../constant";
 
@@ -26,32 +26,30 @@ const Profile = () => {
 
   const dispatch = useDispatch();
 
+  const params = useParams();
+
   if (!localStorage.getItem("currentUserId")) {
     history.push("/");
   }
 
   // gets me the _id of user from url
-  let currentProfileId = window.location.href.split("/").pop();
+  let currentProfileId = params.id;
   // change id to email
   let currentProfileEmail = Buffer.from(currentProfileId, "base64").toString(
     "ascii"
   );
-  console.log(!otherUser);
 
   React.useEffect(() => {
     if (!otherUser || currentProfileId !== otherUser._id) {
-      console.log("looking for other user");
-      // dispatch(requestUser());
+      dispatch(requestUser());
 
       fetch(SERVER_URL + `/api/getuser/${currentProfileEmail}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log("then", data.user);
           dispatch(receiveOtherUser(data.user));
           localStorage.setItem("otherUserId", data.user._id);
         })
         .catch((err) => {
-          console.log(err);
           dispatch(receiveUserError());
         });
     }

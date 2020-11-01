@@ -88,7 +88,7 @@ function App() {
           <Route path="/homepage">
             <HomePage />
           </Route>
-          <Route path="/profile/:id">
+          <Route exact path="/profile/:id">
             <Profile />
           </Route>
         </>

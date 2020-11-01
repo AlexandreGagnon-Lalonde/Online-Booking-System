@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { createBrowserHistory } from 'history';
-import { SERVER_URL } from '../../constant';
+import { createBrowserHistory } from "history";
+import { SERVER_URL } from "../../constant";
 import {
   requestUser,
   receiveUser,
@@ -44,7 +44,7 @@ const SignUpForm = () => {
             _id: Buffer.from(email).toString("base64"),
             firstName,
             lastName,
-            avatar: '',
+            avatar: "",
             phone,
             DOB,
             gender,
@@ -59,18 +59,18 @@ const SignUpForm = () => {
               relation,
               relPhone,
             },
-            Conversations: [],
-            Classes: [],
+            conversations: [],
+            classes: [],
           }),
         })
           .then((res) => res.json())
           .then((data) => {
             if (data.success) {
-              dispatch(receiveUser(data.user))
-              localStorage.setItem('currentUserId', data.user._id)
-              history.push('/homepage')
+              dispatch(receiveUser(data.user));
+              localStorage.setItem("currentUserId", data.user._id);
+              history.push("/homepage");
             } else {
-              dispatch(receiveUserError())
+              dispatch(receiveUserError());
             }
           })
           .catch((err) => {

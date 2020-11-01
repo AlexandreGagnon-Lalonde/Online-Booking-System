@@ -61,7 +61,7 @@ express()
   .get("/api/allworkouts", getWorkouts)
   .get("/api/workout/:id", getOneWorkout)
   .get("/api/getsuggestions", getSuggestions)
-  .get('/api/getcalendar/:calendarDisplay/:firstDay', getCalendar)
+  .get("/api/getcalendar/:calendarDisplay/:firstDay", getCalendar)
 
   .post("/api/createuser", createUser)
   .post("/api/createsuggestion", createSuggestion)
@@ -73,8 +73,8 @@ express()
   .patch("/api/editmessage", editMessage)
   .patch("/api/deletemessage", deleteMessage)
   .patch("/api/updateuser/:param/:value", updateUser)
-  .patch('/api/bookclass/:classId', bookClass)
-  .patch('/api/unbookclass/:classId', unbookClass)
+  .patch("/api/bookclass/:classId", bookClass)
+  .patch("/api/unbookclass/:classId", unbookClass)
 
   .delete("/api/suggestion/delete/:id", deleteSuggestion)
 
@@ -99,8 +99,8 @@ const ADMIN = {
     relation: "",
     relPhone: "",
   },
-  Conversations: [],
-  Classes: [],
+  conversations: [],
+  classes: [],
 };
 
 const importAdmin = async () => {

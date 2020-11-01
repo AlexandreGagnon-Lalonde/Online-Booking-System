@@ -14,9 +14,7 @@ const classes = [
       // etc
     ],
     "6:00": {
-      members: [
-        {_id: 'userId', name: 'fullname'},
-      ],
+      members: [{ _id: "userId", name: "fullname" }],
     },
     "7:00": {
       members: [],
@@ -50,50 +48,7 @@ const classes = [
 
 const user = {
   info: "info",
-  Conversations: [
-    {
-      otherUser: "otherUserId",
-      messages: [
-        {
-          _id: 'data',
-          from: "",
-          to: "",
-          date: "date",
-          message: "message",
-          status: "",
-        },
-        {
-          _id: 'data',
-          from: "",
-          to: "",
-          date: "date",
-          message: "message",
-          status: "",
-        },
-      ],
-    },
-    {
-      otherUser: "otherUserId",
-      messages: [
-        {
-          _id: 'data',
-          from: "",
-          to: "",
-          date: "date",
-          message: "message",
-          status: "",
-        },
-        {
-          _id: 'data',
-          from: "",
-          to: "",
-          date: "date",
-          message: "message",
-          status: "",
-        },
-      ],
-    },
-  ],
+  Conversations: ["_id", "..."],
   Classes: [
     {
       date: "",
@@ -110,16 +65,51 @@ const user = {
 
 const suggestions = [
   {
-    _id: 'date',
-    from: 'anonymous or user email',
-    suggestion: 'suggestion',
+    _id: "date",
+    from: "anonymous or user email",
+    suggestion: "suggestion",
   },
   {
-    _id: 'date',
-    from: 'anonymous or user email',
-    suggestion: 'suggestion',
+    _id: "date",
+    from: "anonymous or user email",
+    suggestion: "suggestion",
   },
   // etc
-]
+];
 
-// localstorage react calendar
+const conversations = [
+  {
+    _id: "id",
+    user1: "userId1",
+    user2: "userId2",
+    messages: [
+      {
+        from: "userid",
+        message: "message",
+        status: "sent",
+      },
+      {
+        from: "userid",
+        message: "message",
+        status: "sent",
+      },
+    ],
+  },
+  {
+    _id: "id",
+    user1: "userId1",
+    user2: "userId2",
+    messages: [
+      {
+        from: "userid",
+        message: "message",
+        status: "sent",
+      },
+      {
+        from: "userid",
+        message: "message",
+        status: "sent",
+      },
+    ],
+  },
+];

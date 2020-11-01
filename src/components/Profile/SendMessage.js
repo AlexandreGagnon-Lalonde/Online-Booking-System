@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
+import { SERVER_URL } from "../../constant";
 
 import {
   requestMessage,
@@ -11,9 +12,9 @@ import {
 const SendMessage = () => {
   const [message, setMessage] = React.useState("");
 
-  const currentUser = useSelector((state) => state.user.currentUser);
+  const currentUser = useSelector((state) => state.user.user);
   const otherUser = useSelector((state) => state.user.otherUser);
-
+  console.log(otherUser, currentUser);
   const dispatch = useDispatch();
 
   return (
@@ -21,35 +22,35 @@ const SendMessage = () => {
       onSubmit={(ev) => {
         ev.preventDefault();
 
-        const date = new Date()
+        const date = new Date();
         const dateId = Buffer.from(date.toString()).toString("base64");
 
-        // dispatch(requestMessage());
+        dispatch(requestMessage());
 
-        // fetch(SERVER_URL + "/api/sendmessage", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify({
-        //     dateId,
-        //     currentUserId: currentUser._id,
-        //     otherUserId: otherUser._id,
-        //     date: new Date(),
-        //     message,
-        //   }),
-        // })
-        //   .then((res) => res.json())
-        //   .then((data) => {
-        //     if (data.success) {
-        //       dispatch(receiveMessages(data.messages))
-        //     } else {
-        //       dispatch(messageError())
-        //     }
-        //   })
-        //   .catch((err) => {
-        //     dispatch(messageError());
-        //   });
+        fetch(SERVER_URL + "/api/sendmessage", {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            dateId,
+            currentUserId: currentUser._id,
+            otherUserId: otherUser._id,
+            date: new Date(),
+            message,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success) {
+              dispatch(receiveMessages(data.messages));
+            } else {
+              dispatch(messageError());
+            }
+          })
+          .catch((err) => {
+            dispatch(messageError());
+          });
       }}
     >
       <textarea
