@@ -111,7 +111,8 @@ const sendMessage = async (req, res) => {
     };
 
     if (conversationExist) {
-      const newMessages = conversationExist.messages.push(newMessage);
+      conversationExist.messages.push(newMessage);
+      const newMessages = conversationExist.messages;
 
       const conversationQuery = { _id: conversationExist._id };
 
@@ -476,8 +477,51 @@ const bookClass = async (req, res) => {
 
 const unbookClass = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
+
+  const { currentUserId, classTime } = req.body;
+  const { classId } = req.params;
   try {
-  } catch (err) {}
+    await client.connect();
+console.log('test')
+    const db = client.db("online-booking-system");
+
+    const currentUser = await db.collection('users').findOne({ _id: currentUserId })
+    const selectedClass = await db.collection('classes').findOne({ _id: classId })
+    console.log(currentUser, selectedClass)
+
+    const updatedSelectedClass = selectedClass[classTime].members.filter(member => member._id !== currentUserId)
+    const updatedCurrentUserClasses = currentUser.classes.filter(classe => classe !== classId)
+
+    const userQuery = { _id: currentUserId };
+    const classQuery = { _id: classId };
+    console.log('test3')
+    const userValue = {
+      $set: {
+        classes: updatedCurrentUserClasses,
+      }
+    }
+    const classValue = {
+      $set: {
+        [classTime]: updatedSelectedClass,
+      }
+    }
+    console.log('test4')
+    const userEdited = await db
+      .collection("users")
+      .updateOne(userQuery, userValue);
+    assert.equal(1, userEdited.matchedCount);
+    assert.equal(1, userEdited.modifiedCount);
+    console.log('test5')
+    const classEdited = await db
+      .collection("classes")
+      .updateOne(classQuery, classValue);
+    assert.equal(1, classEdited.matchedCount);
+    assert.equal(1, classEdited.modifiedCount);
+    console.log('test6')
+    res.status(200).json({ status: 200, userEdited, classEdited })
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
   client.close();
 };
 

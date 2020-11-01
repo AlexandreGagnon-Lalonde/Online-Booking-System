@@ -206,6 +206,42 @@ const Calendar = (props) => {
     setShow({ info: "", modal: false });
   };
 
+  const handleUnbookClass = (ev) => {
+    ev.preventDefault();
+
+    const classId = Buffer.from(show.info.start.toString().slice(0, 15)).toString(
+      "base64"
+    );
+    const classTime = show.classSchedule;
+
+    dispatch(requestCalendar());
+
+    fetch(SERVER_URL + `/api/unbookclass/${classId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        currentUserId: currentUser._id,
+        classTime,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          dispatch(receiveCalendar(data.calendar));
+          localStorage.setItem("currentCalendarId", data.calendar._id);
+        } else {
+          dispatch(receiveCalendarError());
+        }
+      })
+      .catch((err) => {
+        dispatch(receiveCalendarError());
+      });
+
+    setShow({ info: "", modal: false });
+  }
+
   // const handleMouseEnter = () => {
   //   console.log("enter");
   // };
@@ -272,7 +308,9 @@ const Calendar = (props) => {
             show.members.length > 0 ? (
               show.members.map((member) => {
                 return (
-                  <Link to={`/profile/${member._id}`}>{member.fullname}</Link>
+                  <><Link to={`/profile/${member._id}`}>{member.fullname}</Link>
+                    {member._id === currentUser._id ? <button onClick={handleUnbookClass}>Unbook</button> : null}
+                  </>
                 );
               })
             ) : (
