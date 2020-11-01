@@ -2,11 +2,10 @@ import React from "react";
 import styled from "styled-components";
 
 const IndividualMessage = (message) => {
+  console.log(message)
   return (
     <div>
-      <p>{message.from}</p>
-      <p>{message.message}</p>
-      <p>{message.date}</p>
+      <p>{message.message.message}</p>
     </div>
   )
 }

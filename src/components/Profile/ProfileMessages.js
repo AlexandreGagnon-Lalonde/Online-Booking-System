@@ -10,13 +10,14 @@ const ProfileMessages = (props) => {
   const otherUserState = useSelector((state) => state.user.otherUser);
 
   return (
-    <div>
+    <ConversationsContainer>
       {props.currentUser ? (
-        userState.Conversations.length > 0 ? (
-          userState.Conversations.map((conversationObject) => {
+        userState.conversations.length > 0 ? (
+          props.message.map((conversation) => {
+            console.log(conversation.messages)
             return (
               <IndividualConversation
-                conversation={conversationObject.messages}
+                conversation={conversation.messages}
               />
             );
           })
@@ -25,8 +26,12 @@ const ProfileMessages = (props) => {
         )
       ) : null}
       {props.currentUser ? null : <SendMessage />}
-    </div>
+    </ConversationsContainer>
   );
 };
+
+const ConversationsContainer = styled.div`
+  border: 1px solid red;
+`
 
 export default ProfileMessages;

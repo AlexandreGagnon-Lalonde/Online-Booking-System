@@ -5,6 +5,9 @@ import {
   requestUser,
   receiveOtherUser,
   receiveUserError,
+  requestMessage,
+  receiveMessages,
+  messageError,
 } from "../../reducers/action";
 import { useHistory, useParams } from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner";
@@ -17,15 +20,13 @@ import ProfileClasses from "./ProfileClasses";
 import ProfilSuggestion from "./ProfilSuggestion";
 
 const Profile = () => {
-  const userStatus = useSelector((state) => state.user.status);
   const currentUser = useSelector((state) => state.user.user);
   const otherUser = useSelector((state) => state.user.otherUser);
+  const messageState = useSelector((state) => state.message);
   const suggestionState = useSelector((state) => state.suggestion.suggestion);
 
   const history = useHistory();
-
   const dispatch = useDispatch();
-
   const params = useParams();
 
   if (!localStorage.getItem("currentUserId")) {
@@ -53,11 +54,27 @@ const Profile = () => {
           dispatch(receiveUserError());
         });
     }
-  }, [currentProfileId]);
 
+    if (!messageState.message) {
+      
+      dispatch(requestMessage());
+
+      fetch(SERVER_URL + `/api/getmessages/${currentUser._id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(receiveMessages(data.message));
+        })
+        .catch((err) => {
+          dispatch(messageError());
+        });
+    }
+  }, [currentProfileId]);
+console.log(!messageState.message && (!otherUser || currentProfileId !== otherUser._id))
+console.log('message', messageState)
+console.log('otherUser', otherUser)
   return (
     <>
-      {!otherUser || currentProfileId !== otherUser._id ? (
+      {!messageState.message && (!otherUser || currentProfileId !== otherUser._id) ? (
         <LoadingSpinner size={"lg"} />
       ) : (
         <>
@@ -69,6 +86,7 @@ const Profile = () => {
           />
           <ProfileMessages
             currentUser={currentProfileId === currentUser._id ? true : false}
+            message={messageState.message}
           />
           <ProfileClasses
             currentUser={

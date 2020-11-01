@@ -31,6 +31,7 @@ const {
   sendMessage,
   editMessage,
   deleteMessage,
+  getMessages,
   bookClass,
   unbookClass,
   getCalendar,
@@ -62,6 +63,7 @@ express()
   .get("/api/workout/:id", getOneWorkout)
   .get("/api/getsuggestions", getSuggestions)
   .get("/api/getcalendar/:calendarDisplay/:firstDay", getCalendar)
+  .get('/api/getmessages/:_id', getMessages)
 
   .post("/api/createuser", createUser)
   .post("/api/createsuggestion", createSuggestion)

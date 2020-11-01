@@ -5,7 +5,7 @@ import { SERVER_URL } from "../../constant";
 
 import {
   requestMessage,
-  receiveMessages,
+  sendMessage,
   messageError,
 } from "../../reducers/action";
 
@@ -42,11 +42,7 @@ const SendMessage = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            if (data.success) {
-              dispatch(receiveMessages(data.messages));
-            } else {
-              dispatch(messageError());
-            }
+            dispatch(sendMessage());
           })
           .catch((err) => {
             dispatch(messageError());

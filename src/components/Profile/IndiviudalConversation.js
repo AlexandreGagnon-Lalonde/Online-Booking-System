@@ -3,11 +3,11 @@ import styled from "styled-components";
 
 import IndividualMessage from './IndividualMessage';
 
-const IndividualConversation = (messages) => {
-  
+const IndividualConversation = (conversation) => {
   return (
     <div>
-      {messages.map(message => {
+      {conversation.conversation.map(message => {
+        console.log(message)
         return <IndividualMessage message={message} />
       })}
     </div>
