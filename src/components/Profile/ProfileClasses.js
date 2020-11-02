@@ -11,9 +11,12 @@ const ProfileClasses = () => {
   return (
     <div>
       {userState.classes.length > 0 ? (
-        userState.classes.map((classe) => {
-          return <IndividualClasses classe={classe} />;
-        })
+        <p>
+          Classes
+          {userState.classes.map((classe) => {
+            return <IndividualClasses classe={classe} />;
+          })}
+        </p>
       ) : (
         <p>No Classes</p>
       )}
