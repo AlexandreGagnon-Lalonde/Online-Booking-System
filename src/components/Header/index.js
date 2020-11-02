@@ -7,12 +7,12 @@ import LoggedInHeader from "./LoggedInHeader";
 import LoggedOutHeader from "./LoggedOutHeader";
 
 const Header = () => {
-  const state = useSelector((state) => state.user);
-
+  const userState = useSelector((state) => state.user);
+  
   return (
     <>
       {
-      state.status === "Logged In" 
+      userState.status === "Logged In" 
         ? <LoggedInHeader /> 
         : <LoggedOutHeader />
       }
