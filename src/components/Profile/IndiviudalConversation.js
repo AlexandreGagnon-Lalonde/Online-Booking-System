@@ -7,8 +7,9 @@ const IndividualConversation = (conversation) => {
   return (
     <div>
       {conversation.conversation.map(message => {
-        console.log(message)
-        return <IndividualMessage message={message} />
+        return (
+        <><p>Conversation with xyz</p><IndividualMessage message={message} /></>
+        )
       })}
     </div>
   )
