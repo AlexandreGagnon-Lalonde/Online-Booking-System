@@ -19,7 +19,9 @@ const createUser = async (req, res) => {
 
     const users = await db.collection("users").find().toArray();
 
-    if (users.filter((user) => user.email === req.body.email).length === 1) {
+    const userExist = users.find((user) => user.email === req.body.email);
+
+    if (userExist) {
       res.status(404).json({ status: 404, message: "Email Already in Use" });
     }
 
@@ -42,10 +44,10 @@ const getUser = async (req, res) => {
 
     const db = client.db("online-booking-system");
 
-    const user = await db.collection("users").findOne({ email: email });
+    const user = await db.collection("users").findOne({ email });
 
     if (user) {
-      res.status(200).json({ status: 200, lang: email, user: user });
+      res.status(200).json({ status: 200, user });
     } else {
       res.status(404).json({ status: 404, message: "User not found" });
     }
@@ -381,8 +383,11 @@ const bookClass = async (req, res) => {
     const classes = await db.collection("classes").find().toArray();
     const users = await db.collection("users").find().toArray();
 
-    const classExist =
-      classes.filter((classe) => classe._id === classId).length === 1;
+    const classExist = classes.find((classe) => classe._id === classId);
+
+    const userClasses = users.find((user) => user._id === currentUser._id)
+      .classes;
+
     let isCurrentUserInClass;
 
     if (classExist && classes.length > 0) {
@@ -415,15 +420,14 @@ const bookClass = async (req, res) => {
       assert.equal(1, classEdited.matchedCount);
       assert.equal(1, classEdited.modifiedCount);
 
-      let userClasses = users.filter((user) => user._id === currentUser._id)[0]
-        .classes;
-      let currentUserHasClass =
-        userClasses.filter((classe) => classe === classId).length > 0;
+      const currentUserHasClass = userClasses.find(
+        (classe) => classe === classId
+      );
 
       if (!currentUserHasClass) {
         userClasses.push(classId);
 
-        let newUserClass = {
+        const newUserClass = {
           $set: {
             classes: userClasses,
           },
@@ -436,7 +440,7 @@ const bookClass = async (req, res) => {
         assert.equal(1, userEdited.modifiedCount);
       }
 
-      let userEditedData = users.find((user) => user._id === currentUser._id);
+      const userEditedData = users.find((user) => user._id === currentUser._id);
 
       res.status(201).json({
         status: 201,
@@ -445,18 +449,17 @@ const bookClass = async (req, res) => {
         user: userEditedData,
       });
     } else if (!classExist) {
-      // create class data
       const firstClass = await db.collection("classes").insertOne(newClass);
       assert(1, firstClass.insertedCount);
-      let userClasses = users.filter((user) => user._id === currentUser._id)[0]
-        .classes;
-      let currentUserHasClass =
-        userClasses.filter((classe) => classe === classId).length > 0;
+
+      const currentUserHasClass = userClasses.find(
+        (classe) => classe === classId
+      );
 
       if (!currentUserHasClass) {
         userClasses.push(classId);
 
-        let newUserClass = {
+        const newUserClass = {
           $set: {
             classes: userClasses,
           },
@@ -469,9 +472,7 @@ const bookClass = async (req, res) => {
         assert.equal(1, userEdited.modifiedCount);
       }
 
-      let userEditedData = users.filter(
-        (user) => user._id === currentUser._id
-      )[0];
+      const userEditedData = users.find((user) => user._id === currentUser._id);
 
       res.status(201).json({
         status: 201,
@@ -558,13 +559,15 @@ const getCalendar = async (req, res) => {
 
     const classes = await db.collection("classes").find().toArray();
 
+    const encryptedOneDay = Buffer.from(
+      firstDay.toString().slice(0, 15)
+    ).toString("base64");
+
     let passedToFrontEndClasses = [];
 
     if (calendarDisplay === "timeGridWeek") {
       for (let i = 1; i <= 7; i++) {
-        let classExist;
-        let classe;
-        let classStringComparison = classes.filter(
+        const classStringComparison = classes.find(
           (classe) =>
             classe._id ===
             Buffer.from(
@@ -575,20 +578,14 @@ const getCalendar = async (req, res) => {
             ).toString("base64")
         );
 
-        classExist = classStringComparison.length === 1;
-        if (classExist) {
-          classe = classStringComparison[0];
-          passedToFrontEndClasses.push(classe);
+        if (classStringComparison) {
+          passedToFrontEndClasses.push(classStringComparison);
         }
       }
     } else if (calendarDisplay === "timeGridDay") {
       // push the class with the correct _id to the array
       passedToFrontEndClasses =
-        classes.filter(
-          (classe) =>
-            classe._id ===
-            Buffer.from(firstDay.toString().slice(0, 15)).toString("base64")
-        )[0] || [];
+        classes.find((classe) => classe._id === encryptedOneDay) || [];
     } else {
       res.status(404).json({ status: 404, message: "Invalid request" });
     }
