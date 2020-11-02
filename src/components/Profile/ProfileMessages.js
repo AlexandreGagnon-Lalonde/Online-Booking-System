@@ -9,6 +9,7 @@ const ProfileMessages = (props) => {
   const userState = useSelector((state) => state.user.user);
   const otherUserState = useSelector((state) => state.user.otherUser);
 
+  console.log(props.message,'profilemessages')
   return (
     <ConversationsContainer>
       {props.currentUser ? (

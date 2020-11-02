@@ -43,63 +43,29 @@ const Calendar = (props) => {
     _id: "",
     workout: "",
     comments: [],
-    "06:00": {
-      members: [],
-    },
-    "07:00": {
-      members: [],
-    },
-    "08:00": {
-      members: [],
-    },
-    "09:00": {
-      members: [],
-    },
-    "10:00": {
-      members: [],
-    },
-    "12:00": {
-      members: [],
-    },
-    "13:00": {
-      members: [],
-    },
-    "16:00": {
-      members: [],
-    },
-    "17:00": {
-      members: [],
-    },
-    "18:00": {
-      members: [],
-    },
-    "19:00": {
-      members: [],
-    },
-    "20:00": {
-      members: [],
-    },
+    "06:00": [],
+    "07:00": [],
+    "08:00": [],
+    "09:00": [],
+    "10:00": [],
+    "12:00": [],
+    "13:00": [],
+    "16:00": [],
+    "17:00": [],
+    "18:00": [],
+    "19:00": [],
+    "20:00": [],
   };
   // weekend class object template
   const newWeekendClass = {
     _id: "",
     workout: "",
     comments: [],
-    "08:00": {
-      members: [],
-    },
-    "09:00": {
-      members: [],
-    },
-    "10:00": {
-      members: [],
-    },
-    "11:00": {
-      members: [],
-    },
-    "12:00": {
-      members: [],
-    },
+    "08:00": [],
+    "09:00": [],
+    "10:00": [],
+    "11:00": [],
+    "12:00": [],
   };
 
   // close modal
@@ -113,14 +79,14 @@ const Calendar = (props) => {
     const encryptedDay = Buffer.from(
       eventInfo.el.fcSeg.start.toString().slice(0, 15)
     ).toString("base64");
-    let [currentDay] = calendarState.calendar.filter(
+
+    let currentDay = calendarState.calendar.find(
       (day) => day._id === encryptedDay
     );
+
     let classSchedule = eventInfo.el.innerText.toString().slice(0, 5);
 
-    let currentClassMembers = currentDay
-      ? currentDay[classSchedule].members
-      : false;
+    let currentClassMembers = currentDay ? currentDay[classSchedule] : false;
     // set modal date/time eventInfo
     setShow({
       info: eventInfo.el.fcSeg,
@@ -135,45 +101,35 @@ const Calendar = (props) => {
     ev.preventDefault();
     let newClass;
     // string of that format '00:00'
-    let classTime = show.classSchedule;
+    const classTime = show.classSchedule;
     // create an _id from the date without the time
-    let classId = Buffer.from(show.info.start.toString().slice(0, 15)).toString(
-      "base64"
-    );
+    const classId = Buffer.from(
+      show.info.start.toString().slice(0, 15)
+    ).toString("base64");
     // see if the class day is during the week or the weekend
-    let weekDayConfirmation = weekDays.includes(
+    const weekDayConfirmation = weekDays.includes(
       show.info.start.toString().slice(0, 3)
     );
-
+    const newMemberArray = [
+      {
+        _id: currentUser._id,
+        fullname: currentUser.firstName + " " + currentUser.lastName,
+        email: currentUser.email,
+      },
+    ];
     // create newClass with weekday object
     if (weekDayConfirmation) {
       newClass = {
         ...newWeekClass,
         _id: classId,
-        [classTime]: {
-          members: [
-            {
-              _id: currentUser._id,
-              fullname: currentUser.firstName + " " + currentUser.lastName,
-              email: currentUser.email,
-            },
-          ],
-        },
+        [classTime]: newMemberArray,
       };
       // create newClass with weekendday object
     } else {
       newClass = {
         ...newWeekendClass,
         _id: classId,
-        [classTime]: {
-          members: [
-            {
-              _id: currentUser._id,
-              fullname: currentUser.firstName + " " + currentUser.lastName,
-              email: currentUser.email,
-            },
-          ],
-        },
+        [classTime]: newMemberArray,
       };
     }
 
@@ -209,9 +165,9 @@ const Calendar = (props) => {
   const handleUnbookClass = (ev) => {
     ev.preventDefault();
 
-    const classId = Buffer.from(show.info.start.toString().slice(0, 15)).toString(
-      "base64"
-    );
+    const classId = Buffer.from(
+      show.info.start.toString().slice(0, 15)
+    ).toString("base64");
     const classTime = show.classSchedule;
 
     dispatch(requestCalendar());
@@ -240,7 +196,7 @@ const Calendar = (props) => {
       });
 
     setShow({ info: "", modal: false });
-  }
+  };
 
   // const handleMouseEnter = () => {
   //   console.log("enter");
@@ -248,7 +204,7 @@ const Calendar = (props) => {
   // const handleMouseLeave = () => {
   //   console.log("leave");
   // };
-
+  console.log("calendar", show.members === true);
   React.useEffect(() => {
     calendarDisplayRef.current
       .getApi()
@@ -308,8 +264,11 @@ const Calendar = (props) => {
             show.members.length > 0 ? (
               show.members.map((member) => {
                 return (
-                  <><Link to={`/profile/${member._id}`}>{member.fullname}</Link>
-                    {member._id === currentUser._id ? <button onClick={handleUnbookClass}>Unbook</button> : null}
+                  <>
+                    <Link to={`/profile/${member._id}`}>{member.fullname}</Link>
+                    {member._id === currentUser._id ? (
+                      <button onClick={handleUnbookClass}>Unbook</button>
+                    ) : null}
                   </>
                 );
               })

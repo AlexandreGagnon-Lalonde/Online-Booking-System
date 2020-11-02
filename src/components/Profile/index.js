@@ -69,12 +69,12 @@ const Profile = () => {
         });
     }
   }, [currentProfileId]);
-console.log(!messageState.message && (!otherUser || currentProfileId !== otherUser._id))
+console.log(!messageState.message && (!otherUser || currentProfileId === currentUser._id))
 console.log('message', messageState)
 console.log('otherUser', otherUser)
   return (
     <>
-      {!messageState.message && (!otherUser || currentProfileId !== otherUser._id) ? (
+      {!messageState.message && (!otherUser || currentProfileId === currentUser._id) ? (
         <LoadingSpinner size={"lg"} />
       ) : (
         <>

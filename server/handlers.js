@@ -370,7 +370,6 @@ const bookClass = async (req, res) => {
 
   const { classId } = req.params;
   const { newClass, classTime, currentUser } = req.body;
-
   try {
     await client.connect();
 
@@ -384,30 +383,27 @@ const bookClass = async (req, res) => {
 
     const classExist =
       classes.filter((classe) => classe._id === classId).length === 1;
+    let isCurrentUserInClass;
 
-    let currentUserInClass;
     if (classExist && classes.length > 0) {
-      currentUserInClass =
-        classes
-          .filter((classe) => classe._id === classId)[0]
-          [classTime].members.filter((user) => user._id === currentUser._id)
-          .length > 0;
+      isCurrentUserInClass = classes
+        .find((classe) => classe._id === classId)
+        [classTime].find((user) => user._id === currentUser._id);
     }
-    if (classExist && !currentUserInClass) {
+
+    if (classExist && !isCurrentUserInClass) {
       let currentClass;
       // update class data
       classes.forEach((classe) => {
         if (classe._id === classId) {
-          classe[classTime].members.push({
+          classe[classTime].push({
             _id: currentUser._id,
             fullname: currentUser.firstName + " " + currentUser.lastName,
             email: currentUser.email,
           });
           currentClass = {
             $set: {
-              [classTime]: {
-                members: classe[classTime].members,
-              },
+              [classTime]: classe[classTime],
             },
           };
         }
@@ -440,9 +436,7 @@ const bookClass = async (req, res) => {
         assert.equal(1, userEdited.modifiedCount);
       }
 
-      let userEditedData = users.filter(
-        (user) => user._id === currentUser._id
-      )[0];
+      let userEditedData = users.find((user) => user._id === currentUser._id);
 
       res.status(201).json({
         status: 201,
@@ -452,7 +446,6 @@ const bookClass = async (req, res) => {
       });
     } else if (!classExist) {
       // create class data
-      console.log("yep");
       const firstClass = await db.collection("classes").insertOne(newClass);
       assert(1, firstClass.insertedCount);
       let userClasses = users.filter((user) => user._id === currentUser._id)[0]
@@ -504,7 +497,7 @@ const unbookClass = async (req, res) => {
   const { classId } = req.params;
   try {
     await client.connect();
-    console.log("test");
+
     const db = client.db("online-booking-system");
 
     const currentUser = await db
@@ -513,9 +506,8 @@ const unbookClass = async (req, res) => {
     const selectedClass = await db
       .collection("classes")
       .findOne({ _id: classId });
-    console.log(currentUser, selectedClass);
 
-    const updatedSelectedClass = selectedClass[classTime].members.filter(
+    const updatedSelectedClass = selectedClass[classTime].filter(
       (member) => member._id !== currentUserId
     );
     const updatedCurrentUserClasses = currentUser.classes.filter(
@@ -524,7 +516,7 @@ const unbookClass = async (req, res) => {
 
     const userQuery = { _id: currentUserId };
     const classQuery = { _id: classId };
-    console.log("test3");
+
     const userValue = {
       $set: {
         classes: updatedCurrentUserClasses,
@@ -535,19 +527,19 @@ const unbookClass = async (req, res) => {
         [classTime]: updatedSelectedClass,
       },
     };
-    console.log("test4");
+
     const userEdited = await db
       .collection("users")
       .updateOne(userQuery, userValue);
     assert.equal(1, userEdited.matchedCount);
     assert.equal(1, userEdited.modifiedCount);
-    console.log("test5");
+
     const classEdited = await db
       .collection("classes")
       .updateOne(classQuery, classValue);
     assert.equal(1, classEdited.matchedCount);
     assert.equal(1, classEdited.modifiedCount);
-    console.log("test6");
+
     res.status(200).json({ status: 200, userEdited, classEdited });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
