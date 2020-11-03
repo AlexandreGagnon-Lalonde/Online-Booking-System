@@ -29,7 +29,8 @@ export default function userReducer(state = initialState, action) {
     case "RECEIVE_USER_ERROR": {
       return {
         ...state,
-        status: "Error",
+        errorMessage: action.errorMessage,
+        status: "error",
       };
     }
     case "LOGOUT": {

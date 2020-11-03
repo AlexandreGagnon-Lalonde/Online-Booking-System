@@ -16,8 +16,9 @@ export const logoutUser = () => ({
   type: "LOGOUT",
 })
 
-export const receiveUserError = () => ({
+export const receiveUserError = (errorMessage) => ({
   type: "RECEIVE_USER_ERROR",
+  errorMessage,
 });
 
 export const requestCalendar = () => ({
@@ -29,8 +30,9 @@ export const receiveCalendar = (calendar) => ({
   calendar,
 });
 
-export const receiveCalendarError = () => ({
+export const receiveCalendarError = (errorMessage) => ({
   type: "RECEIVE_CALENDAR_ERROR",
+  errorMessage,
 });
 
 export const calendarDay = () => ({
@@ -49,8 +51,9 @@ export const sendMessage = () => ({
   type: "SEND_MESSAGE"
 })
 
-export const messageError = () => ({
-  type: "MESSAGE_ERROR"
+export const messageError = (errorMessage) => ({
+  type: "MESSAGE_ERROR",
+  errorMessage,
 })
 
 export const receiveMessages = (messages) => ({
@@ -71,6 +74,7 @@ export const receiveSuggestion = (suggestion) => ({
   suggestion,
 });
 
-export const receiveSuggestionError = () => ({
+export const receiveSuggestionError = (errorMessage) => ({
   type: "RECEIVE_SUGGESTION_ERROR",
+  errorMessage,
 });
