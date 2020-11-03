@@ -12,6 +12,8 @@ const moment = require("moment");
 
 const createUser = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
+
+  const { DOB, email } = req.body;
   try {
     await client.connect();
 
@@ -19,7 +21,14 @@ const createUser = async (req, res) => {
 
     const users = await db.collection("users").find().toArray();
 
-    const userExist = users.find((user) => user.email === req.body.email);
+    const todayDateTime = new Date().getTime();
+    const DOBTime = new Date(DOB).getTime();
+
+    const userExist = users.find((user) => user.email === email);
+
+    if (todayDateTime < DOBTime) {
+      res.status(404).json({ status: 404, message: "Make sure you're born" });
+    }
 
     if (userExist) {
       res.status(404).json({ status: 404, message: "Email Already in Use" });

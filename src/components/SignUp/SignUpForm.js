@@ -11,6 +11,8 @@ import {
 } from "../../reducers/action";
 
 const SignUpForm = () => {
+  const userState = useSelector((state) => state.user);
+
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
   const [phone, setPhone] = React.useState("");
@@ -28,6 +30,8 @@ const SignUpForm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  const encryptedEmail = Buffer.from(email).toString("base64");
+
   return (
     <Form
       onSubmit={(ev) => {
@@ -41,7 +45,7 @@ const SignUpForm = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            _id: Buffer.from(email).toString("base64"),
+            _id: encryptedEmail,
             firstName,
             lastName,
             avatar: "",
@@ -70,11 +74,12 @@ const SignUpForm = () => {
               localStorage.setItem("currentUserId", data.user._id);
               history.push("/homepage");
             } else {
-              dispatch(receiveUserError());
+              dispatch(receiveUserError(data.message));
+              history.push("/signup");
             }
           })
           .catch((err) => {
-            dispatch(receiveUserError());
+            dispatch(receiveUserError(err.message));
           });
       }}
     >
@@ -168,9 +173,18 @@ const SignUpForm = () => {
         type="password"
         id="password"
         name="password"
+        minlength="8"
+        //pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"
         onChange={(ev) => setPassword(ev.currentTarget.value)}
         required
       />
+      <PasswordConstraint>
+        <ul>
+          <li>At least 8 characters</li>
+          <li>1 uppercase letter, 1 lowercase letter and 1 number</li>
+          <li>can contain a special character</li>
+        </ul>
+      </PasswordConstraint>
       <label>Confirm Password</label>
       <input type="password" required />
       {/* Emergency Contact */}
@@ -210,6 +224,9 @@ const SignUpForm = () => {
         onChange={(ev) => setRelPhone(ev.currentTarget.value)}
       />
       <button type="submit">Register</button>
+      {userState.status === "error" ? (
+        <ErrorSubmitMessage>{userState.errorMessage}</ErrorSubmitMessage>
+      ) : null}
     </Form>
   );
 };
@@ -219,5 +236,8 @@ const Form = styled.form`
   flex-direction: column;
   margin: 50px;
 `;
+
+const PasswordConstraint = styled.div``;
+const ErrorSubmitMessage = styled.div``;
 
 export default SignUpForm;

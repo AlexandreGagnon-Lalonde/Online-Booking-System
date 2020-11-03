@@ -32,10 +32,6 @@ function App() {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  if (!localStorage.getItem("currentUserId")) {
-    history.push("/");
-  }
-
   React.useEffect(() => {
     if (suggestionState.status === "idle") {
       dispatch(requestSuggestion());

@@ -27,7 +27,6 @@ const LogInForm = () => {
   return (
     <div>
       <Form
-        target={"_blank"}
         onSubmit={(ev) => {
           ev.preventDefault();
 
@@ -46,15 +45,12 @@ const LogInForm = () => {
                   history.push("/homepage");
                 } else {
                   dispatch(receiveUserError(wrongPassword));
-                  history.push("/login");
                 }
               } else {
                 dispatch(receiveUserError(wrongUser));
-                history.push("/login");
               }
             })
             .catch((err) => {
-              console.log("2", err);
               dispatch(receiveUserError());
             });
         }}
