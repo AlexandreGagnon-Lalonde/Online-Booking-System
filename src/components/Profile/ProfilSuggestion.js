@@ -1,24 +1,25 @@
 import React from "react";
 import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import IndividualSuggestion from "./IndividualSuggestion";
 import LoadingSpinner from "../LoadingSpinner";
 
-const ProfilSuggestion = () => {
+const ProfilSuggestion = ({ suggestions }) => {
   const suggestionState = useSelector((state) => state.suggestion.suggestion);
-  console.log(suggestionState)
-  React.useEffect(() => {
-    console.log(suggestionState)
-  }, [suggestionState]);
 
   return (
     <>
       {suggestionState ? (
         <StyledDiv>
-          {suggestionState.length > 0 ? (
-            suggestionState.map((suggestion) => {
-              return <IndividualSuggestion key={suggestion._id} suggestion={suggestion} />;
+          {suggestions.length > 0 ? (
+            suggestions.map((suggestion) => {
+              return (
+                <IndividualSuggestion
+                  key={suggestion._id}
+                  suggestion={suggestion}
+                />
+              );
             })
           ) : (
             <p>No suggestions</p>

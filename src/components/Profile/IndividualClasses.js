@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-const IndividualClasses = (classe) => {
+const IndividualClasses = ({ classe }) => {
   return (
     <div>
-      <p>{classe.classe}</p>
+      <p>{classe}</p>
     </div>
-  )
-}
+  );
+};
 
-export default IndividualClasses
+export default IndividualClasses;

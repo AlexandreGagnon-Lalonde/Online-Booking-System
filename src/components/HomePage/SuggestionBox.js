@@ -43,7 +43,7 @@ const SuggestionBox = () => {
             .then((res) => res.json())
             .then((data) => {
               if (data.success) {
-                dispatch(receiveSuggestion(data.messages));
+                dispatch(receiveSuggestion(data.suggestions));
                 setSuggestion("");
                 setCheckbox("");
                 document.getElementById("suggestion-form").reset();

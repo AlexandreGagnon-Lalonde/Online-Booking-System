@@ -1,13 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-const IndividualMessage = (message) => {
-  console.log(message)
+const IndividualMessage = ({ message }) => {
   return (
     <div>
-      <p>{message.message.message}</p>
+      <p>{message.message}</p>
     </div>
-  )
-}
+  );
+};
 
-export default IndividualMessage
+export default IndividualMessage;

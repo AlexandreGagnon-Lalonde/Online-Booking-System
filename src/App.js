@@ -22,11 +22,15 @@ import {
   requestSuggestion,
   receiveSuggestion,
   receiveSuggestionError,
+  requestMessage,
+  receiveMessages,
+  messageError,
 } from "./reducers/action";
 
 function App() {
   const userState = useSelector((state) => state.user);
   const suggestionState = useSelector((state) => state.suggestion);
+  const messageState = useSelector((state) => state.message);
   const calendarState = useSelector((state) => state.calendar);
 
   const history = useHistory();
@@ -65,6 +69,20 @@ function App() {
         .catch((err) => {
           dispatch(receiveUserError());
         });
+    }
+
+    if (userState.user && !messageState.message) {
+      dispatch(requestMessage());
+
+      fetch(SERVER_URL + `/api/getmessages/${userState.user._id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(receiveMessages(data.message));
+        })
+        .catch((err) => {
+          dispatch(messageError());
+        });
+
     }
   }, [userState.user]);
 

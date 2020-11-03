@@ -5,34 +5,27 @@ import { useSelector, useDispatch } from "react-redux";
 import IndividualConversation from "./IndiviudalConversation";
 import SendMessage from "./SendMessage";
 
-const ProfileMessages = (props) => {
-  const userState = useSelector((state) => state.user.user);
-  const otherUserState = useSelector((state) => state.user.otherUser);
-
-  console.log(props.message,'profilemessages')
+const ProfileMessages = ({ currentUser, message }) => {
   return (
     <ConversationsContainer>
-      {props.currentUser ? (
-        userState.conversations.length > 0 ? (
-          props.message.map((conversation) => {
-            console.log(conversation.messages)
+      {currentUser ? (
+        currentUser.conversations.length > 0 ? (
+          message.map((conversation) => {
             return (
-              <IndividualConversation
-                conversation={conversation.messages}
-              />
+              <IndividualConversation conversation={conversation.messages} />
             );
           })
         ) : (
           <p>No Conversations</p>
         )
       ) : null}
-      {props.currentUser ? null : <SendMessage />}
+      {currentUser ? null : <SendMessage />}
     </ConversationsContainer>
   );
 };
 
 const ConversationsContainer = styled.div`
   border: 1px solid red;
-`
+`;
 
 export default ProfileMessages;

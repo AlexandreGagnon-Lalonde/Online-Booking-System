@@ -8,41 +8,48 @@ import {
   receiveSuggestionError,
 } from "../../reducers/action";
 import { SERVER_URL } from "../../constant";
+import LoadingSpinner from "../LoadingSpinner";
 
-const IndividualSuggestion = (props) => {
+const IndividualSuggestion = ({ suggestion }) => {
+  const suggestionState = useSelector((state) => state.suggestion);
   const dispatch = useDispatch();
+
+  const handleSubmit = (ev) => {
+    ev.preventDefault();
+
+    dispatch(requestSuggestion());
+
+    fetch(SERVER_URL + `/api/suggestion/delete/${suggestion._id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          dispatch(receiveSuggestion(data.suggestions));
+        } else {
+          dispatch(receiveSuggestionError());
+        }
+      })
+      .catch((err) => {
+        dispatch(receiveSuggestionError());
+      });
+  };
 
   return (
     <StyledDiv>
-      <form
-        onSubmit={(ev) => {
-          ev.preventDefault();
-
-          dispatch(requestSuggestion());
-
-          fetch(SERVER_URL + `/api/suggestion/delete/${props.suggestion._id}`, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              if (data.success) {
-                dispatch(receiveSuggestion(data.suggestions));
-              } else {
-                dispatch(receiveSuggestionError());
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-              dispatch(receiveSuggestionError());
-            });
-        }}
-      >
-        <p>{props.suggestion.suggestion}</p>
-        <p>{props.suggestion.from}</p>
-        <button type={"submit"}>Delete</button>
+      <form onSubmit={handleSubmit}>
+        <p>{suggestion.suggestion}</p>
+        <p>{suggestion.from}</p>
+        <button type={"submit"}>
+          {suggestionState.status === "Loading" ? (
+            <LoadingSpinner size={"sm"} />
+          ) : (
+            "Delete"
+          )}
+        </button>
       </form>
     </StyledDiv>
   );

@@ -34,9 +34,9 @@ const Profile = () => {
   }
 
   // gets me the _id of user from url
-  let currentProfileId = params.id;
+  const currentProfileId = params.id;
   // change id to email
-  let currentProfileEmail = Buffer.from(currentProfileId, "base64").toString(
+  const currentProfileEmail = Buffer.from(currentProfileId, "base64").toString(
     "ascii"
   );
 
@@ -55,18 +55,18 @@ const Profile = () => {
         });
     }
 
-    if (!messageState.message) {
-      dispatch(requestMessage());
+    // if (!messageState.message) {
+    //   dispatch(requestMessage());
 
-      fetch(SERVER_URL + `/api/getmessages/${currentUser._id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          dispatch(receiveMessages(data.message));
-        })
-        .catch((err) => {
-          dispatch(messageError());
-        });
-    }
+    //   fetch(SERVER_URL + `/api/getmessages/${currentUser._id}`)
+    //     .then((res) => res.json())
+    //     .then((data) => {
+    //       dispatch(receiveMessages(data.message));
+    //     })
+    //     .catch((err) => {
+    //       dispatch(messageError());
+    //     });
+    // }
   }, [currentProfileId]);
 
   return (
@@ -83,15 +83,15 @@ const Profile = () => {
             }
           />
           <ProfileMessages
-            currentUser={currentProfileId === currentUser._id ? true : false}
+            currentUser={currentProfileId === currentUser._id ? currentUser : false}
             message={messageState.message}
           />
           <ProfileClasses
-            currentUser={
+            user={
               currentProfileId === currentUser._id ? currentUser : otherUser
             }
           />
-          {currentUser.admin ? <ProfilSuggestion /> : null}
+          {currentUser.admin ? <ProfilSuggestion suggestions={suggestionState} /> : null}
         </>
       )}
     </>

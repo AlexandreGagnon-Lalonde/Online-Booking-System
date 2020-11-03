@@ -4,16 +4,13 @@ import { useSelector, useDispatch } from "react-redux";
 
 import IndividualClasses from "./IndividualClasses";
 
-const ProfileClasses = () => {
-  const userState = useSelector((state) => state.user.user);
-  const otherUserState = useSelector((state) => state.user.otherUser);
-
+const ProfileClasses = ({ user }) => {
   return (
     <div>
-      {userState.classes.length > 0 ? (
+      {user.classes.length > 0 ? (
         <p>
           Classes
-          {userState.classes.map((classe) => {
+          {user.classes.map((classe) => {
             return <IndividualClasses classe={classe} />;
           })}
         </p>

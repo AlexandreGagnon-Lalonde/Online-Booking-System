@@ -1,18 +1,21 @@
 import React from "react";
 import styled from "styled-components";
 
-import IndividualMessage from './IndividualMessage';
+import IndividualMessage from "./IndividualMessage";
 
-const IndividualConversation = (conversation) => {
+const IndividualConversation = ({ conversation }) => {
   return (
     <div>
-      {conversation.conversation.map(message => {
+      {conversation.map((message) => {
         return (
-        <><p>Conversation with xyz</p><IndividualMessage message={message} /></>
-        )
+          <>
+            <p>Conversation with xyz</p>
+            <IndividualMessage message={message} />
+          </>
+        );
       })}
     </div>
-  )
-}
+  );
+};
 
-export default IndividualConversation
+export default IndividualConversation;
