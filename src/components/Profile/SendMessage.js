@@ -53,7 +53,7 @@ const SendMessage = () => {
         placeholder={"Send a message"}
         onChange={(ev) => setMessage(ev.currentTarget.value)}
       ></textarea>
-      <button type={"submit"}>Send</button>{" "}
+      <button type={"submit"}>Send</button>
     </form>
   );
 };

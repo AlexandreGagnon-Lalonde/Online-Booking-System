@@ -16,47 +16,46 @@ const SuggestionBox = () => {
 
   const currentUser = useSelector((state) => state.user.user);
 
+  const handleSuggestionSubmit = (ev) => {
+    ev.preventDefault();
+
+    const date = new Date();
+    const dateId = Buffer.from(date.toString()).toString("base64");
+    const userName = currentUser.firstName + " " + currentUser.lastName;
+
+    dispatch(requestSuggestion());
+
+    fetch(SERVER_URL + "/api/createsuggestion", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _id: dateId,
+        from: checkbox ? "Anonymous" : userName,
+        suggestion,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          dispatch(receiveSuggestion(data.suggestions));
+          setSuggestion("");
+          setCheckbox("");
+          document.getElementById("suggestion-form").reset();
+        } else {
+          dispatch(receiveSuggestionError());
+        }
+      })
+      .catch((err) => {
+        dispatch(receiveSuggestionError());
+      });
+  };
+
   return (
     <div>
       <h2>Suggestion</h2>
-      <form
-        onSubmit={(ev) => {
-          ev.preventDefault();
-
-          const date = new Date();
-          const dateId = Buffer.from(date.toString()).toString("base64");
-          dispatch(requestSuggestion());
-
-          fetch(SERVER_URL + "/api/createsuggestion", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              _id: dateId,
-              from: checkbox
-                ? "Anonymous"
-                : currentUser.firstName + " " + currentUser.lastName,
-              suggestion,
-            }),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              if (data.success) {
-                dispatch(receiveSuggestion(data.suggestions));
-                setSuggestion("");
-                setCheckbox("");
-                document.getElementById("suggestion-form").reset();
-              } else {
-                dispatch(receiveSuggestionError());
-              }
-            })
-            .catch((err) => {
-              dispatch(receiveSuggestionError());
-            });
-        }}
-        id={"suggestion-form"}
-      >
+      <form onSubmit={handleSuggestionSubmit} id={"suggestion-form"}>
         <textarea
           onChange={(ev) => setSuggestion(ev.currentTarget.value)}
           value={suggestion}
