@@ -42,6 +42,7 @@ const StyledLink = styled(Link)`
 
   &:hover {
     text-decoration: none;
+    color: ${COLORS.orange};
   }
 `
 

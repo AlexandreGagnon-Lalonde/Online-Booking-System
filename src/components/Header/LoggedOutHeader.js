@@ -17,6 +17,14 @@ const NavContainer = styled.div`
 `;
 const StyledLink = styled(Link)`
   color: ${COLORS.beige};
+  font-size: 2em;
+  font-weight: bold;
+  margin: 10px;
+
+  &:hover {
+    color: ${COLORS.orange};
+    text-decoration: none;
+  }
 `
 
 export default LoggedOutHeader;

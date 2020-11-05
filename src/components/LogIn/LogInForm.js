@@ -7,7 +7,6 @@ import {
   requestUser,
   receiveUser,
   receiveUserError,
-  logoutUser,
 } from "../../reducers/action";
 import { COLORS } from "../../constant";
 import LoadingSpinner from "../LoadingSpinner";
@@ -72,7 +71,7 @@ const LogInForm = () => {
             onChange={(ev) => setPassword(ev.currentTarget.value)}
             required
           />
-  
+
           <LogInButton type="submit">
             {userState.status === "Loading" ? <LoadingSpinner /> : "Log In"}
           </LogInButton>
@@ -93,40 +92,52 @@ const MainContainer = styled.div`
   align-items: center;
   width: 100vw;
   height: calc(100vh - 50px);
-`
+`;
 const LogoContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-`
+`;
 const FormContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-`
+`;
 const StyledForm = styled(Form)`
   width: 60%;
-`
+`;
 const StyledInput = styled.input`
-  background-color: ${COLORS.darkGray};
   border: none;
   border-bottom: 2px solid ${COLORS.orange};
   padding: 10px 20px;
   margin-bottom: 20px;
-  
-  &, select, textarea {
+  background-color: ${COLORS.mediumGray};
+  border-radius: 5px;
+
+  &,
+  select,
+  textarea {
     color: ${COLORS.beige};
   }
-`
+  &:focus {
+    outline: none;
+  }
+`;
 const StyledLabel = styled.label`
   padding-left: 20px;
-`
+`;
 const LogInButton = styled.button`
   padding: 15px;
-  margin: 15px;
+  margin: 15px 45px;
   border-radius: 5px;
   border: none;
+  font-weight: bold;
   background-color: ${COLORS.beige}
-`
+
+  &:hover {
+    background-color: ${COLORS.orange}
+    color: red;
+  }
+`;
 
 export default LogInForm;
