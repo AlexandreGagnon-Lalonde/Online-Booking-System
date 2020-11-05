@@ -576,15 +576,15 @@ const getCalendar = async (req, res) => {
 
     if (calendarDisplay === "timeGridWeek") {
       for (let i = 1; i <= 7; i++) {
+        const dayFromMoment = moment(new Date(firstDay))
+          .day(i)
+          .format("ddd MMM DD YYYY")
+          .toString();
+
+        const encryptedWeekDay = Buffer.from(dayFromMoment).toString("base64");
+
         const classStringComparison = classes.find(
-          (classe) =>
-            classe._id ===
-            Buffer.from(
-              moment(new Date(firstDay))
-                .day(i)
-                .format("ddd MMM DD YYYY")
-                .toString()
-            ).toString("base64")
+          (classe) => classe._id === encryptedWeekDay
         );
 
         if (classStringComparison) {
@@ -598,7 +598,7 @@ const getCalendar = async (req, res) => {
     } else {
       res.status(404).json({ status: 404, message: "Invalid request" });
     }
-
+    console.log(passedToFrontEndClasses);
     res.status(200).json({
       status: 200,
       message: "Day received",
