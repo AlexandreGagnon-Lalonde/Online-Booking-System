@@ -9,6 +9,7 @@ import {
   receiveCommentError,
 } from "../../reducers/action";
 import LoadingSpinner from "../LoadingSpinner";
+import IndividualComment from './IndividualComment';
 
 const WorkoutComments = () => {
   const currentUser = useSelector((state) => state.user.user);
@@ -21,8 +22,11 @@ const WorkoutComments = () => {
   const handleComment = (ev) => {
     ev.preventDefault();
 
-    const momentDay = moment(new Date()).format("ddd MMM DD YYYY").toString();
-    const classId = Buffer.from(momentDay).toString("base64");
+    const date = new Date();
+    const classDay = moment(date).format("ddd MMM DD YYYY").toString();
+    const commentDate = moment(date).toString();
+    const commentId = Buffer.from(commentDate).toString("base64");
+    const classId = Buffer.from(classDay).toString("base64");
     const userName = currentUser.firstName + " " + currentUser.lastName;
 
     dispatch(requestComment());
@@ -34,6 +38,7 @@ const WorkoutComments = () => {
       },
       body: JSON.stringify({
         _id: classId,
+        commentId,
         from: userName,
         fromId: currentUser._id,
         comment,
@@ -53,23 +58,27 @@ const WorkoutComments = () => {
         dispatch(receiveCommentError());
       });
   };
-console.log(commentState)
+
   return (
     <>
-      <form onSubmit={handleComment} id={'comment-form'} >
+      <form onSubmit={handleComment} id={"comment-form"}>
         <input
           type={"textarea"}
           value={comment}
           placeholder={"Leave a comment"}
           onChange={(ev) => setComment(ev.currentTarget.value)}
         ></input>
-        <button type={"submit"} disabled={!comment} >Comment</button>
+        <button type={"submit"} disabled={!comment}>
+          Comment
+        </button>
       </form>
       <div>
         {commentState ? (
           commentState.length > 0 ? (
             commentState.map((comment) => {
-              return <p>{comment.comment}</p>;
+              return (
+                <IndividualComment comment={comment} />
+              );
             })
           ) : (
             "No comments"

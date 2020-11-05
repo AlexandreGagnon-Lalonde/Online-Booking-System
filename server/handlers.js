@@ -721,7 +721,7 @@ const deleteSuggestion = async (req, res) => {
 const postComment = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
 
-  const { _id, from, fromId, comment } = req.body;
+  const { _id, from, fromId, comment, commentId } = req.body;
   try {
     await client.connect();
 
@@ -732,6 +732,7 @@ const postComment = async (req, res) => {
     const commentQuery = { _id };
 
     todayClass.comments.push({
+      commentId,
       from,
       fromId,
       comment,
@@ -808,40 +809,39 @@ const editComment = async (req, res) => {
 const deleteComment = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
 
-  // const { _id, commentId } = req.body;
+  const { _id, commentId } = req.body;
   try {
     await client.connect();
 
     const db = client.db("online-booking-system");
 
-    const day = await db.collection("classes").findOne({ _id: dayId });
+    const todayClass = await db.collection("classes").findOne({ _id });
 
-    const query = { _id: dayId };
-
-    day.comments.map((comment) => {
-      if (comment._id === commentId) {
-        comment.comment = "";
+    const commentQuery = { _id };
+    console.log(todayClass.comments);
+    todayClass.comments.map((comment) => {
+      if (comment.commentId === commentId) {
         comment.status = "deleted";
       }
       return comment;
     });
-
-    const editedValue = {
+    console.log(todayClass.comments);
+    const commentEditedValue = {
       $set: {
-        comments: day.comments,
+        comments: todayClass.comments,
       },
     };
 
     const dayDeletedComment = await db
       .collection("classes")
-      .updateOne(query, editedValue);
+      .updateOne(commentQuery, commentEditedValue);
     assert.equal(1, dayDeletedComment.matchedCount);
     assert.equal(1, dayDeletedComment.modifiedCount);
 
     res.status(200).json({
       status: 200,
-      dayId,
-      dayDeletedComment,
+      success: true,
+      comments: todayClass.comments,
     });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
