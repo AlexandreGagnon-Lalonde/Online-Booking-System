@@ -723,36 +723,37 @@ const deleteSuggestion = async (req, res) => {
 const postComment = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
 
-  // const { dayId, commentId, comment, author } = req.body;
+  const { _id, from, fromId, comment } = req.body;
   try {
     await client.connect();
 
     const db = client.db("online-booking-system");
 
-    const day = await db.collection("classes").findOne({ _id: dayId });
+    const todayClass = await db.collection("classes").findOne({ _id });
 
-    const query = { _id: dayId };
+    const commentQuery = { _id };
 
-    const newValue = {
+    todayClass.comments.push({
+      from,
+      fromId,
+      comment,
+      status: "posted",
+    });
+
+    const commentNewValue = {
       $set: {
-        comments: day.comments.push({
-          _id: commentId,
-          author,
-          comment,
-          status: "posted",
-        }),
+        comments: todayClass.comments,
       },
     };
 
     const dayNewComment = await db
       .collection("classes")
-      .updateOne(query, newValue);
+      .updateOne(commentQuery, commentNewValue);
     assert.equal(1, dayNewComment.matchedCount);
     assert.equal(1, dayNewComment.modifiedCount);
 
     res.status(200).json({
       status: 200,
-      dayId,
       dayNewComment,
     });
   } catch (err) {
@@ -849,6 +850,50 @@ const deleteComment = async (req, res) => {
   client.close();
 };
 
+const getComments = async (req, res) => {
+  const client = await MongoClient(MONGO_URI, option);
+
+  // const { dayId, commentId } = req.body;
+  try {
+    await client.connect();
+
+    const db = client.db("online-booking-system");
+
+    const day = await db.collection("classes").findOne({ _id: dayId });
+
+    const query = { _id: dayId };
+
+    day.comments.map((comment) => {
+      if (comment._id === commentId) {
+        comment.comment = "";
+        comment.status = "deleted";
+      }
+      return comment;
+    });
+
+    const editedValue = {
+      $set: {
+        comments: day.comments,
+      },
+    };
+
+    const dayDeletedComment = await db
+      .collection("classes")
+      .updateOne(query, editedValue);
+    assert.equal(1, dayDeletedComment.matchedCount);
+    assert.equal(1, dayDeletedComment.modifiedCount);
+
+    res.status(200).json({
+      status: 200,
+      dayId,
+      dayDeletedComment,
+    });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+  client.close();
+};
+
 module.exports = {
   createUser,
   getUser,
@@ -862,6 +907,7 @@ module.exports = {
   getSuggestions,
   createSuggestion,
   deleteSuggestion,
+  getComments,
   postComment,
   editComment,
   deleteComment,

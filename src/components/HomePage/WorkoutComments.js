@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { SERVER_URL } from "../../constant";
-
+import moment from "moment";
 import {
   requestComment,
   receiveComment,
@@ -19,19 +19,19 @@ const WorkoutComments = () => {
   const handleComment = (ev) => {
     ev.preventDefault();
 
-    const date = new Date();
-    const dateId = Buffer.from(date.toString()).toString("base64");
+    const momentDay = moment(new Date()).format("ddd MMM DD YYYY").toString();
+    const classId = Buffer.from(momentDay).toString("base64");
     const userName = currentUser.firstName + " " + currentUser.lastName;
 
     dispatch(requestComment());
 
-    fetch(SERVER_URL + "/api/createcomment", {
-      method: "POST",
+    fetch(SERVER_URL + "/api/postcomment", {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        _id: dateId,
+        _id: classId,
         from: userName,
         fromId: currentUser._id,
         comment,

@@ -42,13 +42,13 @@ const Calendar = (props) => {
       eventInfo.el.fcSeg.start.toString().slice(0, 15)
     ).toString("base64");
 
-    let currentDay = calendarState.calendar.find(
+    const currentDay = calendarState.calendar.find(
       (day) => day._id === encryptedDay
     );
 
-    let classSchedule = eventInfo.el.innerText.toString().slice(0, 5);
+    const classSchedule = eventInfo.el.innerText.toString().slice(0, 5);
 
-    let currentClassMembers = currentDay ? currentDay[classSchedule] : false;
+    const currentClassMembers = currentDay ? currentDay[classSchedule] : false;
 
     setShow({
       info: eventInfo.el.fcSeg,

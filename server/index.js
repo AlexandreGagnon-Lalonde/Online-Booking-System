@@ -25,6 +25,7 @@ const {
   getSuggestions,
   deleteSuggestion,
   createSuggestion,
+  getComments,
   postComment,
   editComment,
   deleteComment,
@@ -64,6 +65,7 @@ express()
   .get("/api/getsuggestions", getSuggestions)
   .get("/api/getcalendar/:calendarDisplay/:firstDay", getCalendar)
   .get('/api/getmessages/:_id', getMessages)
+  .get('/api/getcomments', getComments)
 
   .post("/api/createuser", createUser)
   .post("/api/createsuggestion", createSuggestion)
