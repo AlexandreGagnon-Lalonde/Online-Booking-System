@@ -6,7 +6,7 @@ import { COLORS } from "../../constant";
 const LoggedOutHeader = () => {
   return (
     <NavContainer>
-      <Link to="/">Home</Link>
+      <StyledLink to="/">Home</StyledLink>
     </NavContainer>
   );
 };
@@ -14,5 +14,8 @@ const LoggedOutHeader = () => {
 const NavContainer = styled.div`
   background-color: ${COLORS.darkGray};
 `;
+const StyledLink = styled(Link)`
+  color: ${COLORS.beige};
+`
 
 export default LoggedOutHeader;

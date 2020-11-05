@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { SERVER_URL } from "../../constant";
 import {
@@ -78,7 +78,6 @@ const LogInForm = () => {
         </button>
       </Form>
       {userState.status === "error" ? <p>{userState.errorMessage}</p> : null}
-      <p></p>
     </div>
   );
 };

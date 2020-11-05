@@ -7,11 +7,13 @@ import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import configureStore from "./reducers/store";
 import { BrowserRouter as Router } from "react-router-dom";
+import GlobalStyles from "./GlobalStyles";
 
 const store = configureStore();
 ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
+      <GlobalStyles />
       <Router>
         <App />
       </Router>
