@@ -1,5 +1,5 @@
 const initialState = {
-  comment: [],
+  comments: [],
   status: "idle",
 };
 
@@ -15,7 +15,7 @@ export default function commentReducer(state = initialState, action) {
       return {
         ...state,
         status: "idle",
-        comment: action.comment
+        comments: action.comments
       };
     }
     case "RECEIVE_COMMENT_ERROR": {

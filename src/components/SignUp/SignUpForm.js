@@ -48,7 +48,6 @@ const SignUpForm = () => {
             _id: encryptedEmail,
             firstName,
             lastName,
-            avatar: "",
             phone,
             DOB,
             gender,

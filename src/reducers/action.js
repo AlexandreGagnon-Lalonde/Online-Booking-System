@@ -83,9 +83,9 @@ export const requestComment = () => ({
   type: "REQUEST_COMMENT",
 });
 
-export const receiveComment = (comment) => ({
+export const receiveComment = (comments) => ({
   type: "RECEIVE_COMMENT",
-  comment,
+  comments,
 });
 
 export const receiveCommentError = (errorMessage) => ({

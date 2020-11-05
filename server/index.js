@@ -64,8 +64,8 @@ express()
   .get("/api/workout/:id", getOneWorkout)
   .get("/api/getsuggestions", getSuggestions)
   .get("/api/getcalendar/:calendarDisplay/:firstDay", getCalendar)
-  .get('/api/getmessages/:_id', getMessages)
-  .get('/api/getcomments', getComments)
+  .get("/api/getmessages/:_id", getMessages)
+  .get("/api/getcomments", getComments)
 
   .post("/api/createuser", createUser)
   .post("/api/createsuggestion", createSuggestion)
@@ -88,7 +88,6 @@ const ADMIN = {
   _id: Buffer.from("alexandre.gl@hotmail.ca").toString("base64"),
   firstName: "Alexandre",
   lastName: "Gagnon-Lalonde",
-  avatar: "",
   phone: 1234567890,
   DOB: "01/01/2000",
   gender: "male",

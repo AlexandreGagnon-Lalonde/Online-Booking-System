@@ -22,6 +22,9 @@ import {
   requestSuggestion,
   receiveSuggestion,
   receiveSuggestionError,
+  requestComment,
+  receiveComment,
+  receiveCommentError,
   requestMessage,
   receiveMessages,
   messageError,
@@ -32,6 +35,7 @@ function App() {
   const suggestionState = useSelector((state) => state.suggestion);
   const messageState = useSelector((state) => state.message);
   const calendarState = useSelector((state) => state.calendar);
+  const commentState = useSelector((state) => state.comment)
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -83,6 +87,20 @@ function App() {
           dispatch(messageError());
         });
 
+    }
+
+    if (commentState.status === "idle") {
+      dispatch(requestComment());
+
+      fetch(SERVER_URL + `/api/getcomments`)
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(receiveComment(data.comments));
+          localStorage.setItem("Comment", data.comments);
+        })
+        .catch((err) => {
+          dispatch(receiveCommentError());
+        });
     }
   }, [userState.user]);
 

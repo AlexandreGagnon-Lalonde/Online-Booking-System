@@ -8,9 +8,11 @@ import {
   receiveComment,
   receiveCommentError,
 } from "../../reducers/action";
+import LoadingSpinner from "../LoadingSpinner";
 
 const WorkoutComments = () => {
   const currentUser = useSelector((state) => state.user.user);
+  const commentState = useSelector((state) => state.comment.comments);
 
   const [comment, setComment] = React.useState("");
 
@@ -42,6 +44,7 @@ const WorkoutComments = () => {
         if (data.success) {
           dispatch(receiveComment(data.comments));
           setComment("");
+          document.getElementById("comment-form").reset();
         } else {
           dispatch(receiveCommentError());
         }
@@ -50,16 +53,32 @@ const WorkoutComments = () => {
         dispatch(receiveCommentError());
       });
   };
-
+console.log(commentState)
   return (
-    <form onSubmit={handleComment}>
-      <input
-        type={"textarea"}
-        placeholder={"Leave a comment"}
-        onChange={(ev) => setComment(ev.currentTarget.value)}
-      ></input>
-      <button type={"submit"}>Comment</button>
-    </form>
+    <>
+      <form onSubmit={handleComment} id={'comment-form'} >
+        <input
+          type={"textarea"}
+          value={comment}
+          placeholder={"Leave a comment"}
+          onChange={(ev) => setComment(ev.currentTarget.value)}
+        ></input>
+        <button type={"submit"} disabled={!comment} >Comment</button>
+      </form>
+      <div>
+        {commentState ? (
+          commentState.length > 0 ? (
+            commentState.map((comment) => {
+              return <p>{comment.comment}</p>;
+            })
+          ) : (
+            "No comments"
+          )
+        ) : (
+          <LoadingSpinner size={"md"} />
+        )}
+      </div>
+    </>
   );
 };
 

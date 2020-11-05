@@ -598,7 +598,6 @@ const getCalendar = async (req, res) => {
     } else {
       res.status(404).json({ status: 404, message: "Invalid request" });
     }
-    console.log(passedToFrontEndClasses);
     res.status(200).json({
       status: 200,
       message: "Day received",
@@ -714,7 +713,6 @@ const deleteSuggestion = async (req, res) => {
 
     res.status(201).json({ status: 201, success: true, suggestions });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ status: 500, message: err.message });
   }
   client.close();
@@ -754,7 +752,8 @@ const postComment = async (req, res) => {
 
     res.status(200).json({
       status: 200,
-      dayNewComment,
+      success: true,
+      comments: todayClass.comments,
     });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
@@ -763,7 +762,7 @@ const postComment = async (req, res) => {
 };
 
 const editComment = async (req, res) => {
-  const client = await MongoClient(MONGO_URI, option);
+  const client = await MongoClient(MONGO_URI, options);
 
   // const { dayId, commentId, newComment, author } = req.body;
   try {
@@ -807,9 +806,9 @@ const editComment = async (req, res) => {
 };
 
 const deleteComment = async (req, res) => {
-  const client = await MongoClient(MONGO_URI, option);
+  const client = await MongoClient(MONGO_URI, options);
 
-  // const { dayId, commentId } = req.body;
+  // const { _id, commentId } = req.body;
   try {
     await client.connect();
 
@@ -851,42 +850,21 @@ const deleteComment = async (req, res) => {
 };
 
 const getComments = async (req, res) => {
-  const client = await MongoClient(MONGO_URI, option);
-
-  // const { dayId, commentId } = req.body;
+  const client = await MongoClient(MONGO_URI, options);
   try {
     await client.connect();
 
     const db = client.db("online-booking-system");
 
-    const day = await db.collection("classes").findOne({ _id: dayId });
+    const todayDate = moment(new Date()).format("ddd MMM DD YYYY").toString();
 
-    const query = { _id: dayId };
+    const _id = Buffer.from(todayDate).toString("base64");
 
-    day.comments.map((comment) => {
-      if (comment._id === commentId) {
-        comment.comment = "";
-        comment.status = "deleted";
-      }
-      return comment;
-    });
-
-    const editedValue = {
-      $set: {
-        comments: day.comments,
-      },
-    };
-
-    const dayDeletedComment = await db
-      .collection("classes")
-      .updateOne(query, editedValue);
-    assert.equal(1, dayDeletedComment.matchedCount);
-    assert.equal(1, dayDeletedComment.modifiedCount);
+    const todayClass = await db.collection("classes").findOne({ _id });
 
     res.status(200).json({
       status: 200,
-      dayId,
-      dayDeletedComment,
+      comments: todayClass.comments,
     });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
