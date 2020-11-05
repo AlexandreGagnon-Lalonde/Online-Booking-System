@@ -4,5 +4,6 @@ import user from "./user-reducer";
 import calendar from "./calendar-reducer";
 import message from './message-reducer';
 import suggestion from './suggestion-reducer';
+import comment from './comment-reducer';
 
-export default combineReducers({ user, calendar, message, suggestion });
+export default combineReducers({ user, calendar, message, suggestion, comment });

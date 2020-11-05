@@ -78,3 +78,17 @@ export const receiveSuggestionError = (errorMessage) => ({
   type: "RECEIVE_SUGGESTION_ERROR",
   errorMessage,
 });
+
+export const requestComment = () => ({
+  type: "REQUEST_COMMENT",
+});
+
+export const receiveComment = (comment) => ({
+  type: "RECEIVE_COMMENT",
+  comment,
+});
+
+export const receiveCommentError = (errorMessage) => ({
+  type: "RECEIVE_COMMENT_ERROR",
+  errorMessage,
+});

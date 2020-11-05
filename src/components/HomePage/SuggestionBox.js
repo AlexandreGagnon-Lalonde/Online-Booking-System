@@ -10,9 +10,10 @@ import {
 } from "../../reducers/action";
 
 const SuggestionBox = () => {
-  const dispatch = useDispatch();
   const [suggestion, setSuggestion] = React.useState("");
   const [checkbox, setCheckbox] = React.useState("");
+  
+  const dispatch = useDispatch();
 
   const currentUser = useSelector((state) => state.user.user);
 
