@@ -24,61 +24,62 @@ const LogInForm = () => {
   const wrongPassword = "Wrong password!";
   const wrongUser = "Are you signed up? Make sure your email is valid!";
 
+  const handleLogin = (ev) => {
+    ev.preventDefault();
+
+    dispatch(requestUser());
+
+    fetch(SERVER_URL + `/api/getuser/${email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status !== 404) {
+          if (data.user.email === email && data.user.password === password) {
+            dispatch(receiveUser(data.user));
+            localStorage.setItem("currentUserId", data.user._id);
+            history.push("/homepage");
+          } else {
+            dispatch(receiveUserError(wrongPassword));
+          }
+        } else {
+          dispatch(receiveUserError(wrongUser));
+        }
+      })
+      .catch((err) => {
+        dispatch(receiveUserError());
+      });
+  };
+
   return (
-    <div>
-      <Form
-        onSubmit={(ev) => {
-          ev.preventDefault();
-
-          dispatch(requestUser());
-
-          fetch(SERVER_URL + `/api/getuser/${email}`)
-            .then((res) => res.json())
-            .then((data) => {
-              if (data.status !== 404) {
-                if (
-                  data.user.email === email &&
-                  data.user.password === password
-                ) {
-                  dispatch(receiveUser(data.user));
-                  localStorage.setItem("currentUserId", data.user._id);
-                  history.push("/homepage");
-                } else {
-                  dispatch(receiveUserError(wrongPassword));
-                }
-              } else {
-                dispatch(receiveUserError(wrongUser));
-              }
-            })
-            .catch((err) => {
-              dispatch(receiveUserError());
-            });
-        }}
-      >
-        <label for="email">Email</label>
-        <input
-          type="text"
-          placeholder="Email"
-          id="email"
-          name="email"
-          onChange={(ev) => setEmail(ev.currentTarget.value)}
-          required
-        />
-        <label for="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          onChange={(ev) => setPassword(ev.currentTarget.value)}
-          required
-        />
-
-        <button type="submit">
-          {userState.status === "Loading" ? <LoadingSpinner /> : "Log In"}
-        </button>
-      </Form>
-      {userState.status === "error" ? <p>{userState.errorMessage}</p> : null}
-    </div>
+    <MainContainer>
+      <LogoContainer>Random stuff to fill before logo</LogoContainer>
+      <FormContainer>
+        <StyledForm onSubmit={handleLogin}>
+          {/* <StyledLabel for="email">Email</StyledLabel> */}
+          <StyledInput
+            type="text"
+            placeholder="Email"
+            id="email"
+            name="email"
+            onChange={(ev) => setEmail(ev.currentTarget.value)}
+            required
+          />
+          {/* <StyledLabel for="password">Password</StyledLabel> */}
+          <StyledInput
+            type="password"
+            placeholder="Password"
+            id="password"
+            name="password"
+            onChange={(ev) => setPassword(ev.currentTarget.value)}
+            required
+          />
+  
+          <LogInButton type="submit">
+            {userState.status === "Loading" ? <LoadingSpinner /> : "Log In"}
+          </LogInButton>
+        </StyledForm>
+        {userState.status === "error" ? <p>{userState.errorMessage}</p> : null}
+      </FormContainer>
+    </MainContainer>
   );
 };
 
@@ -87,5 +88,45 @@ const Form = styled.form`
   flex-direction: column;
   margin: 50px;
 `;
+const MainContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100vw;
+  height: calc(100vh - 50px);
+`
+const LogoContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`
+const FormContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`
+const StyledForm = styled(Form)`
+  width: 60%;
+`
+const StyledInput = styled.input`
+  background-color: ${COLORS.darkGray};
+  border: none;
+  border-bottom: 2px solid ${COLORS.orange};
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  
+  &, select, textarea {
+    color: ${COLORS.beige};
+  }
+`
+const StyledLabel = styled.label`
+  padding-left: 20px;
+`
+const LogInButton = styled.button`
+  padding: 15px;
+  margin: 15px;
+  border-radius: 5px;
+  border: none;
+  background-color: ${COLORS.beige}
+`
 
 export default LogInForm;

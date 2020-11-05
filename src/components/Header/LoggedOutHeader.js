@@ -13,6 +13,7 @@ const LoggedOutHeader = () => {
 
 const NavContainer = styled.div`
   background-color: ${COLORS.darkGray};
+  height: 50px;
 `;
 const StyledLink = styled(Link)`
   color: ${COLORS.beige};
