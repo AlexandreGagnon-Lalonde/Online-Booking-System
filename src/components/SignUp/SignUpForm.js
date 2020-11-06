@@ -135,7 +135,7 @@ const SignUpForm = () => {
             <option value="female">Female</option>
             <option value="idk">I don't know</option>
           </select>
-          <label htmlFor="city">City</label>
+          {/* <label htmlFor="city">City</label> */}
           <StyledInput
             type="text"
             placeholder="City"
@@ -144,7 +144,7 @@ const SignUpForm = () => {
             onChange={(ev) => setCity(ev.currentTarget.value)}
             required
           />
-          <label htmlFor="address">Address</label>
+          {/* <label htmlFor="address">Address</label> */}
           <StyledInput
             type="text"
             placeholder="Address"
@@ -153,7 +153,7 @@ const SignUpForm = () => {
             onChange={(ev) => setAddress(ev.currentTarget.value)}
             required
           />
-          <label htmlFor="zipcode">Zip Code</label>
+          {/* <label htmlFor="zipcode">Zip Code</label> */}
           <StyledInput
             type="text"
             placeholder="Zip Code"
@@ -162,7 +162,7 @@ const SignUpForm = () => {
             onChange={(ev) => setZipcode(ev.currentTarget.value)}
             required
           />
-          <label htmlFor="email">Email</label>
+          {/* <label htmlFor="email">Email</label> */}
           <StyledInput
             type="text"
             placeholder="Email"
@@ -171,7 +171,7 @@ const SignUpForm = () => {
             onChange={(ev) => setEmail(ev.currentTarget.value)}
             required
           />
-          <label htmlFor="password">Password</label>
+          {/* <label htmlFor="password">Password</label> */}
           <StyledInput
             type="password"
             placeholder="Password"
@@ -189,7 +189,7 @@ const SignUpForm = () => {
               <li>can contain a special character</li>
             </ul>
           </PasswordConstraint>
-          <label>Confirm Password</label>
+          {/* <label>Confirm Password</label> */}
           <StyledInput
             type="password"
             placeholder="Confirm Password"

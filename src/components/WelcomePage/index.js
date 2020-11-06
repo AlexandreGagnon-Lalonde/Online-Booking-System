@@ -39,6 +39,7 @@ const StyledLink = styled(Link)`
   font-size: 2em;
   margin: 25px;
   border-radius: 5px;
+  transition: all 0.3s;
 
   &:hover {
     text-decoration: none;

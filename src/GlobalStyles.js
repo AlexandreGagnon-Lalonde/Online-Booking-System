@@ -66,7 +66,7 @@ export default createGlobalStyle`
   body {
     line-height: 1.25;
     background: ${COLORS.darkGray};
-    color: white;
+    color: ${COLORS.beige};
   }
 
   a {

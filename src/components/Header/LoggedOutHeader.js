@@ -20,7 +20,8 @@ const StyledLink = styled(Link)`
   font-size: 2em;
   font-weight: bold;
   margin: 10px;
-
+  transition: all 0.3s;
+  
   &:hover {
     color: ${COLORS.orange};
     text-decoration: none;
