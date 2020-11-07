@@ -2,7 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { SERVER_URL } from "../../constant";
-
+import { AiOutlineSend } from 'react-icons/ai';
+import { COLORS } from '../../constant'
 import {
   requestMessage,
   sendMessage,
@@ -55,14 +56,43 @@ const SendMessage = () => {
   };
 
   return (
-    <form onSubmit={handleSendMessage} id={'message-form'}>
-      <textarea
+    <SendMessageForm onSubmit={handleSendMessage} id={'message-form'}>
+      <SendMessageInput
         placeholder={"Send a message"}
         onChange={(ev) => setMessage(ev.currentTarget.value)}
-      ></textarea>
-      <button type={"submit"} disabled={!message} >Send</button>
-    </form>
+      ></SendMessageInput>
+      <SendMessageButton type={"submit"} disabled={!message} ><AiOutlineSend /></SendMessageButton>
+    </SendMessageForm>
   );
 };
+
+const SendMessageForm = styled.form`
+  display: flex;
+  height: 30px;
+`
+const SendMessageInput = styled.textarea`
+  flex: 7;
+  border-radius: 5px;
+  padding-left: 5px;
+  background-color: ${COLORS.lightGray};
+  color: ${COLORS.darkGray};
+
+  &::placeholder {
+    color: ${COLORS.darkGray};
+  }
+`
+const SendMessageButton = styled.button`
+  flex: 1;
+  border: none;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: ${COLORS.orange};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${COLORS.mediumGray};
+  cursor: pointer;
+
+`
 
 export default SendMessage;
