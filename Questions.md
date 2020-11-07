@@ -27,3 +27,8 @@ dont go back to '/' after submit form
 form error handling
 
 globalStyles
+
+*****************************
+
+profile of otherUser not rendering even after fetch
+

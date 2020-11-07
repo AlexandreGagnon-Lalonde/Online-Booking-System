@@ -20,6 +20,7 @@ import ProfileClasses from "./ProfileClasses";
 import ProfilSuggestion from "./ProfilSuggestion";
 
 const Profile = () => {
+  const userState = useSelector((state) => state.user);
   const currentUser = useSelector((state) => state.user.user);
   const otherUser = useSelector((state) => state.user.otherUser);
   const messageState = useSelector((state) => state.message);
@@ -39,8 +40,7 @@ const Profile = () => {
   const currentProfileEmail = Buffer.from(currentProfileId, "base64").toString(
     "ascii"
   );
-console.log(!messageState.message &&
-  (!otherUser || currentProfileId === currentUser._id))
+
   React.useEffect(() => {
     if (!otherUser || currentProfileId !== otherUser._id) {
       dispatch(requestUser());
@@ -68,12 +68,12 @@ console.log(!messageState.message &&
     //       dispatch(messageError());
     //     });
     // }
-  }, [currentProfileId]);
+  }, [currentProfileId, userState.status]);
 
   return (
     <>
-      {!messageState.message &&
-      (!otherUser || currentProfileId === currentUser._id) ? (
+      {!messageState.message ||
+      (!otherUser && currentProfileId !== currentUser._id) ? (
         <LoadingSpinner size={"lg"} />
       ) : (
         <>

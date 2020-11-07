@@ -46,6 +46,8 @@ const SendMessage = () => {
       .then((res) => res.json())
       .then((data) => {
         dispatch(sendMessage());
+        setMessage('');
+        document.getElementById('message-form').reset()
       })
       .catch((err) => {
         dispatch(messageError());
@@ -53,12 +55,12 @@ const SendMessage = () => {
   };
 
   return (
-    <form onSubmit={handleSendMessage}>
+    <form onSubmit={handleSendMessage} id={'message-form'}>
       <textarea
         placeholder={"Send a message"}
         onChange={(ev) => setMessage(ev.currentTarget.value)}
       ></textarea>
-      <button type={"submit"}>Send</button>
+      <button type={"submit"} disabled={!message} >Send</button>
     </form>
   );
 };

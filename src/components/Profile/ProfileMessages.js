@@ -7,13 +7,14 @@ import IndividualConversation from "./IndiviudalConversation";
 import SendMessage from "./SendMessage";
 
 const ProfileMessages = ({ currentUser, message }) => {
+  console.log(message)
   return (
     <ConversationsContainer>
       {currentUser ? (
         currentUser.conversations.length > 0 ? (
           message.map((conversation) => {
             return (
-              <IndividualConversation conversation={conversation.messages} />
+              <IndividualConversation conversation={conversation} />
             );
           })
         ) : (
@@ -30,6 +31,7 @@ background-color: ${COLORS.mediumGray};
 border-radius: 5px;
 flex: 1;
 padding: 10px;
+margin: 0 10px;
 `;
 
 export default ProfileMessages;
