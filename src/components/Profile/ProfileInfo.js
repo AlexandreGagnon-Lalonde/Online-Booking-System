@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { COLORS } from '../../constant';
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -17,7 +18,8 @@ const ProfileInfo = ({user}) => {
 };
 
 const StyledDiv = styled.div`
-  border: 1px solid black;
+  border-radius: 5px;
+  background-color: ${COLORS.mediumGray};
   padding 10px;
   margin: 0 50px;
 `;

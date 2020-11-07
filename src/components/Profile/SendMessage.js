@@ -23,6 +23,9 @@ const SendMessage = () => {
     const date = new Date();
     const dateId = Buffer.from(date.toString()).toString("base64");
 
+    const currentUserName = currentUser.firstName + ' ' + currentUser.lastName;
+    const otherUserName = otherUser.firstName + ' ' + otherUser.lastName;
+
     dispatch(requestMessage());
 
     fetch(SERVER_URL + "/api/sendmessage", {
@@ -34,6 +37,8 @@ const SendMessage = () => {
         dateId,
         currentUserId: currentUser._id,
         otherUserId: otherUser._id,
+        currentUserName,
+        otherUserName,
         date: new Date(),
         message,
       }),

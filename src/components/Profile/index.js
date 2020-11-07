@@ -39,7 +39,8 @@ const Profile = () => {
   const currentProfileEmail = Buffer.from(currentProfileId, "base64").toString(
     "ascii"
   );
-
+console.log(!messageState.message &&
+  (!otherUser || currentProfileId === currentUser._id))
   React.useEffect(() => {
     if (!otherUser || currentProfileId !== otherUser._id) {
       dispatch(requestUser());
@@ -77,25 +78,41 @@ const Profile = () => {
       ) : (
         <>
           <LoggedInHeader />
-          <ProfileInfo
-            user={
-              currentProfileId === currentUser._id ? currentUser : otherUser
-            }
-          />
-          <ProfileMessages
-            currentUser={currentProfileId === currentUser._id ? currentUser : false}
-            message={messageState.message}
-          />
-          <ProfileClasses
-            user={
-              currentProfileId === currentUser._id ? currentUser : otherUser
-            }
-          />
-          {currentUser.admin ? <ProfilSuggestion suggestions={suggestionState} /> : null}
+          <ProfileContainer>
+            <GenericProfileContainer>
+              <ProfileInfo
+                user={
+                  currentProfileId === currentUser._id ? currentUser : otherUser
+                }
+              />
+    
+              <ProfileClasses
+                user={
+                  currentProfileId === currentUser._id ? currentUser : otherUser
+                }
+              />
+              {currentUser.admin ? (
+                <ProfilSuggestion suggestions={suggestionState} />
+              ) : null}
+            </GenericProfileContainer>
+            <ProfileMessages
+              currentUser={
+                currentProfileId === currentUser._id ? currentUser : false
+              }
+              message={messageState.message}
+            />
+          </ProfileContainer>
         </>
       )}
     </>
   );
 };
 
+const GenericProfileContainer = styled.div`
+  flex: 2;
+`
+const ProfileContainer = styled.div`
+  display: flex;
+  width: 100%;
+`
 export default Profile;

@@ -101,7 +101,7 @@ const updateUser = async (req, res) => {
 const sendMessage = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
 
-  const { dateId, currentUserId, otherUserId, message, date } = req.body;
+  const { dateId, currentUserId, otherUserId, currentUserName, otherUserName, message, date } = req.body;
   try {
     await client.connect();
 
@@ -111,8 +111,8 @@ const sendMessage = async (req, res) => {
 
     const conversationExist = conversations.find(
       (convo) =>
-        (convo.user1 === currentUserId || otherUserId) &&
-        (convo.user2 === currentUserId || otherUserId)
+        (convo.user1 === (currentUserId || otherUserId)) &&
+        (convo.user2 === (currentUserId || otherUserId))
     );
 
     const newMessage = {
@@ -122,6 +122,7 @@ const sendMessage = async (req, res) => {
     };
 
     if (conversationExist) {
+      console.log('exist')
       conversationExist.messages.push(newMessage);
       const newMessages = conversationExist.messages;
 
@@ -139,6 +140,7 @@ const sendMessage = async (req, res) => {
       assert.equal(1, conversationEdited.matchedCount);
       assert.equal(1, conversationEdited.modifiedCount);
     } else {
+      console.log('not exist')
       const currentUser = await db
         .collection("users")
         .findOne({ _id: currentUserId });
@@ -183,6 +185,8 @@ const sendMessage = async (req, res) => {
         _id: conversationId,
         user1: currentUserId,
         user2: otherUserId,
+        user1Name: currentUserName,
+        user2Name: otherUserName,
         messages: [newMessage],
       };
 

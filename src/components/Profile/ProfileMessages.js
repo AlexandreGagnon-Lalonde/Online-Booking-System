@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
+import { COLORS } from '../../constant';
 
 import IndividualConversation from "./IndiviudalConversation";
 import SendMessage from "./SendMessage";
@@ -25,7 +26,10 @@ const ProfileMessages = ({ currentUser, message }) => {
 };
 
 const ConversationsContainer = styled.div`
-  border: 1px solid red;
+background-color: ${COLORS.mediumGray};
+border-radius: 5px;
+flex: 1;
+padding: 10px;
 `;
 
 export default ProfileMessages;
