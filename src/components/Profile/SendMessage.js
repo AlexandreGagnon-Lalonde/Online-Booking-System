@@ -8,11 +8,14 @@ import {
   requestMessage,
   sendMessage,
   messageError,
+  receiveMessages,
 } from "../../reducers/action";
+
 
 const SendMessage = ({ otherUserId }) => {
   const currentUser = useSelector((state) => state.user.user);
   const otherUser = useSelector((state) => state.user.otherUser);
+  const messageState = useSelector((state) => state.message);
 
   const [message, setMessage] = React.useState("");
 
@@ -57,6 +60,21 @@ const SendMessage = ({ otherUserId }) => {
       });
   };
 
+  React.useEffect(() => {
+    if (messageState.status === 'Sent') {
+      dispatch(requestMessage());
+
+    fetch(SERVER_URL + `/api/getmessages/${currentUser._id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch(receiveMessages(data.message));
+      })
+      .catch((err) => {
+        dispatch(messageError());
+      });
+    }
+  }, [messageState.status])
+
   return (
     <SendMessageForm onSubmit={handleSendMessage} id={'message-form'}>
       <SendMessageInput
@@ -94,7 +112,6 @@ const SendMessageButton = styled.button`
   justify-content: center;
   background-color: ${COLORS.mediumGray};
   cursor: pointer;
-
 `
 
 export default SendMessage;
