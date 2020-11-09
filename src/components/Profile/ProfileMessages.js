@@ -7,7 +7,8 @@ import IndividualConversation from "./IndiviudalConversation";
 import SendMessage from "./SendMessage";
 
 const ProfileMessages = ({ currentUser, message }) => {
-  console.log(message)
+
+  console.log(currentUser)
   return (
     <ConversationsContainer>
       {currentUser ? (

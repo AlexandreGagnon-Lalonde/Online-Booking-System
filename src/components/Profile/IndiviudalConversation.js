@@ -7,13 +7,18 @@ import IndividualMessage from "./IndividualMessage";
 
 const IndividualConversation = ({ conversation }) => {
   const currentUser = useSelector((state) => state.user.user);
-
+  console.log(conversation);
   const [toggleConversation, setToggleConversation] = React.useState(false);
 
-  const currentUserName =
+  const otherUserName =
     conversation.user1 === currentUser._id
       ? conversation.user2Name
       : conversation.user1Name;
+
+  const otherUserId =
+    conversation.user1 === currentUser._id
+      ? conversation.user2
+      : conversation.user1;
 
   const handleToggle = (ev) => {
     ev.preventDefault();
@@ -23,7 +28,7 @@ const IndividualConversation = ({ conversation }) => {
   return (
     <ConversationContainer>
       <ToggleConvoButton onClick={handleToggle}>
-        {currentUserName}
+        {otherUserName}
       </ToggleConvoButton>
       {conversation.messages.map((message) => {
         return (
@@ -34,7 +39,7 @@ const IndividualConversation = ({ conversation }) => {
           </>
         );
       })}
-      {toggleConversation ? <SendMessage /> : null}
+      {toggleConversation ? <SendMessage otherUserId={otherUserId} /> : null}
     </ConversationContainer>
   );
 };

@@ -10,7 +10,7 @@ import {
   messageError,
 } from "../../reducers/action";
 
-const SendMessage = () => {
+const SendMessage = ({ otherUserId }) => {
   const currentUser = useSelector((state) => state.user.user);
   const otherUser = useSelector((state) => state.user.otherUser);
 
@@ -27,6 +27,8 @@ const SendMessage = () => {
     const currentUserName = currentUser.firstName + ' ' + currentUser.lastName;
     const otherUserName = otherUser.firstName + ' ' + otherUser.lastName;
 
+    const receivingUserId = otherUserId ? otherUserId : otherUser._id;
+
     dispatch(requestMessage());
 
     fetch(SERVER_URL + "/api/sendmessage", {
@@ -37,7 +39,7 @@ const SendMessage = () => {
       body: JSON.stringify({
         dateId,
         currentUserId: currentUser._id,
-        otherUserId: otherUser._id,
+        otherUserId: receivingUserId,
         currentUserName,
         otherUserName,
         date: new Date(),

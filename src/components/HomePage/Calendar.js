@@ -224,6 +224,7 @@ const Calendar = (props) => {
 const StyledDiv = styled.div`
   margin: 50px;
   border: 1px solid red;
+  flex: 2
 `;
 
 export default Calendar;

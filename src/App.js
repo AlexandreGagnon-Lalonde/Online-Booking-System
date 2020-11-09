@@ -78,7 +78,7 @@ function App() {
         });
     }
 
-    if (userState.user && !messageState.message) {
+    if (userState.user) {
       dispatch(requestMessage());
 
       fetch(SERVER_URL + `/api/getmessages/${userState.user._id}`)

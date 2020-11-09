@@ -13,11 +13,22 @@ const HomePage = () => {
   return (
     <>
       <Header />
-      <Calendar />
-      <WorkoutBox />
-      <SuggestionBox />
+      <ContentContainer>
+        <Calendar />
+        <RightContainer>
+          <WorkoutBox />
+          <SuggestionBox />
+        </RightContainer>
+      </ContentContainer>
     </>
   )
 }
+
+const ContentContainer = styled.div`
+  display: flex;
+`
+const RightContainer = styled.div`
+  flex: 1;
+`
 
 export default HomePage

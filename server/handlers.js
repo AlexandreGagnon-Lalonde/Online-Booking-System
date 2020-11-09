@@ -116,7 +116,8 @@ const sendMessage = async (req, res) => {
     const db = client.db("online-booking-system");
 
     const conversations = await db.collection("conversations").find().toArray();
-
+console.log(otherUserId)
+console.log(currentUserId)
     const conversationExist = conversations.find(
       (convo) =>
         (convo.user1 === currentUserId || convo.user1 === otherUserId) &&

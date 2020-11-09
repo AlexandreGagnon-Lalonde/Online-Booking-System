@@ -40,8 +40,7 @@ const Profile = () => {
   const currentProfileEmail = Buffer.from(currentProfileId, "base64").toString(
     "ascii"
   );
-  console.log(currentUser.admin);
-  console.log(otherUser);
+
   React.useEffect(() => {
     if (!otherUser || currentProfileId !== otherUser._id) {
       dispatch(requestUser());
@@ -69,7 +68,7 @@ const Profile = () => {
     //       dispatch(messageError());
     //     });
     // }
-  }, [currentProfileId, userState.status, otherUser]);
+  }, [currentProfileId, userState.status, otherUser, messageState.status]);
 
   return (
     <>
