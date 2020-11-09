@@ -18,6 +18,7 @@ import { SERVER_URL } from "./constant";
 import {
   requestUser,
   receiveUser,
+  receiveOtherUser,
   receiveUserError,
   requestSuggestion,
   receiveSuggestion,
@@ -66,6 +67,8 @@ function App() {
       fetch(SERVER_URL + `/api/getuser/${email}`)
         .then((res) => res.json())
         .then((data) => {
+                    dispatch(receiveOtherUser(data.user));
+
           dispatch(receiveUser(data.user));
           localStorage.setItem("currentUserId", data.user._id);
           history.push("/homepage");
@@ -86,7 +89,6 @@ function App() {
         .catch((err) => {
           dispatch(messageError());
         });
-
     }
 
     if (commentState.status === "idle") {

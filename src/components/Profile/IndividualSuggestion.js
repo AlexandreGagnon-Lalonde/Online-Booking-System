@@ -106,7 +106,7 @@ const SuggestionDeleteButton = styled.button`
   color: ${COLORS.orange};
   border: none;
   background-color: ${COLORS.lightGray};
-  font-size: 2em;
+  font-size: 1.5em;
   display: flex;
   align-items: center;
   justify-content: center;

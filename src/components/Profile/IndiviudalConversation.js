@@ -48,7 +48,6 @@ const ToggleConvoButton = styled.button`
   border-radius: 5px;
 `;
 const ConversationContainer = styled.div`
-  border: 1px solid ${COLORS.lightGray};
   border-radius: 5px;
   margin-bottom: 10px;
 `;

@@ -40,7 +40,8 @@ const Profile = () => {
   const currentProfileEmail = Buffer.from(currentProfileId, "base64").toString(
     "ascii"
   );
-
+  console.log(currentUser.admin);
+  console.log(otherUser);
   React.useEffect(() => {
     if (!otherUser || currentProfileId !== otherUser._id) {
       dispatch(requestUser());
@@ -68,7 +69,7 @@ const Profile = () => {
     //       dispatch(messageError());
     //     });
     // }
-  }, [currentProfileId, userState.status]);
+  }, [currentProfileId, userState.status, otherUser]);
 
   return (
     <>
@@ -85,13 +86,13 @@ const Profile = () => {
                   currentProfileId === currentUser._id ? currentUser : otherUser
                 }
               />
-    
+
               <ProfileClasses
                 user={
                   currentProfileId === currentUser._id ? currentUser : otherUser
                 }
               />
-              {currentUser.admin ? (
+              {currentUser.admin && currentProfileId === currentUser._id ? (
                 <ProfilSuggestion suggestions={suggestionState} />
               ) : null}
             </GenericProfileContainer>
@@ -110,9 +111,9 @@ const Profile = () => {
 
 const GenericProfileContainer = styled.div`
   flex: 2;
-`
+`;
 const ProfileContainer = styled.div`
   display: flex;
   width: 100%;
-`
+`;
 export default Profile;

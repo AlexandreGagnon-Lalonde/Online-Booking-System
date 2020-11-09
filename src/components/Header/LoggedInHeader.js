@@ -76,7 +76,7 @@ const LogOutButton = styled.button`
   margin: 10px;
   display: flex;
   align-items: center;
-  transition: all 0.3s;
+  transition: all 0.2s;
 
   &:hover {
     background-color: ${COLORS.orange};
