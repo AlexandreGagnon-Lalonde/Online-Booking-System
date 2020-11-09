@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-
+import { COLORS } from "../../constant";
 import { useSelector, useDispatch } from "react-redux";
 import {
   requestSuggestion,
@@ -9,10 +9,15 @@ import {
 } from "../../reducers/action";
 import { SERVER_URL } from "../../constant";
 import LoadingSpinner from "../LoadingSpinner";
+import { Link, useHistory } from "react-router-dom";
+import { FiDelete } from 'react-icons/fi';
 
 const IndividualSuggestion = ({ suggestion }) => {
   const suggestionState = useSelector((state) => state.suggestion);
+
   const dispatch = useDispatch();
+
+  const suggestionAuthor = suggestion.author;
 
   const handleSubmit = (ev) => {
     ev.preventDefault();
@@ -40,24 +45,76 @@ const IndividualSuggestion = ({ suggestion }) => {
 
   return (
     <StyledDiv>
-      <form onSubmit={handleSubmit}>
-        <p>{suggestion.suggestion}</p>
-        <p>{suggestion.from}</p>
-        <button type={"submit"}>
+      <SuggestionListForm onSubmit={handleSubmit}>
+        <SuggestionInfo>
+          <SuggestionContent>{suggestion.suggestion}</SuggestionContent>
+          <SuggestionAuthor>
+            {suggestionAuthor === "Anonymous" ? (
+              suggestionAuthor
+            ) : (
+              <StyledAuthorLink to={`/profile/${suggestion.authorId}`}>
+                {suggestion.author}
+              </StyledAuthorLink>
+            )}
+          </SuggestionAuthor>
+        </SuggestionInfo>
+        <SuggestionDeleteButton type={"submit"}>
           {suggestionState.status === "Loading" ? (
             <LoadingSpinner size={"sm"} />
           ) : (
-            "Delete"
+            <FiDelete />
           )}
-        </button>
-      </form>
+        </SuggestionDeleteButton>
+      </SuggestionListForm>
     </StyledDiv>
   );
 };
 
 const StyledDiv = styled.div`
-  border: 1px solid black;
-  margin: 5px;
+  background-color: ${COLORS.lightGray};
+  border-radius: 5px;
+  margin: 10px;
+  color: ${COLORS.darkGray};
+  padding: 5px;
+`;
+const SuggestionInfo = styled.div`
+  flex: 8;
+`;
+const SuggestionListForm = styled.form`
+  display: flex;
+`;
+const SuggestionContent = styled.p`
+  font-size: 1.4em;
+  font-weight: bold;
+`;
+const SuggestionAuthor = styled.p`
+  font-size: 0.8em;
+  color: ${COLORS.mediumGray};
+`;
+const StyledAuthorLink = styled(Link)`
+font-size: 0.8em;
+color: ${COLORS.mediumGray};
+transition: all 0.2s;
+
+&:hover {
+  text-decoration: none;
+  color: ${COLORS.mediumGray};
+  font-size: 1em;
+}
+`
+const SuggestionDeleteButton = styled.button`
+  color: ${COLORS.orange};
+  border: none;
+  background-color: ${COLORS.lightGray};
+  font-size: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 export default IndividualSuggestion;

@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+import { COLORS } from '../../constant';
 
 import IndividualSuggestion from "./IndividualSuggestion";
 import LoadingSpinner from "../LoadingSpinner";
@@ -22,7 +23,7 @@ const ProfilSuggestion = ({ suggestions }) => {
               );
             })
           ) : (
-            <p>No suggestions</p>
+            <p>No suggestions from users</p>
           )}
         </StyledDiv>
       ) : (
@@ -33,7 +34,10 @@ const ProfilSuggestion = ({ suggestions }) => {
 };
 
 const StyledDiv = styled.div`
-  border: 1px solid black;
+border-radius: 5px;
+background-color: ${COLORS.mediumGray};
+padding 10px;
+margin: 10px 50px;
 `;
 
 export default ProfilSuggestion;

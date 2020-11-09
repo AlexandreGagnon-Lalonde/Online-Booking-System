@@ -23,6 +23,7 @@ const SuggestionBox = () => {
     const date = new Date();
     const dateId = Buffer.from(date.toString()).toString("base64");
     const userName = currentUser.firstName + " " + currentUser.lastName;
+    const authorId = currentUser._id;
 
     dispatch(requestSuggestion());
 
@@ -33,7 +34,8 @@ const SuggestionBox = () => {
       },
       body: JSON.stringify({
         _id: dateId,
-        from: checkbox ? "Anonymous" : userName,
+        author: checkbox ? "Anonymous" : userName,
+        authorId,
         suggestion,
       }),
     })
