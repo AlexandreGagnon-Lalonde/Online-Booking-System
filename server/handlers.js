@@ -126,6 +126,7 @@ const sendMessage = async (req, res) => {
     console.log(conversationExist);
     const newMessage = {
       from: currentUserId,
+      fromName: currentUserName,
       message,
       status: "sent",
     };
