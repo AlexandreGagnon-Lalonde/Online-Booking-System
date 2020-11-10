@@ -839,6 +839,7 @@ const deleteComment = async (req, res) => {
 
 const getComments = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
+
   try {
     await client.connect();
 
@@ -850,9 +851,11 @@ const getComments = async (req, res) => {
 
     const todayClass = await db.collection("classes").findOne({ _id });
 
+    const todayComments = todayClass ? todayClass.comments : [];
+
     res.status(200).json({
       status: 200,
-      comments: todayClass.comments,
+      comments: todayComments,
     });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });

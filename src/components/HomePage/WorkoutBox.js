@@ -7,7 +7,7 @@ import WorkoutComments from './WorkoutComments';
 const WorkoutBox = () => {
   return (
     <WorkoutContainer>
-      <h2>Workout</h2>
+      <WorkoutTitle>Workout</WorkoutTitle>
       <Workout />
       <WorkoutComments />
     </WorkoutContainer>
@@ -20,5 +20,9 @@ background-color: ${COLORS.mediumGray};
 padding 10px;
 margin: 10px 50px;
 `
+const WorkoutTitle = styled.h3`
+
+`
+
 
 export default WorkoutBox

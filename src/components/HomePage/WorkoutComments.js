@@ -10,6 +10,7 @@ import {
 } from "../../reducers/action";
 import LoadingSpinner from "../LoadingSpinner";
 import IndividualComment from './IndividualComment';
+import { COLORS } from '../../constant';
 
 const WorkoutComments = () => {
   const currentUser = useSelector((state) => state.user.user);
@@ -60,17 +61,17 @@ const WorkoutComments = () => {
   };
 
   return (
-    <>
+    <WorkoutContainer>
       <form onSubmit={handleComment} id={"comment-form"}>
-        <input
-          type={"textarea"}
+        <WorkoutCommentInput
+          type={"text"}
           value={comment}
           placeholder={"Leave a comment"}
           onChange={(ev) => setComment(ev.currentTarget.value)}
-        ></input>
-        <button type={"submit"} disabled={!comment}>
+        ></WorkoutCommentInput>
+        <WorkoutCommentButton type={"submit"} disabled={!comment}>
           Comment
-        </button>
+        </WorkoutCommentButton>
       </form>
       <div>
         {commentState ? (
@@ -87,8 +88,42 @@ const WorkoutComments = () => {
           <LoadingSpinner size={"md"} />
         )}
       </div>
-    </>
+    </WorkoutContainer>
   );
 };
+
+const WorkoutCommentButton = styled.button`
+border: 1px solid ${COLORS.orange};
+border-radius: 5px;
+font-size: 1.5em;
+font-weight: bold;
+color: ${COLORS.orange};
+display: flex;
+align-items: center;
+justify-content: center;
+background-color: ${COLORS.mediumGray};
+cursor: pointer;
+width: 100%;
+transition: all 0.3s;
+
+&:hover {
+  color: ${COLORS.lightGray};
+}
+`
+const WorkoutCommentInput = styled.input`
+  border-radius: 5px;
+  padding-left: 5px;
+  background-color: ${COLORS.lightGray};
+  color: ${COLORS.darkGray};
+  width: 100%;
+  margin: 10px 0;
+
+  &::placeholder {
+    color: ${COLORS.darkGray};
+  }
+`
+const WorkoutContainer = styled.div`
+
+`
 
 export default WorkoutComments;
