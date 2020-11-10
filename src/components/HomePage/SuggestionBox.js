@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { SERVER_URL } from "../../constant";
-
+import { COLORS } from '../../constant';
 import {
   requestSuggestion,
   receiveSuggestion,
@@ -56,28 +56,77 @@ const SuggestionBox = () => {
   };
 
   return (
-    <div>
-      <h2>Suggestion</h2>
+    <SuggestionContainer>
+      <SuggestionTitle>Suggestion</SuggestionTitle>
       <form onSubmit={handleSuggestionSubmit} id={"suggestion-form"}>
-        <textarea
+        <SuggestionInput
           onChange={(ev) => setSuggestion(ev.currentTarget.value)}
           value={suggestion}
           placeholder={"Enter a/some suggestion(s)"}
-        ></textarea>
-        <label htmlFor={"suggestion"}>Anonymous</label>
-        <input
-          type={"checkbox"}
-          id={"anonymous"}
-          name={"suggestion"}
-          value={checkbox ? true : false}
-          onChange={(ev) => setCheckbox(ev.currentTarget.value)}
-        ></input>
-        <button type="submit" disabled={!suggestion}>
-          Send
-        </button>
+        ></SuggestionInput>
+          <AnonymousContainer>
+            <AnonymousLabel htmlFor={"suggestion"}>Anonymous</AnonymousLabel>
+            <input
+              type={"checkbox"}
+              id={"anonymous"}
+              name={"suggestion"}
+              value={checkbox ? true : false}
+              onChange={(ev) => setCheckbox(ev.currentTarget.value)}
+            ></input>
+          </AnonymousContainer>
+          <SuggestionButton type="submit" disabled={!suggestion}>
+            Send
+          </SuggestionButton>
       </form>
-    </div>
+    </SuggestionContainer>
   );
 };
+
+const SuggestionTitle = styled.h3`
+
+`
+const SuggestionContainer = styled.div`
+border-radius: 5px;
+background-color: ${COLORS.mediumGray};
+padding 10px;
+margin: 10px 50px;
+`
+const SuggestionInput = styled.textarea`
+  border-radius: 5px;
+  padding-left: 5px;
+  background-color: ${COLORS.lightGray};
+  color: ${COLORS.darkGray};
+  width: 100%;
+  margin: 10px 0;
+
+  &::placeholder {
+    color: ${COLORS.darkGray};
+  }
+`
+const AnonymousContainer = styled.div`
+padding: 0 0 10px 0;
+`
+const AnonymousLabel = styled.label`
+  padding-right: 10px;
+`
+const SuggestionButton = styled.button`
+border: 1px solid ${COLORS.orange};
+border-radius: 5px;
+font-size: 1.5em;
+font-weight: bold;
+color: ${COLORS.orange};
+display: flex;
+align-items: center;
+justify-content: center;
+background-color: ${COLORS.mediumGray};
+cursor: pointer;
+width: 100%;
+transition: all 0.3s;
+
+&:hover {
+  color: ${COLORS.lightGray};
+}
+`
+
 
 export default SuggestionBox;
