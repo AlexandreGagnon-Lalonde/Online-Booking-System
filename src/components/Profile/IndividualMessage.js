@@ -86,7 +86,7 @@ const IndividualMessage = ({ message, conversationId }) => {
         <MessageNotFromCurrentUser>
           {messageValueShortcut}{" "}
           <MessageAuthor>
-            <Link to={`/profile/${messageAuthor}`}>{message.fromName}</Link>
+            <StyledLink to={`/profile/${messageAuthor}`}>{message.fromName}</StyledLink>
             <EditedMention>
               {messageStatus === "edited" ? " · edited" : null}
             </EditedMention>
@@ -109,6 +109,11 @@ const EditButton = styled.button`
   color: ${COLORS.orange};
   background-color: ${COLORS.mediumGray};
   border: none;
+  transition: all 0.3s;
+
+  &:hover {
+    color: ${COLORS.lightGray};
+  }
 `;
 const MessageAuthor = styled.p`
   font-size: 0.5em;
@@ -122,5 +127,14 @@ const MessageContent = styled.div`
   display: flex;
   flex-direction: column;
 `;
+const StyledLink = styled(Link)`
+  color: ${COLORS.orange};
+  transition: all 0.3s;
+
+  &:hover {
+    color: ${COLORS.lightGray};
+    text-decoration: none;
+  }
+`
 
 export default IndividualMessage;

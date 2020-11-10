@@ -9,9 +9,19 @@ import {
   receiveCommentError,
 } from "../../reducers/action";
 import LoadingSpinner from "../LoadingSpinner";
+import { COLORS } from "../../constant";
+import { FiEdit2 } from "react-icons/fi";
+import { FiDelete } from "react-icons/fi";
+import { Link, useHistory } from "react-router-dom";
 
 const IndividualComment = ({ comment }) => {
   const currentUser = useSelector((state) => state.user.user);
+
+  const commentValueShortcut = comment.comment;
+
+  const [toggleEditing, setToggleEditing] = React.useState(false);
+  const [commentValue, setCommentValue] = React.useState(commentValueShortcut);
+
   const dispatch = useDispatch();
 
   const handleDeleteComment = (ev) => {
@@ -45,21 +55,73 @@ const IndividualComment = ({ comment }) => {
         dispatch(receiveCommentError());
       });
   };
+  const handleEditComment = (ev) => {
+    ev.preventDefault();
+  };
 
   return (
     <>
-      {comment.status !== "deleted" ? (
-        <>
-          <p>{comment.comment}</p>
-          {comment.fromId === currentUser._id ? (
-            <button onClick={handleDeleteComment}>Delete</button>
-          ) : null}
-        </>
-      ) : (
-        <p>Deleted</p>
-      )}
+      <CommentFromCurrentUser>
+        <CommentInfo>
+          <CommentContent>
+            {comment.status === "deleted" ? (
+              <DeletedComment>deleted</DeletedComment>
+            ) : (
+              comment.comment
+            )}
+          </CommentContent>
+          <CommentAuthor>
+            <StyledLink to={`/profile/${comment.fromId}`}>{comment.from}</StyledLink>
+          </CommentAuthor>
+        </CommentInfo>
+        {comment.fromId === currentUser._id ? (
+          <ButtonContainer>
+            <CommentButton onClick={handleEditComment}>
+              <FiEdit2 />
+            </CommentButton>
+            <CommentButton onClick={handleDeleteComment}>
+              <FiDelete />
+            </CommentButton>
+          </ButtonContainer>
+        ) : null}
+      </CommentFromCurrentUser>
     </>
   );
 };
+
+const CommentFromCurrentUser = styled.div`
+display: flex;
+justify-content: space-between;
+`;
+const CommentInfo = styled.div``;
+const CommentContent = styled.p``;
+const CommentAuthor = styled.p`
+  font-size: 0.5em;
+  color: ${COLORS.lightGray};
+`;
+const CommentButton = styled.button`
+  font-size: 0.8em;
+  color: ${COLORS.orange};
+  background-color: ${COLORS.mediumGray};
+  border: none;
+  transition: all 0.3s;
+
+  &:hover {
+    color: ${COLORS.lightGray};
+  }
+`;
+const DeletedComment = styled.p`
+  font-size: 0.8em;
+`;
+const ButtonContainer = styled.div``
+const StyledLink = styled(Link)`
+  color: ${COLORS.orange};
+  transition: all 0.3s;
+
+  &:hover {
+    color: ${COLORS.lightGray};
+    text-decoration: none;
+  }
+`
 
 export default IndividualComment;

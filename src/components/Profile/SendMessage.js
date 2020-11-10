@@ -112,6 +112,11 @@ const SendMessageButton = styled.button`
   justify-content: center;
   background-color: ${COLORS.mediumGray};
   cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    color: ${COLORS.lightGray};
+  }
 `
 
 export default SendMessage;
