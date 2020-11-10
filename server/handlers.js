@@ -116,8 +116,8 @@ const sendMessage = async (req, res) => {
     const db = client.db("online-booking-system");
 
     const conversations = await db.collection("conversations").find().toArray();
-console.log(otherUserId)
-console.log(currentUserId)
+    console.log(otherUserId);
+    console.log(currentUserId);
     const conversationExist = conversations.find(
       (convo) =>
         (convo.user1 === currentUserId || convo.user1 === otherUserId) &&
@@ -215,27 +215,24 @@ console.log(currentUserId)
 const editMessage = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
 
-  // const { messageContent, messageId, _id, userId } = req.body;
+  const { _id, messageValue, author, oldMessage } = req.body;
   try {
     await client.connect();
 
     const db = client.db("online-booking-system");
 
-    const currentUser = await db.collection("users").findOne({ _id });
-    const otherUser = await db.collection("users").findOne({ _id: userId });
+    const currentConversation = await db
+      .collection("conversations")
+      .findOne({ _id });
 
-    const currentUserQuery = { _id };
-    const otherUserQuery = { _id: userId };
+    const currentConversationQuery = { _id };
 
-    const currentUserNewConversations = currentUser.Conversations.map(
+    const currentConversationUpdated = currentConversation.messages.map(
       (message) => {
-        if (message._id === messageId) {
+        if (message.from === author && message.message === oldMessage) {
           return {
-            _id: messageId,
-            from: message.from,
-            to: message.to,
-            message: messageContent,
-            date: message.date,
+            ...message,
+            message: messageValue,
             status: "edited",
           };
         } else {
@@ -244,46 +241,23 @@ const editMessage = async (req, res) => {
       }
     );
 
-    const otherUserNewConversations = otherUser.Conversations.map((message) => {
-      if (message._id === messageId) {
-        return {
-          _id: messageId,
-          from: message.from,
-          to: message.to,
-          message: messageContent,
-          date: message.date,
-          status: "edited",
-        };
-      } else {
-        return message;
-      }
+    const newConversation = {
+      $set: {
+        messages: currentConversationUpdated,
+      },
+    };
+
+    const oldConversationUpdated = await db
+      .collection("conversations")
+      .updateOne(currentConversationQuery, newConversation);
+    assert.equal(1, oldConversationUpdated.matchedCount);
+    assert.equal(1, oldConversationUpdated.modifiedCount);
+
+    res.status(200).json({
+      status: 200,
+      success: true,
+      message: currentConversationUpdated,
     });
-
-    const currentUserNewMessage = {
-      $set: {
-        conversations: currentUserNewConversations,
-      },
-    };
-
-    const otherUserNewMessage = {
-      $set: {
-        conversations: otherUserNewConversations,
-      },
-    };
-
-    const currentUserMessageCreated = await db
-      .collection("users")
-      .updateOne(currentUserQuery, currentUserNewMessage);
-    assert.equal(1, currentUserMessageCreated.matchedCount);
-    assert.equal(1, currentUserMessageCreated.modifiedCount);
-
-    const otherUserMessageCreated = await db
-      .collection("users")
-      .updateOne(otherUserQuery, otherUserNewMessage);
-    assert.equal(1, otherUserMessageCreated.matchedCount);
-    assert.equal(1, otherUserMessageCreated.modifiedCount);
-
-    res.status(200).json({ status: 200, success: true, message: newMessage });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }

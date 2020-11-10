@@ -34,7 +34,7 @@ const IndividualConversation = ({ conversation }) => {
         return (
           <>
             {toggleConversation ? (
-              <IndividualMessage message={message} />
+              <IndividualMessage message={message} conversationId={conversation._id} />
             ) : null}
           </>
         );
