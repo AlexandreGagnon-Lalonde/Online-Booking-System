@@ -12,6 +12,7 @@ import LoadingSpinner from "../LoadingSpinner";
 import { COLORS } from "../../constant";
 import { FiEdit2 } from "react-icons/fi";
 import { FiDelete } from "react-icons/fi";
+import { AiOutlineSend } from "react-icons/ai";
 import { Link, useHistory } from "react-router-dom";
 
 const IndividualComment = ({ comment }) => {
@@ -60,33 +61,31 @@ const IndividualComment = ({ comment }) => {
   const handleEditComment = (ev) => {
     ev.preventDefault();
 
-    dispatch(requestComment());
+    if (oldComment !== newComment) {
+      dispatch(requestComment());
 
-    fetch(SERVER_URL + "/api/editcomment", {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        _id: classId,
-        oldComment,
-        newComment,
-        commentId,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          dispatch(receiveComment(data.comments));
-        } else {
-          dispatch(receiveCommentError());
-        }
-        setToggleEditing(!toggleEditing);
+      fetch(SERVER_URL + "/api/editcomment", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          _id: classId,
+          newComment,
+          commentId,
+        }),
       })
-      .catch((err) => {
-        dispatch(receiveCommentError());
-        setToggleEditing(!toggleEditing);
-      });
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(receiveComment(data.comments));
+          setToggleEditing(!toggleEditing);
+        })
+        .catch((err) => {
+          dispatch(receiveCommentError());
+        });
+    } else {
+      setToggleEditing(!toggleEditing);
+    }
   };
   const handleEdit = (ev) => {
     ev.preventDefault();
@@ -102,7 +101,7 @@ const IndividualComment = ({ comment }) => {
             {commentStatus === "deleted" ? (
               <DeletedComment>deleted</DeletedComment>
             ) : toggleEditing ? (
-              <input
+              <EditCommentInput
                 type={"text"}
                 value={newComment}
                 onChange={(ev) => setNewComment(ev.currentTarget.value)}
@@ -127,7 +126,7 @@ const IndividualComment = ({ comment }) => {
                 <CommentButton
                   onClick={toggleEditing ? handleEditComment : handleEdit}
                 >
-                  <FiEdit2 />
+                  {toggleEditing ? <AiOutlineSend /> : <FiEdit2 />}
                 </CommentButton>
                 <CommentButton onClick={handleDeleteComment}>
                   <FiDelete />
@@ -161,6 +160,9 @@ const CommentButton = styled.button`
   &:hover {
     color: ${COLORS.lightGray};
   }
+  &:focus {
+    color: ${COLORS.lightGray};
+  }
 `;
 const DeletedComment = styled.p`
   font-size: 0.8em;
@@ -181,6 +183,16 @@ const RegularComment = styled.p``;
 const EditedMention = styled.span`
   font-size: 1em;
   color: ${COLORS.lightGray};
+`;
+const EditCommentInput = styled.input`
+  border-radius: 5px;
+  padding-left: 5px;
+  background-color: ${COLORS.lightGray};
+  color: ${COLORS.darkGray};
+
+  &::placeholder {
+    color: ${COLORS.darkGray};
+  }
 `;
 
 export default IndividualComment;

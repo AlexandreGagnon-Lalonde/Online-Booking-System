@@ -753,24 +753,24 @@ const postComment = async (req, res) => {
 const editComment = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
 
-  const { _id, oldComment, newComment, commentId } = req.body;
+  const { _id, newComment, commentId } = req.body;
   try {
     await client.connect();
 
     const db = client.db("online-booking-system");
 
     const currentClass = await db.collection("classes").findOne({ _id });
-console.log(currentClass.comments)
+
     const commentQuery = { _id };
 
     currentClass.comments.map((comment) => {
-      if (comment.commentId === commentId && oldComment !== newComment) {
+      if (comment.commentId === commentId) {
         comment.comment = newComment;
         comment.status = "edited";
       }
       return comment;
     });
-console.log(currentClass.comments)
+
     const commentEditedValue = {
       $set: {
         comments: currentClass.comments,

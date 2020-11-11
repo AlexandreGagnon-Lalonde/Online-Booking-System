@@ -66,7 +66,7 @@ const IndividualMessage = ({ message, conversationId }) => {
         <MessageFromCurrentUser>
           <MessageContent>
             {toggleEditing ? (
-              <input
+              <EditMessageInput
                 type={"text"}
                 value={messageValue}
                 onChange={(ev) => setMessageValue(ev.currentTarget.value)}
@@ -86,7 +86,9 @@ const IndividualMessage = ({ message, conversationId }) => {
         <MessageNotFromCurrentUser>
           {messageValueShortcut}{" "}
           <MessageAuthor>
-            <StyledLink to={`/profile/${messageAuthor}`}>{message.fromName}</StyledLink>
+            <StyledLink to={`/profile/${messageAuthor}`}>
+              {message.fromName}
+            </StyledLink>
             <EditedMention>
               {messageStatus === "edited" ? " · edited" : null}
             </EditedMention>
@@ -114,6 +116,9 @@ const EditButton = styled.button`
   &:hover {
     color: ${COLORS.lightGray};
   }
+  &:focus {
+    color: ${COLORS.lightGray};
+  }
 `;
 const MessageAuthor = styled.p`
   font-size: 0.5em;
@@ -135,6 +140,15 @@ const StyledLink = styled(Link)`
     color: ${COLORS.lightGray};
     text-decoration: none;
   }
-`
+`;
+const EditMessageInput = styled.input`
+  border-radius: 5px;
+  padding-left: 5px;
+  background-color: ${COLORS.lightGray};
+  color: ${COLORS.darkGray};
 
+  &::placeholder {
+    color: ${COLORS.darkGray};
+  }
+`;
 export default IndividualMessage;
