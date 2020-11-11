@@ -9,7 +9,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import Modal from "react-bootstrap/Modal";
 import { SERVER_URL } from "../../constant";
-
+import { COLORS } from '../../constant';
 import {
   calendarDay,
   calendarWeek,
@@ -23,8 +23,8 @@ const CalendarDisplayCommand = ({ setFirstDayOfCalendar, calendarDisplay }) => {
   const dispatch = useDispatch();
 
   return (
-    <div>
-      <button
+    <ButtonContainer>
+      <DisplayButton
         disabled={
           calendarDisplay === "timeGridDay" //? true : false
         }
@@ -35,8 +35,8 @@ const CalendarDisplayCommand = ({ setFirstDayOfCalendar, calendarDisplay }) => {
         }}
       >
         Day
-      </button>
-      <button
+      </DisplayButton>
+      <DisplayButton
         disabled={
           calendarDisplay === "timeGridWeek" //? true : false
         }
@@ -47,9 +47,34 @@ const CalendarDisplayCommand = ({ setFirstDayOfCalendar, calendarDisplay }) => {
         }}
       >
         Week
-      </button>
-    </div>
+      </DisplayButton>
+    </ButtonContainer>
   );
 };
+
+const DisplayButton = styled.button`
+color: ${COLORS.orange};
+backgroud-color: ${COLORS.beige};
+border: none;
+border-radius: 5px;
+padding: 8px 10px;
+margin: 10px;
+display: flex;
+align-items: center;
+font-weight: bold;
+transition: all 0.2s;
+
+&:hover {
+  background-color: ${COLORS.orange};
+  color: ${COLORS.beige};
+}
+&:disabled {
+  background-color: ${COLORS.orange};
+  color: ${COLORS.beige};
+}
+`
+const ButtonContainer = styled.div`
+  display: flex;
+`
 
 export default CalendarDisplayCommand;
