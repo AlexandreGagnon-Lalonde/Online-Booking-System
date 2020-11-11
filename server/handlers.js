@@ -753,33 +753,33 @@ const postComment = async (req, res) => {
 const editComment = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
 
-  // const { dayId, commentId, newComment, author } = req.body;
+  const { _id, oldComment, newComment, commentId } = req.body;
   try {
     await client.connect();
 
     const db = client.db("online-booking-system");
 
-    const day = await db.collection("classes").findOne({ _id: dayId });
+    const currentClass = await db.collection("classes").findOne({ _id });
+console.log(currentClass.comments)
+    const commentQuery = { _id };
 
-    const query = { _id: dayId };
-
-    day.comments.map((comment) => {
-      if (comment._id === commentId) {
+    currentClass.comments.map((comment) => {
+      if (comment.commentId === commentId && oldComment !== newComment) {
         comment.comment = newComment;
         comment.status = "edited";
       }
       return comment;
     });
-
-    const editedValue = {
+console.log(currentClass.comments)
+    const commentEditedValue = {
       $set: {
-        comments: day.comments,
+        comments: currentClass.comments,
       },
     };
 
     const dayEditedComment = await db
       .collection("classes")
-      .updateOne(query, editedValue);
+      .updateOne(commentQuery, commentEditedValue);
     assert.equal(1, dayEditedComment.matchedCount);
     assert.equal(1, dayEditedComment.modifiedCount);
 

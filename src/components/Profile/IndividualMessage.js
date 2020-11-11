@@ -120,7 +120,7 @@ const MessageAuthor = styled.p`
   color: ${COLORS.lightGray};
 `;
 const EditedMention = styled.span`
-  font-size: 0.5em;
+  font-size: 1em;
   color: ${COLORS.lightGray};
 `;
 const MessageContent = styled.div`

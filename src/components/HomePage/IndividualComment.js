@@ -16,20 +16,22 @@ import { Link, useHistory } from "react-router-dom";
 
 const IndividualComment = ({ comment }) => {
   const currentUser = useSelector((state) => state.user.user);
-
-  const commentValueShortcut = comment.comment;
+  console.log(comment);
+  const oldComment = comment.comment;
 
   const [toggleEditing, setToggleEditing] = React.useState(false);
-  const [commentValue, setCommentValue] = React.useState(commentValueShortcut);
+  const [newComment, setNewComment] = React.useState(oldComment);
 
   const dispatch = useDispatch();
 
+  const momentDay = moment(new Date()).format("ddd MMM DD YYYY").toString();
+  const classId = Buffer.from(momentDay).toString("base64");
+  const commentId = comment.commentId;
+  const commentStatus = comment.status;
+  const commentAuthorId = comment.fromId;
+
   const handleDeleteComment = (ev) => {
     ev.preventDefault();
-
-    const momentDay = moment(new Date()).format("ddd MMM DD YYYY").toString();
-    const classId = Buffer.from(momentDay).toString("base64");
-    const commentId = comment.commentId;
 
     dispatch(requestComment());
 
@@ -57,6 +59,39 @@ const IndividualComment = ({ comment }) => {
   };
   const handleEditComment = (ev) => {
     ev.preventDefault();
+
+    dispatch(requestComment());
+
+    fetch(SERVER_URL + "/api/editcomment", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _id: classId,
+        oldComment,
+        newComment,
+        commentId,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          dispatch(receiveComment(data.comments));
+        } else {
+          dispatch(receiveCommentError());
+        }
+        setToggleEditing(!toggleEditing);
+      })
+      .catch((err) => {
+        dispatch(receiveCommentError());
+        setToggleEditing(!toggleEditing);
+      });
+  };
+  const handleEdit = (ev) => {
+    ev.preventDefault();
+
+    setToggleEditing(!toggleEditing);
   };
 
   return (
@@ -64,24 +99,41 @@ const IndividualComment = ({ comment }) => {
       <CommentFromCurrentUser>
         <CommentInfo>
           <CommentContent>
-            {comment.status === "deleted" ? (
+            {commentStatus === "deleted" ? (
               <DeletedComment>deleted</DeletedComment>
+            ) : toggleEditing ? (
+              <input
+                type={"text"}
+                value={newComment}
+                onChange={(ev) => setNewComment(ev.currentTarget.value)}
+              />
             ) : (
-              comment.comment
+              <RegularComment>{comment.comment}</RegularComment>
             )}
           </CommentContent>
           <CommentAuthor>
-            <StyledLink to={`/profile/${comment.fromId}`}>{comment.from}</StyledLink>
+            <StyledLink to={`/profile/${commentAuthorId}`}>
+              {comment.from}
+            </StyledLink>
+            <EditedMention>
+              {commentStatus === "edited" ? "  ·  edited" : null}
+            </EditedMention>
           </CommentAuthor>
         </CommentInfo>
-        {comment.fromId === currentUser._id ? (
+        {commentAuthorId === currentUser._id ? (
           <ButtonContainer>
-            <CommentButton onClick={handleEditComment}>
-              <FiEdit2 />
-            </CommentButton>
-            <CommentButton onClick={handleDeleteComment}>
-              <FiDelete />
-            </CommentButton>
+            {commentStatus === "deleted" ? null : (
+              <>
+                <CommentButton
+                  onClick={toggleEditing ? handleEditComment : handleEdit}
+                >
+                  <FiEdit2 />
+                </CommentButton>
+                <CommentButton onClick={handleDeleteComment}>
+                  <FiDelete />
+                </CommentButton>
+              </>
+            )}
           </ButtonContainer>
         ) : null}
       </CommentFromCurrentUser>
@@ -90,8 +142,8 @@ const IndividualComment = ({ comment }) => {
 };
 
 const CommentFromCurrentUser = styled.div`
-display: flex;
-justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 `;
 const CommentInfo = styled.div``;
 const CommentContent = styled.p``;
@@ -112,8 +164,10 @@ const CommentButton = styled.button`
 `;
 const DeletedComment = styled.p`
   font-size: 0.8em;
+  font-style: italic;
+  color: ${COLORS.lightGray};
 `;
-const ButtonContainer = styled.div``
+const ButtonContainer = styled.div``;
 const StyledLink = styled(Link)`
   color: ${COLORS.orange};
   transition: all 0.3s;
@@ -122,6 +176,11 @@ const StyledLink = styled(Link)`
     color: ${COLORS.lightGray};
     text-decoration: none;
   }
-`
+`;
+const RegularComment = styled.p``;
+const EditedMention = styled.span`
+  font-size: 1em;
+  color: ${COLORS.lightGray};
+`;
 
 export default IndividualComment;
