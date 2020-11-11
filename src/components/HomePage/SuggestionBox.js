@@ -8,8 +8,11 @@ import {
   receiveSuggestion,
   receiveSuggestionError,
 } from "../../reducers/action";
+import LoadingSpinner from '../LoadingSpinner';
 
 const SuggestionBox = () => {
+  const suggestionState = useSelector((state) => state.suggestion);
+
   const [suggestion, setSuggestion] = React.useState("");
   const [checkbox, setCheckbox] = React.useState("");
   
@@ -75,7 +78,7 @@ const SuggestionBox = () => {
             ></input>
           </AnonymousContainer>
           <SuggestionButton type="submit" disabled={!suggestion}>
-            Send
+            {suggestionState.status === 'Loading' ? <LoadingSpinner /> : 'Send'}
           </SuggestionButton>
       </form>
     </SuggestionContainer>

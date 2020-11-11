@@ -17,7 +17,7 @@ import { Link, useHistory } from "react-router-dom";
 
 const IndividualComment = ({ comment }) => {
   const currentUser = useSelector((state) => state.user.user);
-  console.log(comment);
+
   const oldComment = comment.comment;
 
   const [toggleEditing, setToggleEditing] = React.useState(false);

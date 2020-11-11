@@ -14,7 +14,7 @@ import { COLORS } from '../../constant';
 
 const WorkoutComments = () => {
   const currentUser = useSelector((state) => state.user.user);
-  const commentState = useSelector((state) => state.comment.comments);
+  const commentState = useSelector((state) => state.comment);
 
   const [comment, setComment] = React.useState("");
 
@@ -70,13 +70,13 @@ const WorkoutComments = () => {
           onChange={(ev) => setComment(ev.currentTarget.value)}
         ></WorkoutCommentInput>
         <WorkoutCommentButton type={"submit"} disabled={!comment}>
-          Comment
+          {commentState.status === 'Loading' ? <LoadingSpinner /> : 'Comment'}
         </WorkoutCommentButton>
       </form>
       <div>
-        {commentState ? (
-          commentState.length > 0 ? (
-            commentState.map((comment) => {
+        {commentState.comments ? (
+          commentState.comments.length > 0 ? (
+            commentState.comments.map((comment) => {
               return (
                 <IndividualComment comment={comment} />
               );
