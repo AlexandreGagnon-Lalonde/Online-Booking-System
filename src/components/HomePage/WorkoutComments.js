@@ -9,8 +9,8 @@ import {
   receiveCommentError,
 } from "../../reducers/action";
 import LoadingSpinner from "../LoadingSpinner";
-import IndividualComment from './IndividualComment';
-import { COLORS } from '../../constant';
+import IndividualComment from "./IndividualComment";
+import { COLORS } from "../../constant";
 
 const WorkoutComments = () => {
   const currentUser = useSelector((state) => state.user.user);
@@ -70,7 +70,7 @@ const WorkoutComments = () => {
           onChange={(ev) => setComment(ev.currentTarget.value)}
         ></WorkoutCommentInput>
         <WorkoutCommentButton type={"submit"} disabled={!comment}>
-          {commentState.status === 'Loading' ? <LoadingSpinner /> : 'Comment'}
+          {commentState.status === "Loading" ? <LoadingSpinner /> : "Comment"}
         </WorkoutCommentButton>
       </form>
       <div>
@@ -78,7 +78,7 @@ const WorkoutComments = () => {
           commentState.comments.length > 0 ? (
             commentState.comments.map((comment) => {
               return (
-                <IndividualComment comment={comment} />
+                <IndividualComment key={comment.commentId} comment={comment} />
               );
             })
           ) : (
@@ -93,23 +93,23 @@ const WorkoutComments = () => {
 };
 
 const WorkoutCommentButton = styled.button`
-border: 1px solid ${COLORS.orange};
-border-radius: 5px;
-font-size: 1.5em;
-font-weight: bold;
-color: ${COLORS.orange};
-display: flex;
-align-items: center;
-justify-content: center;
-background-color: ${COLORS.mediumGray};
-cursor: pointer;
-width: 100%;
-transition: all 0.3s;
+  border: 1px solid ${COLORS.orange};
+  border-radius: 5px;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: ${COLORS.orange};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${COLORS.mediumGray};
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s;
 
-&:hover {
-  color: ${COLORS.lightGray};
-}
-`
+  &:hover {
+    color: ${COLORS.lightGray};
+  }
+`;
 const WorkoutCommentInput = styled.input`
   border-radius: 5px;
   padding-left: 5px;
@@ -121,9 +121,7 @@ const WorkoutCommentInput = styled.input`
   &::placeholder {
     color: ${COLORS.darkGray};
   }
-`
-const WorkoutContainer = styled.div`
-
-`
+`;
+const WorkoutContainer = styled.div``;
 
 export default WorkoutComments;

@@ -2,14 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-
+import { COLORS } from "../../constant";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import Modal from "react-bootstrap/Modal";
 import { SERVER_URL } from "../../constant";
-
+import StyledWrapper from "./CalendarModalStyles";
 import {
   calendarDay,
   calendarWeek,
@@ -98,109 +98,162 @@ const CalendarModal = ({ show, setShow }) => {
     setShow({ info: "", modal: false });
   };
 
-    // class booking
-    const handleCalendarSubmit = (ev) => {
-      ev.preventDefault();
+  // class booking
+  const handleCalendarSubmit = (ev) => {
+    ev.preventDefault();
 
-      let newClass;
-      // string of that format '00:00'
-      const classTime = show.classSchedule;
-      // create an _id from the date without the time
-      const classId = Buffer.from(
-        show.info.start.toString().slice(0, 15)
-      ).toString("base64");
-      // see if the class day is during the week or the weekend
-      const weekDayConfirmation = weekDays.includes(
-        show.info.start.toString().slice(0, 3)
-      );
-      const newMemberArray = [
-        {
-          _id: currentUser._id,
-          fullname: currentUser.firstName + " " + currentUser.lastName,
-          email: currentUser.email,
-        },
-      ];
-      // create newClass with weekday object
-      if (weekDayConfirmation) {
-        newClass = {
-          ...newWeekClass,
-          _id: classId,
-          [classTime]: newMemberArray,
-        };
-        // create newClass with weekendday object
-      } else {
-        newClass = {
-          ...newWeekendClass,
-          _id: classId,
-          [classTime]: newMemberArray,
-        };
-      }
-  
-      dispatch(requestCalendar());
-  
-      fetch(SERVER_URL + `/api/bookclass/${newClass._id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          newClass,
-          classTime,
-          currentUser,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success) {
-            dispatch(receiveCalendar(data.calendar));
-            localStorage.setItem("currentCalendarId", data.calendar._id);
-          } else {
-            dispatch(receiveCalendarError());
-          }
-        })
-        .catch((err) => {
+    let newClass;
+    // string of that format '00:00'
+    const classTime = show.classSchedule;
+    // create an _id from the date without the time
+    const classId = Buffer.from(
+      show.info.start.toString().slice(0, 15)
+    ).toString("base64");
+    // see if the class day is during the week or the weekend
+    const weekDayConfirmation = weekDays.includes(
+      show.info.start.toString().slice(0, 3)
+    );
+    const newMemberArray = [
+      {
+        _id: currentUser._id,
+        fullname: currentUser.firstName + " " + currentUser.lastName,
+        email: currentUser.email,
+      },
+    ];
+    // create newClass with weekday object
+    if (weekDayConfirmation) {
+      newClass = {
+        ...newWeekClass,
+        _id: classId,
+        [classTime]: newMemberArray,
+      };
+      // create newClass with weekendday object
+    } else {
+      newClass = {
+        ...newWeekendClass,
+        _id: classId,
+        [classTime]: newMemberArray,
+      };
+    }
+
+    dispatch(requestCalendar());
+
+    fetch(SERVER_URL + `/api/bookclass/${newClass._id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        newClass,
+        classTime,
+        currentUser,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          dispatch(receiveCalendar(data.calendar));
+          localStorage.setItem("currentCalendarId", data.calendar._id);
+        } else {
           dispatch(receiveCalendarError());
-        });
-  
-      setShow({ info: "", modal: false });
-    };
-  
+        }
+      })
+      .catch((err) => {
+        dispatch(receiveCalendarError());
+      });
+
+    setShow({ info: "", modal: false });
+  };
+
   return (
-    <Modal show={show.modal} onHide={handleClose}>
-    <Modal.Header closeButton>
-      <Modal.Title>Modal Title</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-      {show.members ? (
-        show.members.length > 0 ? (
-          show.members.map((member) => {
-            return (
-              <>
-                <Link to={`/profile/${member._id}`}>{member.fullname}</Link>
-                {member._id === currentUser._id ? (
-                  <button onClick={handleUnbookClass}>Unbook</button>
-                ) : null}
-              </>
-            );
-          })
-        ) : (
-          "No members"
-        )
-      ) : (
-        <LoadingSpinner size={"sm"} />
-      )}
-    </Modal.Body>
-    <Modal.Footer>
-      <button onClick={handleCalendarSubmit} variant={"secondary"}>
-        Book
-      </button>
-      <button onClick={handleClose} variant={"primary"}>
-        Cancel
-      </button>
-    </Modal.Footer>
-  </Modal>
+    <StyledWrapper>
+      <Modal show={show.modal} onHide={handleClose} className="modal-container">
+        <Modal.Header closeButton>
+          <Modal.Title>Modal Title</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {show.members ? (
+            show.members.length > 0 ? (
+              show.members.map((member) => {
+                return (
+                  <ModalUserInfo>
+                    <ModalUserName to={`/profile/${member._id}`}>
+                      {member.fullname}
+                    </ModalUserName>
+                    {member._id === currentUser._id ? (
+                      <UnBookButton onClick={handleUnbookClass}>
+                        Unbook
+                      </UnBookButton>
+                    ) : null}
+                  </ModalUserInfo>
+                );
+              })
+            ) : (
+              "No members"
+            )
+          ) : (
+            <LoadingSpinner size={"sm"} />
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <BookButton onClick={handleCalendarSubmit} variant={"secondary"}>
+            Book
+          </BookButton>
+        </Modal.Footer>
+      </Modal>
+    </StyledWrapper>
+  );
+};
 
-  )
-}
+const BookButton = styled.button`
+  border: 1px solid ${COLORS.orange};
+  border-radius: 5px;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: ${COLORS.orange};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${COLORS.mediumGray};
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s;
 
-export default CalendarModal
+  &:hover {
+    color: ${COLORS.lightGray};
+  }
+`;
+const UnBookButton = styled.button`
+  border: 1px solid ${COLORS.orange};
+  border-radius: 5px;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: ${COLORS.orange};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${COLORS.mediumGray};
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    color: ${COLORS.lightGray};
+  }
+`;
+const ModalUserInfo = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+const ModalUserName = styled(Link)`
+  font-size: 1.5em;
+  font-weight: bold;
+  color: ${COLORS.orange};
+  transition: all 0.3s;
+
+  &:hover {
+    text-decoration: none;
+    color: ${COLORS.lightGray};
+  }
+`;
+
+export default CalendarModal;

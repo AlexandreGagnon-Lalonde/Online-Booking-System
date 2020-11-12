@@ -3,13 +3,12 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 
-import Header from '../Header/index';
-import Calendar from './Calendar';
-import WorkoutBox from './WorkoutBox';
-import SuggestionBox from './SuggestionBox';
+import Header from "../Header/index";
+import Calendar from "./Calendar";
+import WorkoutBox from "./WorkoutBox";
+import SuggestionBox from "./SuggestionBox";
 
 const HomePage = () => {
-
   return (
     <>
       <Header />
@@ -21,16 +20,16 @@ const HomePage = () => {
         </RightContainer>
       </ContentContainer>
     </>
-  )
-}
+  );
+};
 
 const ContentContainer = styled.div`
   display: flex;
-`
+`;
 const RightContainer = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-`
+`;
 
-export default HomePage
+export default HomePage;

@@ -7,9 +7,9 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import Modal from "react-bootstrap/Modal";
-import StyledWrapper from './CalendarStyles';
+import StyledWrapper from "./CalendarStyles";
 import { SERVER_URL } from "../../constant";
-import { COLORS } from '../../constant';
+import { COLORS } from "../../constant";
 import {
   receiveCalendar,
   receiveCalendarError,
@@ -42,7 +42,7 @@ const Calendar = (props) => {
     minute: "2-digit",
     meridiem: false,
     hour12: false,
-  }
+  };
   const handleDateChange = (arg) => {
     if (!firstDayOfCalendar) {
       if (calendarDisplay === "timeGridWeek") {
@@ -51,7 +51,7 @@ const Calendar = (props) => {
         setFirstDayOfCalendar(arg.view.activeEnd);
       }
     }
-  }
+  };
   const handleShow = (eventInfo) => {
     const encryptedDay = Buffer.from(
       eventInfo.el.fcSeg.start.toString().slice(0, 15)
@@ -175,7 +175,7 @@ const Calendar = (props) => {
       endTime: "15:00",
       daysOfWeek: [0, 6],
     },
-  ]
+  ];
 
   React.useEffect(() => {
     calendarDisplayRef.current.getApi().changeView(calendarDisplay);
@@ -227,7 +227,7 @@ const Calendar = (props) => {
           // expand events to fill the calendar
           expandRows={true}
           // toolbar, remove dates, add prev and next button
-          headerToolbar={{start: '', center: '', end: 'today prev,next'}}
+          headerToolbar={{ start: "", center: "", end: "today prev,next" }}
           // remove all day events section
           allDaySlot={false}
           // handle when an event is clicked

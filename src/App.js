@@ -36,10 +36,13 @@ function App() {
   const suggestionState = useSelector((state) => state.suggestion);
   const messageState = useSelector((state) => state.message);
   const calendarState = useSelector((state) => state.calendar);
-  const commentState = useSelector((state) => state.comment)
+  const commentState = useSelector((state) => state.comment);
 
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const CommentStatusIsReady = commentState.status !== "Loading";
+  const SuggestionStatusIsReady = suggestionState.status !== "Loading";
 
   React.useEffect(() => {
     if (suggestionState.status === "idle") {
@@ -67,7 +70,7 @@ function App() {
       fetch(SERVER_URL + `/api/getuser/${email}`)
         .then((res) => res.json())
         .then((data) => {
-                    dispatch(receiveOtherUser(data.user));
+          dispatch(receiveOtherUser(data.user));
 
           dispatch(receiveUser(data.user));
           localStorage.setItem("currentUserId", data.user._id);
@@ -108,7 +111,9 @@ function App() {
 
   return (
     <>
-      {userState.user || !localStorage.getItem("currentUserId") ? (
+      {(userState.user || !localStorage.getItem("currentUserId")) &&
+      CommentStatusIsReady &&
+      SuggestionStatusIsReady ? (
         <>
           <Route exact path="/">
             <WelcomePage />

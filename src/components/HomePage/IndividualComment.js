@@ -145,7 +145,7 @@ const CommentFromCurrentUser = styled.div`
   justify-content: space-between;
 `;
 const CommentInfo = styled.div``;
-const CommentContent = styled.p``;
+const CommentContent = styled.div``;
 const CommentAuthor = styled.p`
   font-size: 0.5em;
   color: ${COLORS.lightGray};
