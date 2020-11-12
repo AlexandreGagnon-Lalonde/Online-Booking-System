@@ -18,7 +18,7 @@ const WorkoutContainer = styled.div`
 border-radius: 5px;
 background-color: ${COLORS.mediumGray};
 padding 10px;
-margin: 10px 50px;
+margin: 25px 25px 10px 0;
 `
 const WorkoutTitle = styled.h3`
 

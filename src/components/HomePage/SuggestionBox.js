@@ -92,7 +92,7 @@ const SuggestionContainer = styled.div`
 border-radius: 5px;
 background-color: ${COLORS.mediumGray};
 padding 10px;
-margin: 10px 50px;
+margin: 25px 25px 0 0;
 `
 const SuggestionInput = styled.textarea`
   border-radius: 5px;
@@ -100,14 +100,14 @@ const SuggestionInput = styled.textarea`
   background-color: ${COLORS.lightGray};
   color: ${COLORS.darkGray};
   width: 100%;
-  margin: 10px 0;
+  margin: 10px 0 0 0;
 
   &::placeholder {
     color: ${COLORS.darkGray};
   }
 `
 const AnonymousContainer = styled.div`
-padding: 0 0 10px 0;
+padding: 5px 0 10px 0;
 `
 const AnonymousLabel = styled.label`
   padding-right: 10px;

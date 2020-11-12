@@ -58,11 +58,12 @@ backgroud-color: ${COLORS.beige};
 border: none;
 border-radius: 5px;
 padding: 8px 10px;
-margin: 10px;
+margin: 0 10px 0 0;
 display: flex;
 align-items: center;
 font-weight: bold;
 transition: all 0.2s;
+height: 40px;
 
 &:hover {
   background-color: ${COLORS.orange};
@@ -75,6 +76,7 @@ transition: all 0.2s;
 `
 const ButtonContainer = styled.div`
   display: flex;
+  position: absolute;
 `
 
 export default CalendarDisplayCommand;
