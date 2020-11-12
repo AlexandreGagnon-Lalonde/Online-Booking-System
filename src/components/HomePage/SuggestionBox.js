@@ -126,6 +126,7 @@ const SuggestionButton = styled.button`
 
   &:hover {
     color: ${COLORS.lightGray};
+    border: 1px solid ${COLORS.lightGray};
   }
 `;
 

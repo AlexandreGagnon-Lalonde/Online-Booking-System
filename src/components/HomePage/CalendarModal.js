@@ -9,7 +9,6 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import Modal from "react-bootstrap/Modal";
 import { SERVER_URL } from "../../constant";
-import StyledWrapper from "./CalendarModalStyles";
 import {
   calendarDay,
   calendarWeek,
@@ -166,12 +165,11 @@ const CalendarModal = ({ show, setShow }) => {
   };
 
   return (
-    <StyledWrapper>
-      <Modal show={show.modal} onHide={handleClose} className="modal-container">
-        <Modal.Header closeButton>
-          <Modal.Title>Modal Title</Modal.Title>
+      <Modal show={show.modal} onHide={handleClose} style={{boxShadow: 'none'}}>
+        <Modal.Header closeButton style={{backgroundColor: `${COLORS.beige}`, border: 'none'}}>
+          <Modal.Title style={{color: `${COLORS.mediumGray}`, fontWeight: 'bold'}}>Members</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{backgroundColor: `${COLORS.beige}`, border: 'none'}}>
           {show.members ? (
             show.members.length > 0 ? (
               show.members.map((member) => {
@@ -189,19 +187,18 @@ const CalendarModal = ({ show, setShow }) => {
                 );
               })
             ) : (
-              "No members"
+              <GenericMemberMessage>No members in this class</GenericMemberMessage>
             )
           ) : (
             <LoadingSpinner size={"sm"} />
           )}
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer style={{backgroundColor: `${COLORS.beige}`, border: 'none'}}>
           <BookButton onClick={handleCalendarSubmit} variant={"secondary"}>
             Book
           </BookButton>
         </Modal.Footer>
       </Modal>
-    </StyledWrapper>
   );
 };
 
@@ -214,13 +211,14 @@ const BookButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${COLORS.mediumGray};
+  background-color: ${COLORS.beige};
   cursor: pointer;
   width: 100%;
   transition: all 0.3s;
 
   &:hover {
-    color: ${COLORS.lightGray};
+    color: ${COLORS.mediumGray};
+    border: 1px solid ${COLORS.mediumGray};
   }
 `;
 const UnBookButton = styled.button`
@@ -232,12 +230,13 @@ const UnBookButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${COLORS.mediumGray};
+  background-color: ${COLORS.beige};
   cursor: pointer;
   transition: all 0.3s;
 
   &:hover {
-    color: ${COLORS.lightGray};
+    color: ${COLORS.mediumGray};
+    border: 1px solid ${COLORS.mediumGray};
   }
 `;
 const ModalUserInfo = styled.div`
@@ -252,8 +251,11 @@ const ModalUserName = styled(Link)`
 
   &:hover {
     text-decoration: none;
-    color: ${COLORS.lightGray};
+    color: ${COLORS.mediumGray};
   }
 `;
+const GenericMemberMessage = styled.p`
+  color: ${COLORS.mediumGray};
+`
 
 export default CalendarModal;

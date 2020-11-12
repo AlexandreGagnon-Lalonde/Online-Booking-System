@@ -108,9 +108,11 @@ const WorkoutCommentButton = styled.button`
 
   &:hover {
     color: ${COLORS.lightGray};
+    border: 1px solid ${COLORS.lightGray};
   }
 `;
 const WorkoutCommentInput = styled.input`
+border: none;
   border-radius: 5px;
   padding-left: 5px;
   background-color: ${COLORS.lightGray};
