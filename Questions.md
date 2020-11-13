@@ -33,3 +33,5 @@ globalStyles
 toggle conversations
 
 next week data fetch
+
+error state persisting when changing page

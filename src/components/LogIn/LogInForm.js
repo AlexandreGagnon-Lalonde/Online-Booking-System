@@ -50,7 +50,7 @@ const LogInForm = () => {
 
   return (
     <MainContainer>
-      <LogoContainer>Random stuff to fill before logo</LogoContainer>
+      {/* <LogoContainer>Random stuff to fill before logo</LogoContainer> */}
       <FormContainer>
         <StyledForm onSubmit={handleLogin}>
           {/* <StyledLabel for="email">Email</StyledLabel> */}
@@ -75,8 +75,10 @@ const LogInForm = () => {
           <LogInButton type="submit">
             {userState.status === "Loading" ? <LoadingSpinner /> : "Log In"}
           </LogInButton>
+          {userState.status === "error" ? (
+            <ErrorSubmitMessage>{userState.errorMessage}</ErrorSubmitMessage>
+          ) : null}
         </StyledForm>
-        {userState.status === "error" ? <p>{userState.errorMessage}</p> : null}
       </FormContainer>
     </MainContainer>
   );
@@ -130,14 +132,27 @@ const LogInButton = styled.button`
   padding: 15px;
   margin: 15px 45px;
   border-radius: 5px;
-  border: none;
+  border: 1px solid ${COLORS.orange};
   font-weight: bold;
-  background-color: ${COLORS.beige}
+  font-size: 2em;
+  background-color: ${COLORS.darkGray};
+  color: ${COLORS.orange};
+  transition: all 0.3s;
 
   &:hover {
-    background-color: ${COLORS.orange}
-    color: red;
+    background-color: ${COLORS.mediumGray};
+    color: ${COLORS.beige};
+    border: 1px solid ${COLORS.beige};
   }
+`;
+const ErrorSubmitMessage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  color: ${COLORS.errorRed};
+  border: 1px solid ${COLORS.errorRed};
+  margin: 0 90px 0 90px;
 `;
 
 export default LogInForm;
