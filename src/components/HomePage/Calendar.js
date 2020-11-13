@@ -45,15 +45,22 @@ const Calendar = (props) => {
   };
   const handleDateChange = (arg) => {
     const firstDayExist = firstDayOfCalendar ? firstDayOfCalendar.toString() : null;
-    const calendarFirstDay = arg.view.activeStart.toString();
+    let calendarFirstDay;
 
+    if (calendarDisplay === 'timeGridWeek') {
+      calendarFirstDay = arg.view.activeStart.toString();
+    } else {
+      calendarFirstDay = arg.view.activeStart.toString();
+    }
+    console.log(calendarFirstDay)
+    console.log(firstDayExist)
     const didWeekChange = calendarFirstDay !== firstDayExist;
 
     if (!firstDayOfCalendar || didWeekChange) {
       if (calendarDisplay === "timeGridWeek") {
         setFirstDayOfCalendar(arg.view.activeStart);
       } else {
-        setFirstDayOfCalendar(arg.view.activeEnd);
+        setFirstDayOfCalendar(arg.view.activeStart);
       }
     }
   };
