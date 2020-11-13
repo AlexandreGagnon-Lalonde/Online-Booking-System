@@ -27,11 +27,16 @@ const createUser = async (req, res) => {
     const userExist = users.find((user) => user.email === email);
 
     if (todayDateTime < DOBTime) {
-      res.status(404).json({ status: 404, message: "Make sure you're born" });
+      res.status(404).json({ status: 404, message: "Make sure you're born !" });
     }
 
     if (userExist) {
-      res.status(404).json({ status: 404, message: "Email Already in Use" });
+      res
+        .status(404)
+        .json({
+          status: 404,
+          message: "Someone is already using this email !",
+        });
     }
 
     const newUser = await db.collection("users").insertOne(req.body);
@@ -46,16 +51,16 @@ const createUser = async (req, res) => {
 
 const getUser = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
-console.log('test')
+  console.log("test");
   const { email } = req.params;
   try {
-    console.log('testtest')
+    console.log("testtest");
     await client.connect();
-console.log('test)')
+    console.log("test)");
     const db = client.db("online-booking-system");
-console.log('test')
+    console.log("test");
     const user = await db.collection("users").findOne({ email });
-console.log(user)
+    console.log(user);
     if (user) {
       res.status(200).json({ status: 200, user });
     } else {
