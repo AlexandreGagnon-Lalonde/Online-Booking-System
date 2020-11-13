@@ -25,6 +25,7 @@ export default function calendarReducer(state = initialState, action) {
     case "RECEIVE_CALENDAR_ERROR": {
       return {
         ...state,
+        errorMessage: action.errorMessage,
         status: "Error",
       };
     }

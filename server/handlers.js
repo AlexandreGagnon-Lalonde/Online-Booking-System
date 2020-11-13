@@ -397,6 +397,10 @@ const bookClass = async (req, res) => {
       isCurrentUserInClass = classes
         .find((classe) => classe._id === classId)
         [classTime].find((user) => user._id === currentUser._id);
+
+        if (isCurrentUserInClass) {
+          res.status(404).json({ status: 404, message: 'You are already in this class'})
+        }
     }
 
     if (classExist && !isCurrentUserInClass) {

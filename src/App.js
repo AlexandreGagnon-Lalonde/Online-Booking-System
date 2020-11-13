@@ -111,9 +111,7 @@ function App() {
 
   return (
     <>
-      {(userState.user || !localStorage.getItem("currentUserId")) &&
-      CommentStatusIsReady &&
-      SuggestionStatusIsReady ? (
+      {(userState.user || !localStorage.getItem("currentUserId")) ? (
         <>
           <Route exact path="/">
             <WelcomePage />

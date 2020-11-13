@@ -20,8 +20,10 @@ import LoadingSpinner from "../LoadingSpinner";
 
 const CalendarModal = ({ show, setShow }) => {
   const currentUser = useSelector((state) => state.user.user);
+  const calendarState = useSelector((state) => state.calendar);
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   // days of the week in the same format as fullcalendar
   const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri"];
@@ -61,6 +63,7 @@ const CalendarModal = ({ show, setShow }) => {
     setShow({ info: "", modal: false, members: [], classSchedule: null });
   };
 
+  // handle to remove current user from class
   const handleUnbookClass = (ev) => {
     ev.preventDefault();
 
@@ -154,51 +157,64 @@ const CalendarModal = ({ show, setShow }) => {
           dispatch(receiveCalendar(data.calendar));
           localStorage.setItem("currentCalendarId", data.calendar._id);
         } else {
-          dispatch(receiveCalendarError());
+          dispatch(receiveCalendarError(data.message));
         }
       })
       .catch((err) => {
         dispatch(receiveCalendarError());
       });
-
+      console.log(calendarState.errorMessage)
     setShow({ info: "", modal: false });
   };
 
   return (
-      <Modal show={show.modal} onHide={handleClose} style={{boxShadow: 'none'}}>
-        <Modal.Header closeButton style={{backgroundColor: `${COLORS.beige}`, border: 'none'}}>
-          <Modal.Title style={{color: `${COLORS.mediumGray}`, fontWeight: 'bold'}}>Members</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{backgroundColor: `${COLORS.beige}`, border: 'none'}}>
-          {show.members ? (
-            show.members.length > 0 ? (
-              show.members.map((member) => {
-                return (
-                  <ModalUserInfo>
-                    <ModalUserName to={`/profile/${member._id}`}>
-                      {member.fullname}
-                    </ModalUserName>
-                    {member._id === currentUser._id ? (
-                      <UnBookButton onClick={handleUnbookClass}>
-                        Unbook
-                      </UnBookButton>
-                    ) : null}
-                  </ModalUserInfo>
-                );
-              })
-            ) : (
-              <GenericMemberMessage>No members in this class</GenericMemberMessage>
-            )
+    <Modal show={show.modal} onHide={handleClose} style={{ boxShadow: "none" }}>
+      <Modal.Header
+        closeButton
+        style={{ backgroundColor: `${COLORS.beige}`, border: "none" }}
+      >
+        <Modal.Title
+          style={{ color: `${COLORS.mediumGray}`, fontWeight: "bold" }}
+        >
+          Members
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body
+        style={{ backgroundColor: `${COLORS.beige}`, border: "none" }}
+      >
+        {show.members ? (
+          show.members.length > 0 ? (
+            show.members.map((member) => {
+              return (
+                <ModalUserInfo>
+                  <ModalUserName to={`/profile/${member._id}`}>
+                    {member.fullname}
+                  </ModalUserName>
+                  {member._id === currentUser._id ? (
+                    <UnBookButton onClick={handleUnbookClass}>
+                      Unbook
+                    </UnBookButton>
+                  ) : null}
+                </ModalUserInfo>
+              );
+            })
           ) : (
-            <LoadingSpinner size={"sm"} />
-          )}
-        </Modal.Body>
-        <Modal.Footer style={{backgroundColor: `${COLORS.beige}`, border: 'none'}}>
-          <BookButton onClick={handleCalendarSubmit} variant={"secondary"}>
-            Book
-          </BookButton>
-        </Modal.Footer>
-      </Modal>
+            <GenericMemberMessage>
+              No members in this class
+            </GenericMemberMessage>
+          )
+        ) : (
+          <LoadingSpinner size={"sm"} />
+        )}
+      </Modal.Body>
+      <Modal.Footer
+        style={{ backgroundColor: `${COLORS.beige}`, border: "none" }}
+      >
+        <BookButton onClick={handleCalendarSubmit} variant={"secondary"}>
+          Book
+        </BookButton>
+      </Modal.Footer>
+    </Modal>
   );
 };
 
@@ -256,6 +272,6 @@ const ModalUserName = styled(Link)`
 `;
 const GenericMemberMessage = styled.p`
   color: ${COLORS.mediumGray};
-`
+`;
 
 export default CalendarModal;

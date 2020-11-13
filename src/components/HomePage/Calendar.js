@@ -44,7 +44,12 @@ const Calendar = (props) => {
     hour12: false,
   };
   const handleDateChange = (arg) => {
-    if (!firstDayOfCalendar) {
+    const firstDayExist = firstDayOfCalendar ? firstDayOfCalendar.toString() : null;
+    const calendarFirstDay = arg.view.activeStart.toString();
+
+    const didWeekChange = calendarFirstDay !== firstDayExist;
+
+    if (!firstDayOfCalendar || didWeekChange) {
       if (calendarDisplay === "timeGridWeek") {
         setFirstDayOfCalendar(arg.view.activeStart);
       } else {
@@ -196,6 +201,7 @@ const Calendar = (props) => {
           dispatch(receiveCalendarError());
         });
     }
+    console.log('calendar',calendarState)
   }, [calendarDisplay, firstDayOfCalendar, show]);
 
   return (
