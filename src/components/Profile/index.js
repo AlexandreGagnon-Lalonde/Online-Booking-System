@@ -114,5 +114,6 @@ const GenericProfileContainer = styled.div`
 const ProfileContainer = styled.div`
   display: flex;
   width: 100%;
+  align-items: flex-start;
 `;
 export default Profile;

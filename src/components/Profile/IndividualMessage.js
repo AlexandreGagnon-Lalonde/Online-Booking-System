@@ -99,11 +99,11 @@ const IndividualMessage = ({ message, conversationId }) => {
   );
 };
 
-const MessageFromCurrentUser = styled.p`
+const MessageFromCurrentUser = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
-const MessageNotFromCurrentUser = styled.p`
+const MessageNotFromCurrentUser = styled.div`
   text-align: left;
 `;
 const EditButton = styled.button`

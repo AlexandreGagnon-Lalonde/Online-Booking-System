@@ -52,9 +52,12 @@ const IndividualSuggestion = ({ suggestion }) => {
             {suggestionAuthor === "Anonymous" ? (
               suggestionAuthor
             ) : (
-              <StyledAuthorLink to={`/profile/${suggestion.authorId}`}>
-                {suggestion.author}
-              </StyledAuthorLink>
+              <AuthorDiv>
+                from{' '}
+                <StyledAuthorLink to={`/profile/${suggestion.authorId}`}>
+                  {suggestion.author}
+                </StyledAuthorLink>
+              </AuthorDiv>
             )}
           </SuggestionAuthor>
         </SuggestionInfo>
@@ -87,33 +90,35 @@ const SuggestionContent = styled.p`
   font-size: 1.4em;
   font-weight: bold;
 `;
-const SuggestionAuthor = styled.p`
+const SuggestionAuthor = styled.div`
   font-size: 0.8em;
   color: ${COLORS.mediumGray};
 `;
 const StyledAuthorLink = styled(Link)`
-font-size: 0.8em;
-color: ${COLORS.mediumGray};
+font-size: 1em;
+color: ${COLORS.orange};
 transition: all 0.2s;
 
 &:hover {
   text-decoration: none;
-  color: ${COLORS.mediumGray};
-  font-size: 1em;
+  color: ${COLORS.darkGray};
 }
+`
+const AuthorDiv = styled.div`
+  font-size: 0.8em;
 `
 const SuggestionDeleteButton = styled.button`
   color: ${COLORS.orange};
   border: none;
   background-color: ${COLORS.lightGray};
-  font-size: 1.5em;
+  font-size: 1em;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
 
   &:hover {
-    transform: scale(1.1);
+    color: ${COLORS.darkGray};
   }
 `;
 
