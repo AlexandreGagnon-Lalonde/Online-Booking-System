@@ -31,12 +31,10 @@ const createUser = async (req, res) => {
     }
 
     if (userExist) {
-      res
-        .status(404)
-        .json({
-          status: 404,
-          message: "Someone is already using this email !",
-        });
+      res.status(404).json({
+        status: 404,
+        message: "Someone is already using this email !",
+      });
     }
 
     const newUser = await db.collection("users").insertOne(req.body);
@@ -54,7 +52,6 @@ const getUser = async (req, res) => {
 
   const { email } = req.params;
   try {
-
     await client.connect();
 
     const db = client.db("online-booking-system");
@@ -392,15 +389,33 @@ const bookClass = async (req, res) => {
       .classes;
 
     let isCurrentUserInClass;
+    let isCurrentUserInDay;
 
     if (classExist && classes.length > 0) {
       isCurrentUserInClass = classes
         .find((classe) => classe._id === classId)
         [classTime].find((user) => user._id === currentUser._id);
 
-        if (isCurrentUserInClass) {
-          res.status(404).json({ status: 404, message: 'You are already in this class'})
-        }
+      const classesValues = Object.values(
+        classes.find((classe) => classe._id === classId)
+      ).slice(3);
+
+      isCurrentUserInDay = classesValues.find((subClass) => {
+        return subClass.find((user) => user._id === currentUser._id);
+      });
+
+      isCurrentUserInClass
+        ? res
+            .status(404)
+            .json({ status: 404, message: "You are already in this class" })
+        : null;
+
+      isCurrentUserInDay
+        ? res.status(404).json({
+            status: 404,
+            message: "You are already registered for a class today",
+          })
+        : null;
     }
 
     if (classExist && !isCurrentUserInClass) {
@@ -408,16 +423,22 @@ const bookClass = async (req, res) => {
       // update class data
       classes.forEach((classe) => {
         if (classe._id === classId) {
-          classe[classTime].push({
-            _id: currentUser._id,
-            fullname: currentUser.firstName + " " + currentUser.lastName,
-            email: currentUser.email,
-          });
-          currentClass = {
-            $set: {
-              [classTime]: classe[classTime],
-            },
-          };
+          if (classe[classTime].length < 6) {
+            classe[classTime].push({
+              _id: currentUser._id,
+              fullname: currentUser.firstName + " " + currentUser.lastName,
+              email: currentUser.email,
+            });
+            currentClass = {
+              $set: {
+                [classTime]: classe[classTime],
+              },
+            };
+          } else {
+            res
+              .status(404)
+              .json({ status: 404, message: "This class is full!" });
+          }
         }
       });
 
