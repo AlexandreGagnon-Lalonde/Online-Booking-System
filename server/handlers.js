@@ -453,7 +453,7 @@ const bookClass = async (req, res) => {
       );
 
       if (!currentUserHasClass) {
-        userClasses.push(classId);
+        userClasses.push({ _id: classId, classTime});
 
         const newUserClass = {
           $set: {
@@ -485,7 +485,7 @@ const bookClass = async (req, res) => {
       );
 
       if (!currentUserHasClass) {
-        userClasses.push(classId);
+        userClasses.push({ _id: classId, classTime });
 
         const newUserClass = {
           $set: {
