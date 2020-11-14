@@ -5,14 +5,16 @@ import { COLORS } from "../../constant";
 import IndividualClasses from "./IndividualClasses";
 
 const ProfileClasses = ({ user }) => {
+  const lastFiveClasses = user.classes.slice(Math.max(user.classes.length - 5, 0)) 
+
   return (
     <ClassesContainer>
       {user.classes.length > 0 ? (
         <>
           <ClassesTitle>Classes</ClassesTitle>
           <IndividualClassesContainer>
-            {user.classes.map((classe) => {
-              return <IndividualClasses classe={classe} />;
+            {lastFiveClasses.map((classe) => {
+              return <IndividualClasses key={classe} classe={classe} />;
             })}
           </IndividualClassesContainer>
         </>
@@ -27,7 +29,7 @@ const ClassesContainer = styled.div`
 border-radius: 5px;
 background-color: ${COLORS.mediumGray};
 padding 10px;
-margin: 10px 50px;
+margin: 0 25px 25px 25px;
 `;
 const ClassesTitle = styled.h2`
   font-weight: bold;
