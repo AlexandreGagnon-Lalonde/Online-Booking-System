@@ -68,7 +68,7 @@ const Profile = () => {
     //       dispatch(messageError());
     //     });
     // }
-  }, [currentProfileId, userState.status, otherUser, messageState.status]);
+  }, [currentProfileId, userState.status, otherUser, messageState.status, messageState.toggleIndex]);
 
   return (
     <>

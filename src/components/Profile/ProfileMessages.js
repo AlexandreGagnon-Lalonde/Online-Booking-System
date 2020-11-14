@@ -7,26 +7,26 @@ import IndividualConversation from "./IndiviudalConversation";
 import SendMessage from "./SendMessage";
 
 const ProfileMessages = ({ currentUser, message }) => {
-
+const messageState = useSelector((state) => state.message);
   console.log(currentUser)
   return (
     <ConversationsContainer>
       {currentUser ? (
         currentUser.conversations.length > 0 ? (
-          message.map((conversation) => {
+          message.map((conversation, convoIndex) => {
             return (
-              <IndividualConversation key={conversation._id} conversation={conversation} />
+              <IndividualConversation key={conversation._id} conversation={conversation} indexOfToggle={messageState.toggleIndex} index={convoIndex} />
             );
           })
         ) : (
           <p>No Conversations</p>
         )
       ) : null}
-      {currentUser ? null : <SendMessage />}
+      {!currentUser && <SendMessage />}
     </ConversationsContainer>
   );
 };
-
+// !currentUser && <SendMessage /> === currentUser ? null : <SendMessage />
 const ConversationsContainer = styled.div`
 background-color: ${COLORS.mediumGray};
 border-radius: 5px;

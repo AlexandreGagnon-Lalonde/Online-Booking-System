@@ -1,6 +1,7 @@
 const initialState = {
   message: null,
   status: "idle",
+  toggleIndex: -1,
 };
 
 export default function messageReducer(state = initialState, action) {
@@ -29,6 +30,12 @@ export default function messageReducer(state = initialState, action) {
         message: action.messages,
         status: "Received",
       };
+    }
+    case "CHANGE_TOGGLE": {
+      return {
+        ...state,
+        toggleIndex: action.newIndex,
+      }
     }
     case "DELETE_MESSAGES": {
       return { 

@@ -14,7 +14,7 @@ const ProfileClasses = ({ user }) => {
           <ClassesTitle>Classes</ClassesTitle>
           <IndividualClassesContainer>
             {lastFiveClasses.map((classe) => {
-              return <IndividualClasses key={classe} classe={classe} />;
+              return <IndividualClasses key={classe._id} classe={classe} />;
             })}
           </IndividualClassesContainer>
         </>

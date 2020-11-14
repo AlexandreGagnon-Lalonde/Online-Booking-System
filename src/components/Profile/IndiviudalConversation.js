@@ -4,11 +4,18 @@ import { COLORS } from "../../constant";
 import { useSelector, useDispatch } from "react-redux";
 import SendMessage from "./SendMessage";
 import IndividualMessage from "./IndividualMessage";
+import { toggleIndex } from "../../reducers/action";
 
-const IndividualConversation = ({ conversation }) => {
+let toggled;
+
+const IndividualConversation = ({ conversation, indexOfToggle, index }) => {
   const currentUser = useSelector((state) => state.user.user);
-  console.log(conversation);
-  const [toggleConversation, setToggleConversation] = React.useState(false);
+
+  // const [toggleConversation, setToggleConversation] = React.useState(false);
+
+  const dispatch = useDispatch();
+
+  toggled = indexOfToggle === index;
 
   const otherUserName =
     conversation.user1 === currentUser._id
@@ -22,7 +29,8 @@ const IndividualConversation = ({ conversation }) => {
 
   const handleToggle = (ev) => {
     ev.preventDefault();
-    setToggleConversation(!toggleConversation);
+    dispatch(toggleIndex(index));
+    // setToggleConversation(!toggleConversation);
   };
 
   return (
@@ -30,27 +38,38 @@ const IndividualConversation = ({ conversation }) => {
       <ToggleConvoButton onClick={handleToggle}>
         {otherUserName}
       </ToggleConvoButton>
-      {conversation.messages.map((message) => {
-        return (
-          <>
-            {toggleConversation ? (
-              <IndividualMessage message={message} conversationId={conversation._id} />
-            ) : null}
-          </>
-        );
-      })}
-      {toggleConversation ? <SendMessage otherUserId={otherUserId} /> : null}
+      {toggled && (
+        <>
+          {conversation.messages.map((message) => {
+            return (
+              <>
+                {toggled && (
+                  <IndividualMessage
+                    message={message}
+                    conversationId={conversation._id}
+                  />
+                )}
+              </>
+            );
+          })}
+          <SendMessage otherUserId={otherUserId} />
+        </>
+      )}
     </ConversationContainer>
   );
 };
-
+console.log(toggled)
 const ToggleConvoButton = styled.button`
   display: block;
   width: 100%;
   border: none;
-  background-color: ${COLORS.lightGray};
+  background-color: ${toggled ? COLORS.orange : COLORS.beige};
+  color: ${toggled ? COLORS.lightGray : COLORS.orange};
   font-weight: bold;
   border-radius: 5px;
+
+  &:hover {
+  }
 `;
 const ConversationContainer = styled.div`
   border-radius: 5px;
