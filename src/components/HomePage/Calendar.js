@@ -52,8 +52,7 @@ const Calendar = (props) => {
     } else {
       calendarFirstDay = arg.view.activeStart.toString();
     }
-    console.log(calendarFirstDay)
-    console.log(firstDayExist)
+
     const didWeekChange = calendarFirstDay !== firstDayExist;
 
     if (!firstDayOfCalendar || didWeekChange) {
@@ -208,7 +207,6 @@ const Calendar = (props) => {
           dispatch(receiveCalendarError());
         });
     }
-    console.log('calendar',calendarState)
   }, [calendarDisplay, firstDayOfCalendar, show]);
 
   return (

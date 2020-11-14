@@ -21,7 +21,7 @@ const StyledDiv = styled.div`
   border-radius: 5px;
   background-color: ${COLORS.mediumGray};
   padding 10px;
-  margin: 0 50px;
+  margin: 25px;
 `;
 
 export default ProfileInfo;

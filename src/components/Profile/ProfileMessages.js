@@ -15,7 +15,7 @@ const ProfileMessages = ({ currentUser, message }) => {
         currentUser.conversations.length > 0 ? (
           message.map((conversation) => {
             return (
-              <IndividualConversation conversation={conversation} />
+              <IndividualConversation key={conversation._id} conversation={conversation} />
             );
           })
         ) : (
@@ -32,7 +32,7 @@ background-color: ${COLORS.mediumGray};
 border-radius: 5px;
 flex: 1;
 padding: 10px;
-margin: 0 10px;
+margin: 25px 25px 0 0;
 `;
 
 export default ProfileMessages;
