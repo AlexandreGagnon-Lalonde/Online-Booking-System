@@ -76,7 +76,7 @@ const Calendar = (props) => {
 
     const classSchedule = eventInfo.el.innerText.toString().slice(0, 5);
 
-    const currentClassMembers = currentDay ? currentDay[classSchedule] : false;
+    const currentClassMembers = currentDay ? currentDay[classSchedule] : [];
 
     setShow({
       info: eventInfo.el.fcSeg,
