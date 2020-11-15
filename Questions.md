@@ -32,6 +32,10 @@ globalStyles
 
 toggle conversations
 
-next week data fetch
+go from week to day when mobile
+
+*****************************
 
 error state persisting when changing page
+
+reset convo toggle when changing page

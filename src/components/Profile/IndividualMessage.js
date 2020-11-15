@@ -18,6 +18,7 @@ const IndividualMessage = ({ message, conversationId }) => {
   const messageValueShortcut = message.message;
   const messageAuthor = message.from;
   const messageStatus = message.status;
+  const isAuthorCurrentUser = message.from === currentUser._id;
 
   const [toggleEditing, setToggleEditing] = React.useState(false);
   const [messageValue, setMessageValue] = React.useState(messageValueShortcut);
@@ -61,9 +62,9 @@ const IndividualMessage = ({ message, conversationId }) => {
   };
 
   return (
-    <div>
+    <SingleMessageContainer>
       {messageAuthor === currentUser._id ? (
-        <MessageFromCurrentUser>
+        <MessageFromCurrentUser style={{marginLeft: 'auto'}}>
           <MessageContent>
             {toggleEditing ? (
               <EditMessageInput
@@ -95,21 +96,33 @@ const IndividualMessage = ({ message, conversationId }) => {
           </MessageAuthor>
         </MessageNotFromCurrentUser>
       )}
-    </div>
+    </SingleMessageContainer>
   );
 };
 
+const SingleMessageContainer = styled.div`
+`
 const MessageFromCurrentUser = styled.div`
   display: flex;
   justify-content: flex-end;
+  background-color: ${COLORS.orange};  margin: 5px;
+  padding: 5px;
+  border-radius: 10px;
+  width: fit-content;
+
 `;
 const MessageNotFromCurrentUser = styled.div`
-  text-align: left;
+  background-color: ${COLORS.darkGray};
+  text-align: left;  margin: 5px;
+  padding: 5px;
+  border-radius: 10px;
+  width: fit-content;
+
 `;
 const EditButton = styled.button`
   font-size: 0.8em;
-  color: ${COLORS.orange};
-  background-color: ${COLORS.mediumGray};
+  color: ${COLORS.darkGray};
+  background-color: ${COLORS.orange};
   border: none;
   transition: all 0.3s;
 
@@ -125,7 +138,7 @@ const MessageAuthor = styled.p`
   color: ${COLORS.lightGray};
 `;
 const EditedMention = styled.span`
-  font-size: 1em;
+  font-size: 8px;
   color: ${COLORS.lightGray};
 `;
 const MessageContent = styled.div`

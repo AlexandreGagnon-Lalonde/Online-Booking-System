@@ -114,7 +114,7 @@ const WorkoutCommentButton = styled.button`
 const WorkoutCommentInput = styled.input`
 border: none;
   border-radius: 5px;
-  padding-left: 5px;
+  padding: 1px 5px 5px 5px;
   background-color: ${COLORS.lightGray};
   color: ${COLORS.darkGray};
   width: 100%;

@@ -15,6 +15,9 @@ import {
   receiveCalendar,
   receiveCalendarError,
   requestCalendar,
+  requestUser,
+  receiveUser,
+  receiveUserError,
 } from "../../reducers/action";
 import LoadingSpinner from "../LoadingSpinner";
 
@@ -163,7 +166,6 @@ const CalendarModal = ({ show, setShow }) => {
       .catch((err) => {
         dispatch(receiveCalendarError());
       });
-      console.log(calendarState.errorMessage)
     setShow({ info: "", modal: false });
   };
 
@@ -184,17 +186,20 @@ const CalendarModal = ({ show, setShow }) => {
       >
         {show.members ? (
           show.members.length > 0 ? (
-            show.members.map((member) => {
+            show.members.map((member, index) => {
               return (
                 <ModalUserInfo>
-                  <ModalUserName to={`/profile/${member._id}`}>
-                    {member.fullname}
-                  </ModalUserName>
-                  {member._id === currentUser._id ? (
-                    <UnBookButton onClick={handleUnbookClass}>
-                      Unbook
-                    </UnBookButton>
-                  ) : null}
+                  {index === 0 ? null : <Separator />}
+                  <NotSeparator>
+                    <ModalUserName to={`/profile/${member._id}`}>
+                      {member.fullname}
+                    </ModalUserName>
+                    {member._id === currentUser._id ? (
+                      <UnBookButton onClick={handleUnbookClass}>
+                        Unbook
+                      </UnBookButton>
+                    ) : null}
+                  </NotSeparator>
                 </ModalUserInfo>
               );
             })
@@ -237,6 +242,14 @@ const BookButton = styled.button`
     border: 1px solid ${COLORS.mediumGray};
   }
 `;
+const Separator = styled.div`
+  border-top: 1px solid ${COLORS.lightGray};
+  padding: 5px;
+`;
+const NotSeparator = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 const UnBookButton = styled.button`
   border: 1px solid ${COLORS.orange};
   border-radius: 5px;
@@ -257,7 +270,8 @@ const UnBookButton = styled.button`
 `;
 const ModalUserInfo = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  padding: 5px;
 `;
 const ModalUserName = styled(Link)`
   font-size: 1.5em;

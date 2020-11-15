@@ -30,6 +30,7 @@ const IndividualComment = ({ comment }) => {
   const commentId = comment.commentId;
   const commentStatus = comment.status;
   const commentAuthorId = comment.fromId;
+  const isAuthorCurrentUser = comment.fromId === currentUser._id;
 
   const handleDeleteComment = (ev) => {
     ev.preventDefault();
@@ -95,7 +96,7 @@ const IndividualComment = ({ comment }) => {
 
   return (
     <>
-      <CommentFromCurrentUser>
+      <CommentFromCurrentUser style={isAuthorCurrentUser ? {backgroundColor: `${COLORS.orange}`} : {backgroundColor: `${COLORS.darkGray}`}}>
         <CommentInfo>
           <CommentContent>
             {commentStatus === "deleted" ? (
@@ -143,6 +144,9 @@ const IndividualComment = ({ comment }) => {
 const CommentFromCurrentUser = styled.div`
   display: flex;
   justify-content: space-between;
+  padding: 5px;
+  margin: 5px 0;
+  border-radius: 10px;
 `;
 const CommentInfo = styled.div``;
 const CommentContent = styled.div``;
@@ -152,8 +156,8 @@ const CommentAuthor = styled.p`
 `;
 const CommentButton = styled.button`
   font-size: 0.8em;
-  color: ${COLORS.orange};
-  background-color: ${COLORS.mediumGray};
+  color: ${COLORS.mediumGray};
+  background-color: ${COLORS.orange};
   border: none;
   transition: all 0.3s;
 
@@ -169,9 +173,11 @@ const DeletedComment = styled.p`
   font-style: italic;
   color: ${COLORS.lightGray};
 `;
-const ButtonContainer = styled.div``;
+const ButtonContainer = styled.div`
+  display: flex;
+`;
 const StyledLink = styled(Link)`
-  color: ${COLORS.orange};
+  color: ${COLORS.mediumGray};
   transition: all 0.3s;
 
   &:hover {

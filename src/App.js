@@ -59,7 +59,10 @@ function App() {
         });
     }
 
-    if (localStorage.getItem("currentUserId") && !userState.user) {
+    if (
+      localStorage.getItem("currentUserId") &&
+      !userState.user /* || userState.status === 'Loading'*/
+    ) {
       const email = Buffer.from(
         localStorage.getItem("currentUserId"),
         "base64"
@@ -111,7 +114,7 @@ function App() {
 
   return (
     <>
-      {(userState.user || !localStorage.getItem("currentUserId")) ? (
+      {userState.user || !localStorage.getItem("currentUserId") ? (
         <>
           <Route exact path="/">
             <WelcomePage />

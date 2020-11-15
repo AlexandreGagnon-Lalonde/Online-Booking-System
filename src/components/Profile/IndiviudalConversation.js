@@ -6,16 +6,12 @@ import SendMessage from "./SendMessage";
 import IndividualMessage from "./IndividualMessage";
 import { toggleIndex } from "../../reducers/action";
 
-let toggled;
-
 const IndividualConversation = ({ conversation, indexOfToggle, index }) => {
   const currentUser = useSelector((state) => state.user.user);
 
-  // const [toggleConversation, setToggleConversation] = React.useState(false);
-
   const dispatch = useDispatch();
 
-  toggled = indexOfToggle === index;
+  const toggled = indexOfToggle === index;
 
   const otherUserName =
     conversation.user1 === currentUser._id
@@ -29,51 +25,54 @@ const IndividualConversation = ({ conversation, indexOfToggle, index }) => {
 
   const handleToggle = (ev) => {
     ev.preventDefault();
-    dispatch(toggleIndex(index));
-    // setToggleConversation(!toggleConversation);
+    if (indexOfToggle !== -1) {
+      dispatch(toggleIndex(-1));
+    } else {
+      dispatch(toggleIndex(index));
+    }
   };
 
   return (
     <ConversationContainer>
-      <ToggleConvoButton onClick={handleToggle}>
+      <ToggleConvoButton
+        onClick={handleToggle}
+        style={{
+          backgroundColor: `${toggled ? COLORS.beige : COLORS.lightGray}`,
+          color: `${toggled ? COLORS.orange : COLORS.mediumGray}`,
+          height: `${toggled ? "40px" : "24px"}`,
+        }}
+      >
         {otherUserName}
       </ToggleConvoButton>
       {toggled && (
-        <>
+        <ConversationContent>
           {conversation.messages.map((message) => {
             return (
-              <>
-                {toggled && (
-                  <IndividualMessage
-                    message={message}
-                    conversationId={conversation._id}
-                  />
-                )}
-              </>
+              <IndividualMessage
+                message={message}
+                conversationId={conversation._id}
+              />
             );
           })}
           <SendMessage otherUserId={otherUserId} />
-        </>
+        </ConversationContent>
       )}
     </ConversationContainer>
   );
 };
-console.log(toggled)
+
 const ToggleConvoButton = styled.button`
   display: block;
   width: 100%;
   border: none;
-  background-color: ${toggled ? COLORS.orange : COLORS.beige};
-  color: ${toggled ? COLORS.lightGray : COLORS.orange};
   font-weight: bold;
   border-radius: 5px;
-
-  &:hover {
-  }
+  transition: all 0.3s;
 `;
 const ConversationContainer = styled.div`
   border-radius: 5px;
   margin-bottom: 10px;
 `;
+const ConversationContent = styled.div``;
 
 export default IndividualConversation;
