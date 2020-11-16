@@ -7,9 +7,23 @@ import IndividualClasses from "./IndividualClasses";
 const ProfileClasses = ({ user }) => {
   const workoutState = useSelector((state) => state.workout);
 
-  console.log(workoutState.allWorkouts)
-  const lastFiveClasses = user.classes.slice(Math.max(user.classes.length - 5, 0)) 
-console.log(lastFiveClasses)
+  const userClasses = user.classes.map((classe) => {
+    const newDate = new Date(
+      Buffer.from(classe._id, "base64").toString("ascii")
+    );
+    return {
+      ...classe,
+      date: newDate.toString().slice(0, 15),
+      dateSeparator: newDate,
+    };
+  });
+  const userClassesSorted = userClasses.sort(
+    (a, b) => a.dateSeparator - b.dateSeparator
+  );
+  const lastFiveClasses = userClassesSorted.slice(
+    Math.max(userClassesSorted.length - 5, 0)
+  );
+
   return (
     <ClassesContainer>
       {user.classes.length > 0 ? (
@@ -17,8 +31,16 @@ console.log(lastFiveClasses)
           <ClassesTitle>Classes</ClassesTitle>
           <IndividualClassesContainer>
             {lastFiveClasses.map((classe) => {
-              const workoutObject = workoutState.allWorkouts.find(workout => workout._id === classe._id);
-              return <IndividualClasses key={classe._id} classe={classe} workout={workoutObject} />;
+              const workoutObject = workoutState.allWorkouts.find(
+                (workout) => workout._id === classe._id
+              );
+              return (
+                <IndividualClasses
+                  key={classe._id}
+                  classe={classe}
+                  workout={workoutObject}
+                />
+              );
             })}
           </IndividualClassesContainer>
         </>
@@ -41,10 +63,9 @@ const ClassesTitle = styled.h2`
   color: ${COLORS.orange};
 `;
 const IndividualClassesContainer = styled.div`
-display: grid;
-align-items: center;
-grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-
-`
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+`;
 
 export default ProfileClasses;

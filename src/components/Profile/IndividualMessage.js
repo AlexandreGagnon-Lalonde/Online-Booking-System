@@ -64,7 +64,7 @@ const IndividualMessage = ({ message, conversationId }) => {
   return (
     <SingleMessageContainer>
       {messageAuthor === currentUser._id ? (
-        <MessageFromCurrentUser style={{marginLeft: 'auto'}}>
+        <MessageFromCurrentUser style={{ marginLeft: "auto" }}>
           <MessageContent>
             {toggleEditing ? (
               <EditMessageInput
@@ -76,7 +76,7 @@ const IndividualMessage = ({ message, conversationId }) => {
               messageValueShortcut
             )}
             <EditedMention>
-              {messageStatus === "edited" ? messageStatus : null}
+              {messageStatus === "edited" && messageStatus}
             </EditedMention>
           </MessageContent>
           <EditButton onClick={toggleEditing ? handleConfirmEdit : handleEdit}>
@@ -91,7 +91,7 @@ const IndividualMessage = ({ message, conversationId }) => {
               {message.fromName}
             </StyledLink>
             <EditedMention>
-              {messageStatus === "edited" ? " · edited" : null}
+              {messageStatus === "edited" && " · edited"}
             </EditedMention>
           </MessageAuthor>
         </MessageNotFromCurrentUser>
@@ -100,30 +100,30 @@ const IndividualMessage = ({ message, conversationId }) => {
   );
 };
 
-const SingleMessageContainer = styled.div`
-`
+const SingleMessageContainer = styled.div``;
 const MessageFromCurrentUser = styled.div`
   display: flex;
   justify-content: flex-end;
-  background-color: ${COLORS.orange};  margin: 5px;
-  padding: 5px;
+  background-color: ${COLORS.orange};
+  margin: 5px 0 5px 5px;
+  padding: 0 5px 5px 5px;
   border-radius: 10px;
   width: fit-content;
-
 `;
 const MessageNotFromCurrentUser = styled.div`
   background-color: ${COLORS.darkGray};
-  text-align: left;  margin: 5px;
-  padding: 5px;
+  text-align: left;
+  margin: 5px 5px 5px 0;
+  padding: 0 5px 5px 5px;
   border-radius: 10px;
   width: fit-content;
-
 `;
 const EditButton = styled.button`
   font-size: 0.8em;
   color: ${COLORS.darkGray};
   background-color: ${COLORS.orange};
   border: none;
+  border-radius: 5px;
   transition: all 0.3s;
 
   &:hover {
@@ -164,4 +164,5 @@ const EditMessageInput = styled.input`
     color: ${COLORS.darkGray};
   }
 `;
+
 export default IndividualMessage;

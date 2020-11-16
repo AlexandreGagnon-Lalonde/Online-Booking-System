@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { COLORS } from "../../constant";
 
 const IndividualClasses = ({ classe, workout }) => {
-  const classDate = Buffer.from(classe._id, "base64").toString("ascii");
+  const classDate = classe.date;
 
   const classWorkout = workout.workout;
-  
+
   return (
     <IndiClassContainer>
       <ClassDateStyled>
