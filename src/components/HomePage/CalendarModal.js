@@ -158,6 +158,8 @@ const CalendarModal = ({ show, setShow }) => {
       .then((data) => {
         if (data.success) {
           dispatch(receiveCalendar(data.calendar));
+          setShow({ info: "", modal: false });
+
           localStorage.setItem("currentCalendarId", data.calendar._id);
         } else {
           dispatch(receiveCalendarError(data.message));
@@ -166,7 +168,6 @@ const CalendarModal = ({ show, setShow }) => {
       .catch((err) => {
         dispatch(receiveCalendarError());
       });
-    setShow({ info: "", modal: false });
   };
 
   return (
@@ -218,6 +219,9 @@ const CalendarModal = ({ show, setShow }) => {
         <BookButton onClick={handleCalendarSubmit} variant={"secondary"}>
           Book
         </BookButton>
+        {calendarState.status === "Error" ? (
+          <ErrorMessage>{calendarState.errorMessage}</ErrorMessage>
+        ) : null}
       </Modal.Footer>
     </Modal>
   );
@@ -286,6 +290,18 @@ const ModalUserName = styled(Link)`
 `;
 const GenericMemberMessage = styled.p`
   color: ${COLORS.mediumGray};
+`;
+const ErrorMessage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  color: ${COLORS.errorRed};
+  border: 1px solid ${COLORS.errorRed};
+  border-radius: 5px;
+  padding: 5px;
+  margin-top: 10px;
+  width: 100%;
 `;
 
 export default CalendarModal;

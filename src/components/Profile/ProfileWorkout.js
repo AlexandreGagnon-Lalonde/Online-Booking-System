@@ -43,17 +43,12 @@ const ProfileWorkout = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.status !== 500) {
-                  dispatch(receiveWorkout(data.workout));
+          dispatch(receiveWorkout(data.workout));
+        } else {
+          dispatch(receiveWorkoutError(data.message));
+        }
         setWorkout("");
         document.getElementById("workout-form").reset();
-
-        } else {
-          dispatch(receiveWorkoutError(data.message))
-          setWorkout("");
-          document.getElementById("workout-form").reset();
-  
-        }
-        console.log(data)
       })
       .catch((err) => {
         dispatch(receiveWorkoutError(err.message));
@@ -70,9 +65,7 @@ const ProfileWorkout = () => {
           onChange={(ev) => setWorkout(ev.currentTarget.value)}
           required
         />
-        <SubmitWorkoutButton >
-          Post workout
-        </SubmitWorkoutButton>
+        <SubmitWorkoutButton>Post workout</SubmitWorkoutButton>
         {workoutState.status === "Error" ? (
           <ErrorMessage>{workoutState.errorMessage}</ErrorMessage>
         ) : null}
@@ -122,13 +115,15 @@ const SubmitWorkoutInput = styled.input`
   }
 `;
 const ErrorMessage = styled.div`
-display: flex;
-justify-content: center;
-align-items: center;
-height: 50px;
-color: ${COLORS.errorRed};
-border: 1px solid ${COLORS.errorRed};
-margin-top: 10px;
-`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  color: ${COLORS.errorRed};
+  border: 1px solid ${COLORS.errorRed};
+  border-radius: 5px;
+  padding: 5px;
+  margin-top: 10px;
+`;
 
 export default ProfileWorkout;

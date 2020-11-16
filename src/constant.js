@@ -9,5 +9,5 @@ export const COLORS = {
   mediumGray: '#403d39',
   darkGray: '#252422',
   orange: '#eb5e28',
-  errorRed: '#cc0000',
+  errorRed: '#ff1744',
 }
