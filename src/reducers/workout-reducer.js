@@ -1,5 +1,6 @@
 const initialState = {
   workout: null,
+  allWorkouts: null,
   errorMessage: null,
   status: "idle",
 };
@@ -19,6 +20,14 @@ export default function workoutReducer(state = initialState, action) {
         workout: action.workout,
       };
     }
+    case "RECEIVE_ALL_WORKOUTS": {
+      return {
+        ...state,
+        status: "idle",
+        allWorkouts: action.allWorkouts,
+      };
+    }
+    
     case "RECEIVE_WORKOUT_ERROR": {
       return {
         ...state,

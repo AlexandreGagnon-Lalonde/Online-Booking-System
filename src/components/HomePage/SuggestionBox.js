@@ -87,10 +87,10 @@ const SuggestionBox = () => {
 
 const SuggestionTitle = styled.h3``;
 const SuggestionContainer = styled.div`
-border-radius: 5px;
-background-color: ${COLORS.mediumGray};
-padding 10px;
-margin: 25px 25px 0 0;
+  border-radius: 5px;
+  background-color: ${COLORS.mediumGray};
+  padding 10px;
+  margin: 25px 25px 0 0;
 `;
 const SuggestionInput = styled.textarea`
   border-radius: 5px;

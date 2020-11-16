@@ -453,7 +453,7 @@ const bookClass = async (req, res) => {
       );
 
       if (!currentUserHasClass) {
-        userClasses.push({ _id: classId, classTime});
+        userClasses.push({ _id: classId, classTime });
 
         const newUserClass = {
           $set: {
@@ -628,7 +628,7 @@ const getCalendar = async (req, res) => {
   client.close();
 };
 
-const getWorkouts = async (req, res) => {
+const getAllWorkouts = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
 
   try {
@@ -638,12 +638,12 @@ const getWorkouts = async (req, res) => {
 
     const classes = await db.collection("classes").find().toArray();
 
-    const workouts = classes.map((classe) => {
-      return classe.workout;
+    const allWorkouts = classes.map((classe) => {
+      return { workout: classe.workout, _id: classe._id };
     });
 
-    workouts.length > 0
-      ? res.status(200).json({ status: 200, workouts: workouts })
+    allWorkouts.length > 0
+      ? res.status(200).json({ status: 200, allWorkouts: allWorkouts })
       : res.status(404).json({ status: 404, message: "No workouts" });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
@@ -666,6 +666,42 @@ const getWorkout = async (req, res) => {
     todayClass.workout
       ? res.status(200).json({ status: 200, workout: todayClass.workout })
       : res.status(404).json({ status: 404, message: "No workouts" });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+  client.close();
+};
+
+const postWorkout = async (req, res) => {
+  const client = await MongoClient(MONGO_URI, options);
+
+  const { _id, workout } = req.body;
+  try {
+    await client.connect();
+
+    const db = client.db("online-booking-system");
+
+    const todayClass = await db.collection("classes").findOne({ _id });
+
+    const workoutQuery = { _id };
+
+    const workoutNewValue = {
+      $set: {
+        workout,
+      },
+    };
+
+    const dayNewComment = await db
+      .collection("classes")
+      .updateOne(workoutQuery, workoutNewValue);
+    assert.equal(1, dayNewComment.matchedCount);
+    assert.equal(1, dayNewComment.modifiedCount);
+
+    res.status(200).json({
+      status: 200,
+      success: true,
+      workout,
+    });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }
@@ -899,8 +935,9 @@ module.exports = {
   editMessage,
   deleteMessage,
   getMessages,
-  getWorkouts,
+  getAllWorkouts,
   getWorkout,
+  postWorkout,
   getSuggestions,
   createSuggestion,
   deleteSuggestion,

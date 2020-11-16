@@ -1,11 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { COLORS } from '../../constant';
+import { COLORS } from "../../constant";
 
 import { useSelector, useDispatch } from "react-redux";
 
-const ProfileInfo = ({user}) => {
-  console.log(user)
+const ProfileInfo = ({ user }) => {
   return (
     <StyledDiv>
       <p>Name: {user.firstName + " " + user.lastName}</p>

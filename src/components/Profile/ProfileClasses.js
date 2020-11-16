@@ -5,8 +5,11 @@ import { COLORS } from "../../constant";
 import IndividualClasses from "./IndividualClasses";
 
 const ProfileClasses = ({ user }) => {
-  const lastFiveClasses = user.classes.slice(Math.max(user.classes.length - 5, 0)) 
+  const workoutState = useSelector((state) => state.workout);
 
+  console.log(workoutState.allWorkouts)
+  const lastFiveClasses = user.classes.slice(Math.max(user.classes.length - 5, 0)) 
+console.log(lastFiveClasses)
   return (
     <ClassesContainer>
       {user.classes.length > 0 ? (
@@ -14,7 +17,8 @@ const ProfileClasses = ({ user }) => {
           <ClassesTitle>Classes</ClassesTitle>
           <IndividualClassesContainer>
             {lastFiveClasses.map((classe) => {
-              return <IndividualClasses key={classe._id} classe={classe} />;
+              const workoutObject = workoutState.allWorkouts.find(workout => workout._id === classe._id);
+              return <IndividualClasses key={classe._id} classe={classe} workout={workoutObject} />;
             })}
           </IndividualClassesContainer>
         </>

@@ -107,6 +107,11 @@ export const receiveWorkout = (workout) => ({
   workout,
 });
 
+export const receiveAllWorkouts = (allWorkouts) => ({
+  type: "RECEIVE_ALL_WORKOUTS",
+  allWorkouts,
+});
+
 export const receiveWorkoutError = (errorMessage) => ({
   type: "RECEIVE_WORKOUT_ERROR",
   errorMessage,

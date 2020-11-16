@@ -12,7 +12,7 @@ import {
 import { useHistory, useParams } from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner";
 import { SERVER_URL } from "../../constant";
-
+import ProfileWorkout from "./ProfileWorkout";
 import LoggedInHeader from "../Header/LoggedInHeader";
 import ProfileInfo from "./ProfileInfo";
 import ProfileMessages from "./ProfileMessages";
@@ -68,7 +68,13 @@ const Profile = () => {
     //       dispatch(messageError());
     //     });
     // }
-  }, [currentProfileId, userState.status, otherUser, messageState.status, messageState.toggleIndex]);
+  }, [
+    currentProfileId,
+    userState.status,
+    otherUser,
+    messageState.status,
+    messageState.toggleIndex,
+  ]);
 
   return (
     <>
@@ -79,7 +85,7 @@ const Profile = () => {
         <>
           <LoggedInHeader />
           <ProfileContainer>
-            <GenericProfileContainer>
+            <LeftGenericProfileContainer>
               <ProfileInfo
                 user={
                   currentProfileId === currentUser._id ? currentUser : otherUser
@@ -94,13 +100,18 @@ const Profile = () => {
               {currentUser.admin && currentProfileId === currentUser._id ? (
                 <ProfilSuggestion suggestions={suggestionState} />
               ) : null}
-            </GenericProfileContainer>
-            <ProfileMessages
-              currentUser={
-                currentProfileId === currentUser._id ? currentUser : false
-              }
-              message={messageState.message}
-            />
+            </LeftGenericProfileContainer>
+            <RightGenericProfileContainer>
+              <ProfileMessages
+                currentUser={
+                  currentProfileId === currentUser._id ? currentUser : false
+                }
+                message={messageState.message}
+              />
+              {currentUser.admin && currentProfileId === currentUser._id ? (
+                <ProfileWorkout suggestions={suggestionState} />
+              ) : null}
+            </RightGenericProfileContainer>
           </ProfileContainer>
         </>
       )}
@@ -108,9 +119,12 @@ const Profile = () => {
   );
 };
 
-const GenericProfileContainer = styled.div`
-  flex: 2;
+const LeftGenericProfileContainer = styled.div`
+  flex: 3;
 `;
+const RightGenericProfileContainer = styled.div`
+  flex: 2;
+`
 const ProfileContainer = styled.div`
   display: flex;
   width: 100%;

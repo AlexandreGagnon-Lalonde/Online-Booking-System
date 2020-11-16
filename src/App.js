@@ -28,6 +28,7 @@ import {
   receiveCommentError,
   requestWorkout,
   receiveWorkout,
+  receiveAllWorkouts,
   receiveWorkoutError,
   requestMessage,
   receiveMessages,
@@ -120,6 +121,15 @@ function App() {
         .then((res) => res.json())
         .then((data) => {
           dispatch(receiveWorkout(data.workout));
+        })
+        .catch((err) => {
+          dispatch(receiveWorkoutError(err.message));
+        });
+        
+      fetch(SERVER_URL + `/api/getallworkouts`)
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(receiveAllWorkouts(data.allWorkouts));
         })
         .catch((err) => {
           dispatch(receiveWorkoutError(err.message));
