@@ -651,23 +651,20 @@ const getWorkouts = async (req, res) => {
   client.close();
 };
 
-const getOneWorkout = async (req, res) => {
+const getWorkout = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
 
-  // const { workoutId } = req.body;
+  const todayDate = moment(new Date()).format("ddd MMM DD YYYY").toString();
+  const _id = Buffer.from(todayDate).toString("base64");
   try {
     await client.connect();
 
     const db = client.db("online-booking-system");
 
-    const classes = await db.collection("classes").find().toArray();
+    const todayClass = await db.collection("classes").findOne({ _id });
 
-    const workout = classes.map((classe) => {
-      return classe._id === workoutId;
-    });
-
-    workouts.length > 0
-      ? res.status(200).json({ status: 200, workout: workout })
+    todayClass.workout
+      ? res.status(200).json({ status: 200, workout: todayClass.workout })
       : res.status(404).json({ status: 404, message: "No workouts" });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
@@ -903,7 +900,7 @@ module.exports = {
   deleteMessage,
   getMessages,
   getWorkouts,
-  getOneWorkout,
+  getWorkout,
   getSuggestions,
   createSuggestion,
   deleteSuggestion,

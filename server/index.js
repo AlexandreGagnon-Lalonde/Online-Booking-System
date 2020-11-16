@@ -21,7 +21,7 @@ const {
   getUser,
   updateUser,
   getWorkouts,
-  getOneWorkout,
+  getWorkout,
   getSuggestions,
   deleteSuggestion,
   createSuggestion,
@@ -60,8 +60,8 @@ express()
 
   // REST endpoints?
   .get("/api/getuser/:email", getUser)
-  .get("/api/allworkouts", getWorkouts)
-  .get("/api/workout/:id", getOneWorkout)
+  .get("/api/getworkout", getWorkout)
+  .get("/api/getworkouts", getWorkouts)
   .get("/api/getsuggestions", getSuggestions)
   .get("/api/getcalendar/:calendarDisplay/:firstDay", getCalendar)
   .get("/api/getmessages/:_id", getMessages)

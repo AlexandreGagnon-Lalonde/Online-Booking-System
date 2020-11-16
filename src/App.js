@@ -26,6 +26,9 @@ import {
   requestComment,
   receiveComment,
   receiveCommentError,
+  requestWorkout,
+  receiveWorkout,
+  receiveWorkoutError,
   requestMessage,
   receiveMessages,
   messageError,
@@ -37,6 +40,7 @@ function App() {
   const messageState = useSelector((state) => state.message);
   const calendarState = useSelector((state) => state.calendar);
   const commentState = useSelector((state) => state.comment);
+  const workoutState = useSelector((state) => state.workout);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -104,10 +108,21 @@ function App() {
         .then((res) => res.json())
         .then((data) => {
           dispatch(receiveComment(data.comments));
-          localStorage.setItem("Comment", data.comments);
         })
         .catch((err) => {
           dispatch(receiveCommentError());
+        });
+    }
+    if (workoutState.status === "idle") {
+      dispatch(requestWorkout());
+
+      fetch(SERVER_URL + `/api/getworkout`)
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(receiveWorkout(data.workout));
+        })
+        .catch((err) => {
+          dispatch(receiveWorkoutError(err.message));
         });
     }
   }, [userState.user]);
