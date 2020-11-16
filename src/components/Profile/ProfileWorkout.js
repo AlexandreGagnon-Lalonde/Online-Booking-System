@@ -42,15 +42,24 @@ const ProfileWorkout = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        dispatch(receiveWorkout(data.workout));
+        if (data.status !== 500) {
+                  dispatch(receiveWorkout(data.workout));
         setWorkout("");
         document.getElementById("workout-form").reset();
+
+        } else {
+          dispatch(receiveWorkoutError(data.message))
+          setWorkout("");
+          document.getElementById("workout-form").reset();
+  
+        }
+        console.log(data)
       })
       .catch((err) => {
-        dispatch(receiveWorkoutError());
+        dispatch(receiveWorkoutError(err.message));
       });
   };
-  
+
   return (
     <PostWorkoutContainer>
       <StyledWorkoutTitle>Post a workout for today</StyledWorkoutTitle>
@@ -61,9 +70,12 @@ const ProfileWorkout = () => {
           onChange={(ev) => setWorkout(ev.currentTarget.value)}
           required
         />
-        <SubmitWorkoutButton disabled={workoutExist || !workout}>
+        <SubmitWorkoutButton >
           Post workout
         </SubmitWorkoutButton>
+        {workoutState.status === "Error" ? (
+          <ErrorMessage>{workoutState.errorMessage}</ErrorMessage>
+        ) : null}
       </WorkoutForm>
     </PostWorkoutContainer>
   );
@@ -109,5 +121,14 @@ const SubmitWorkoutInput = styled.input`
     color: ${COLORS.darkGray};
   }
 `;
+const ErrorMessage = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+height: 50px;
+color: ${COLORS.errorRed};
+border: 1px solid ${COLORS.errorRed};
+margin-top: 10px;
+`
 
 export default ProfileWorkout;

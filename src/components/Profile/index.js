@@ -25,6 +25,7 @@ const Profile = () => {
   const otherUser = useSelector((state) => state.user.otherUser);
   const messageState = useSelector((state) => state.message);
   const suggestionState = useSelector((state) => state.suggestion.suggestion);
+  const workoutState = useSelector((state) => state.workout)
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -42,6 +43,7 @@ const Profile = () => {
   );
 
   React.useEffect(() => {
+    console.log(workoutState.status)
     if (!otherUser || currentProfileId !== otherUser._id) {
       dispatch(requestUser());
 
@@ -74,6 +76,7 @@ const Profile = () => {
     otherUser,
     messageState.status,
     messageState.toggleIndex,
+    workoutState.status,
   ]);
 
   return (

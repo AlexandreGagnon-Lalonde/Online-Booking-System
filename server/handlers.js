@@ -683,6 +683,14 @@ const postWorkout = async (req, res) => {
 
     const todayClass = await db.collection("classes").findOne({ _id });
 
+    if (todayClass.workout) {
+      res.status(500).json({
+        status: 500,
+        message:
+          "There is already a workout for today, please take care of your members!",
+      });
+    }
+
     const workoutQuery = { _id };
 
     const workoutNewValue = {
