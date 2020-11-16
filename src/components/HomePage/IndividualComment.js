@@ -96,7 +96,13 @@ const IndividualComment = ({ comment }) => {
 
   return (
     <>
-      <CommentFromCurrentUser style={isAuthorCurrentUser ? {backgroundColor: `${COLORS.orange}`} : {backgroundColor: `${COLORS.darkGray}`}}>
+      <CommentFromCurrentUser
+        style={
+          isAuthorCurrentUser
+            ? { backgroundColor: `${COLORS.orange}` }
+            : { backgroundColor: `${COLORS.darkGray}` }
+        }
+      >
         <CommentInfo>
           <CommentContent>
             {commentStatus === "deleted" ? (
@@ -144,8 +150,8 @@ const IndividualComment = ({ comment }) => {
 const CommentFromCurrentUser = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 5px;
-  margin: 5px 0;
+  padding: 0 5px 5px 5px;
+  margin: 10px 0 0 0;
   border-radius: 10px;
 `;
 const CommentInfo = styled.div``;
@@ -159,6 +165,7 @@ const CommentButton = styled.button`
   color: ${COLORS.mediumGray};
   background-color: ${COLORS.orange};
   border: none;
+  border-radius: 5px;
   transition: all 0.3s;
 
   &:hover {

@@ -5,6 +5,7 @@ import Workout from './Workout';
 import WorkoutComments from './WorkoutComments';
 
 const WorkoutBox = () => {
+  
   return (
     <WorkoutContainer>
       <WorkoutTitle>Workout</WorkoutTitle>

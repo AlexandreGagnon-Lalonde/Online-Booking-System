@@ -25,10 +25,10 @@ const IndividualConversation = ({ conversation, indexOfToggle, index }) => {
 
   const handleToggle = (ev) => {
     ev.preventDefault();
-    if (indexOfToggle !== -1) {
-      dispatch(toggleIndex(-1));
-    } else {
+    if (!toggled || indexOfToggle === -1) {
       dispatch(toggleIndex(index));
+    } else {
+      dispatch(toggleIndex(-1));
     }
   };
 
