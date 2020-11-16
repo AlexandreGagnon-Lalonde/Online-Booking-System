@@ -1,26 +1,28 @@
 const initialState = {
-  comments: [],
+  workout: null,
+  errorMessage: null,
   status: "idle",
 };
 
-export default function commentReducer(state = initialState, action) {
+export default function workoutReducer(state = initialState, action) {
   switch (action.type) {
-    case "REQUEST_COMMENT": {
+    case "REQUEST_WORKOUT": {
       return {
         ...state,
         status: "Loading",
       };
     }
-    case "RECEIVE_COMMENT": {
+    case "RECEIVE_WORKOUT": {
       return {
         ...state,
         status: "idle",
-        comments: action.comments,
+        workout: action.workout,
       };
     }
-    case "RECEIVE_COMMENT_ERROR": {
+    case "RECEIVE_WORKOUT_ERROR": {
       return {
         ...state,
+        errorMessage: action.errorMessage,
         status: "Error",
       };
     }

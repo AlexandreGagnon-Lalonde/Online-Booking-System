@@ -97,3 +97,17 @@ export const receiveCommentError = (errorMessage) => ({
   type: "RECEIVE_COMMENT_ERROR",
   errorMessage,
 });
+
+export const requestWorkout = () => ({
+  type: "REQUEST_WORKOUT",
+});
+
+export const receiveWorkout = (workout) => ({
+  type: "RECEIVE_WORKOUT",
+  workout,
+});
+
+export const receiveWorkoutError = (errorMessage) => ({
+  type: "RECEIVE_WORKOUT_ERROR",
+  errorMessage,
+});
