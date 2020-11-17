@@ -55,10 +55,8 @@ const LogInForm = () => {
 
   return (
     <MainContainer>
-      {/* <LogoContainer>Random stuff to fill before logo</LogoContainer> */}
       <FormContainer>
         <StyledForm onSubmit={handleLogin}>
-          {/* <StyledLabel for="email">Email</StyledLabel> */}
           <StyledInput
             type="text"
             placeholder="Email"
@@ -67,7 +65,6 @@ const LogInForm = () => {
             onChange={(ev) => setEmail(ev.currentTarget.value)}
             required
           />
-          {/* <StyledLabel for="password">Password</StyledLabel> */}
           <StyledInput
             type="password"
             placeholder="Password"

@@ -479,7 +479,7 @@ const bookClass = async (req, res) => {
       }
 
       const userEditedData = users.find((user) => user._id === currentUser._id);
-
+console.log(userEditedData)
       res.status(201).json({
         status: 201,
         success: true,
@@ -516,6 +516,7 @@ const bookClass = async (req, res) => {
       res.status(201).json({
         status: 201,
         message: "Class updated",
+        success: true,
         calendar: newClass,
         user: userEditedData,
       });
