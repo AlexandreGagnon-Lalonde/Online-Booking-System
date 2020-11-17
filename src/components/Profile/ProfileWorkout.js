@@ -55,6 +55,10 @@ const ProfileWorkout = () => {
       });
   };
 
+  React.useEffect(() => {
+    dispatch(receiveWorkout(workoutState.workout))
+  }, [])
+
   return (
     <PostWorkoutContainer>
       <StyledWorkoutTitle>Post a workout for today</StyledWorkoutTitle>
