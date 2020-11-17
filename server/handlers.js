@@ -551,7 +551,7 @@ const unbookClass = async (req, res) => {
       (member) => member._id !== currentUserId
     );
     const updatedCurrentUserClasses = currentUser.classes.filter(
-      (classe) => classe !== classId
+      (classe) => classe._id !== classId
     );
 
     const userQuery = { _id: currentUserId };

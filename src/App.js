@@ -64,10 +64,7 @@ function App() {
         });
     }
 
-    if (
-      localStorage.getItem("currentUserId") &&
-      !userState.user /* || userState.status === 'Loading'*/
-    ) {
+    if ((localStorage.getItem("currentUserId") && !userState.user) || userState.status === 'Loading') {
       const email = Buffer.from(
         localStorage.getItem("currentUserId"),
         "base64"
@@ -125,7 +122,7 @@ function App() {
         .catch((err) => {
           dispatch(receiveWorkoutError(err.message));
         });
-        
+
       fetch(SERVER_URL + `/api/getallworkouts`)
         .then((res) => res.json())
         .then((data) => {
@@ -135,7 +132,7 @@ function App() {
           dispatch(receiveWorkoutError(err.message));
         });
     }
-  }, [userState.user]);
+  }, [userState.user, userState.status]);
 
   return (
     <>
