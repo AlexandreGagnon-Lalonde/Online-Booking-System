@@ -149,7 +149,7 @@ function App() {
   React.useEffect(() => {
     const debouncedHandleResize = debounce(() => {
       dispatch(changeWindowWidth(window.innerWidth));
-    }, 1000);
+    }, 500);
 
     window.addEventListener("resize", debouncedHandleResize);
 

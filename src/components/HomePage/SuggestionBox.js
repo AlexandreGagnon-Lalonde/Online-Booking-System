@@ -12,6 +12,7 @@ import LoadingSpinner from "../LoadingSpinner";
 
 const SuggestionBox = () => {
   const suggestionState = useSelector((state) => state.suggestion);
+  const windowState = useSelector((state) => state.window)
 
   const [suggestion, setSuggestion] = React.useState("");
   const [checkbox, setCheckbox] = React.useState("");
@@ -57,7 +58,7 @@ const SuggestionBox = () => {
   };
 
   return (
-    <SuggestionContainer>
+    <SuggestionContainer  style={windowState.width < 600 ? {margin: '25px'} : null}>
       <SuggestionTitle>Suggestion</SuggestionTitle>
       <form onSubmit={handleSuggestionSubmit} id={"suggestion-form"}>
         <SuggestionInput

@@ -20,10 +20,20 @@ import {
 import LoadingSpinner from "../LoadingSpinner";
 
 const CalendarDisplayCommand = ({ setFirstDayOfCalendar, calendarDisplay }) => {
+  const windowState = useSelector((state) => state.window)
   const dispatch = useDispatch();
 
+  React.useEffect(() => {
+    if (windowState.width < 600) {
+      dispatch(calendarDay())
+    } else {
+      dispatch(calendarWeek())
+    }
+    console.log('wut')
+  }, [windowState.width])
+
   return (
-    <ButtonContainer>
+    <ButtonContainer style={windowState.width < 600 ? { display: 'none'} : null}>
       <DisplayButton
         disabled={
           calendarDisplay === "timeGridDay" //? true : false

@@ -9,10 +9,11 @@ import WorkoutBox from "./WorkoutBox";
 import SuggestionBox from "./SuggestionBox";
 
 const HomePage = () => {
+  const windowState = useSelector((state) => state.window)
   return (
     <>
       <Header />
-      <ContentContainer>
+      <ContentContainer style={windowState.width < 600 ? {display: 'block'} : null}>
         <Calendar />
         <RightContainer>
           <WorkoutBox />

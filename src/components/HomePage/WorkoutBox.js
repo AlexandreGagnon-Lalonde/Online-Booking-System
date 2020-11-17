@@ -3,11 +3,13 @@ import styled from "styled-components";
 import { COLORS } from '../../constant';
 import Workout from './Workout';
 import WorkoutComments from './WorkoutComments';
+import { useSelector, useDispatch } from "react-redux";
 
 const WorkoutBox = () => {
-  
+  const windowState = useSelector((state) => state.window)
+
   return (
-    <WorkoutContainer>
+    <WorkoutContainer style={windowState.width < 600 ? {margin: '0 25px 0 25px'} : null}>
       <WorkoutTitle>Workout</WorkoutTitle>
       <Workout />
       <WorkoutComments />
