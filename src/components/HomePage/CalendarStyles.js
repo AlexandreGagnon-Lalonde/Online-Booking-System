@@ -53,16 +53,16 @@ const StyledWrapper = styled.div`
     border: none;
   }
   .fc-timegrid-col {
-    border: 1px solid red;
+    border: 1px solid ${COLORS.beige};
   }
   .fc-col-header-cell {
-    border: 1px solid green;
+    border: 1px solid ${COLORS.beige};
   }
   .fc-timegrid-axis {
-    border: 1px solid yellow;
+    border: 1px solid ${COLORS.beige};
   }
   .fc-scrollgrid {
-    border: 1px solid blue;
+    border: 1px solid ${COLORS.beige};
     border-radius: 5px;
   }
 `
