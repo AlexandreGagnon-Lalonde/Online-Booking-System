@@ -52,15 +52,15 @@ const ProfileClasses = ({ user }) => {
 };
 
 const ClassesContainer = styled.div`
-border-radius: 5px;
-background-color: ${COLORS.mediumGray};
-padding 10px;
-margin: 0 25px 25px 25px;
+  border-radius: 5px;
+  background-color: ${COLORS.mediumGray};
+  padding 10px;
+  margin: 0 25px 25px 25px;
 `;
 const ClassesTitle = styled.h2`
   font-weight: bold;
   font-size: 1.5em;
-  color: ${COLORS.orange};
+  color: ${COLORS.lightGray};
 `;
 const IndividualClassesContainer = styled.div`
   display: grid;

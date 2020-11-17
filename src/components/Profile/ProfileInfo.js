@@ -24,7 +24,7 @@ const ProfileInfo = ({ user }) => {
         <FiHome style={{ color: `${COLORS.orange}`}} /> {user.address + " " + user.city}
       </Address>
       <Gender>
-        <FaTransgenderAlt style={{ color: `${COLORS.orange}`}} /> {user.gender}
+        <FaTransgenderAlt style={{ color: `${COLORS.orange}`}} /> {user.gender ? user.gender : 'Unisex'}
       </Gender>
     </StyledDiv>
   );
