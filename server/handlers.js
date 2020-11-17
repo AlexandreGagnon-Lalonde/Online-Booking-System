@@ -13,7 +13,7 @@ const moment = require("moment");
 const createUser = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
 
-  const { DOB, email } = req.body;
+  const { DOB, email, password, confirmPassword, gender } = req.body;
   try {
     await client.connect();
 
@@ -27,20 +27,33 @@ const createUser = async (req, res) => {
     const userExist = users.find((user) => user.email === email);
 
     if (todayDateTime < DOBTime) {
-      res.status(404).json({ status: 404, message: "Make sure you're born !" });
+      return res
+        .status(404)
+        .json({ status: 404, message: "Make sure you're born !" });
     }
 
+    if (password !== confirmPassword) {
+      return res.status(404).json({
+        status: 404,
+        message: "Please make sure you confirm your password",
+      });
+    }
     if (userExist) {
-      res.status(404).json({
+      return res.status(404).json({
         status: 404,
         message: "Someone is already using this email !",
       });
     }
 
-    const newUser = await db.collection("users").insertOne(req.body);
+    const userBody = {
+      ...req.body,
+      gender: gender ? gender : "Unisex",
+    };
+
+    const newUser = await db.collection("users").insertOne(userBody);
     assert(1, newUser.insertedCount);
 
-    res.status(201).json({ status: 201, success: true, user: req.body });
+    res.status(201).json({ status: 201, success: true, user: userBody });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }
@@ -119,14 +132,13 @@ const sendMessage = async (req, res) => {
     const db = client.db("online-booking-system");
 
     const conversations = await db.collection("conversations").find().toArray();
-    console.log(otherUserId);
-    console.log(currentUserId);
+
     const conversationExist = conversations.find(
       (convo) =>
         (convo.user1 === currentUserId || convo.user1 === otherUserId) &&
         (convo.user2 === currentUserId || convo.user2 === otherUserId)
     );
-    console.log(conversationExist);
+
     const newMessage = {
       from: currentUserId,
       fromName: currentUserName,
@@ -135,7 +147,6 @@ const sendMessage = async (req, res) => {
     };
 
     if (conversationExist) {
-      console.log("exist");
       conversationExist.messages.push(newMessage);
       const newMessages = conversationExist.messages;
 
@@ -153,7 +164,6 @@ const sendMessage = async (req, res) => {
       assert.equal(1, conversationEdited.matchedCount);
       assert.equal(1, conversationEdited.modifiedCount);
     } else {
-      console.log("not exist");
       const currentUser = await db
         .collection("users")
         .findOne({ _id: currentUserId });
@@ -404,18 +414,18 @@ const bookClass = async (req, res) => {
         return subClass.find((user) => user._id === currentUser._id);
       });
 
-      isCurrentUserInClass
-        ? res
-            .status(404)
-            .json({ status: 404, message: "You are already in this class" })
-        : null;
+      if (isCurrentUserInClass) {
+        return res
+          .status(404)
+          .json({ status: 404, message: "You are already in this class" });
+      }
 
-      isCurrentUserInDay
-        ? res.status(404).json({
-            status: 404,
-            message: "You are already registered for a class today",
-          })
-        : null;
+      if (isCurrentUserInDay) {
+        return res.status(404).json({
+          status: 404,
+          message: "You are already registered for a class today",
+        });
+      }
     }
 
     if (classExist && !isCurrentUserInClass) {
@@ -435,7 +445,7 @@ const bookClass = async (req, res) => {
               },
             };
           } else {
-            res
+            return res
               .status(404)
               .json({ status: 404, message: "This class is full!" });
           }
@@ -472,6 +482,7 @@ const bookClass = async (req, res) => {
 
       res.status(201).json({
         status: 201,
+        success: true,
         message: "Class created, user edited",
         calendar: currentClass,
         user: userEditedData,
@@ -615,7 +626,7 @@ const getCalendar = async (req, res) => {
       passedToFrontEndClasses =
         classes.find((classe) => classe._id === encryptedOneDay) || [];
     } else {
-      res.status(404).json({ status: 404, message: "Invalid request" });
+      return res.status(404).json({ status: 404, message: "Invalid request" });
     }
     res.status(200).json({
       status: 200,
@@ -642,9 +653,9 @@ const getAllWorkouts = async (req, res) => {
       return { workout: classe.workout, _id: classe._id };
     });
 
-    allWorkouts.length > 0
-      ? res.status(200).json({ status: 200, allWorkouts: allWorkouts })
-      : res.status(404).json({ status: 404, message: "No workouts" });
+    const workoutsReturnValue = allWorkouts ? allWorkouts : [];
+
+    res.status(200).json({ status: 200, allWorkouts: workoutsReturnValue });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }
@@ -663,9 +674,7 @@ const getWorkout = async (req, res) => {
 
     const todayClass = await db.collection("classes").findOne({ _id });
 
-    todayClass.workout
-      ? res.status(200).json({ status: 200, workout: todayClass.workout })
-      : res.status(404).json({ status: 404, message: "No workouts" });
+    res.status(200).json({ status: 200, workout: todayClass.workout });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }
@@ -684,32 +693,32 @@ const postWorkout = async (req, res) => {
     const todayClass = await db.collection("classes").findOne({ _id });
 
     if (todayClass.workout) {
-      res.status(500).json({
+      return res.status(500).json({
         status: 500,
         message:
           "There is already a workout for today, please take care of your members!",
       });
-    }
+    } else {
+      const workoutQuery = { _id };
 
-    const workoutQuery = { _id };
+      const workoutNewValue = {
+        $set: {
+          workout,
+        },
+      };
 
-    const workoutNewValue = {
-      $set: {
+      const dayNewComment = await db
+        .collection("classes")
+        .updateOne(workoutQuery, workoutNewValue);
+      assert.equal(1, dayNewComment.matchedCount);
+      assert.equal(1, dayNewComment.modifiedCount);
+
+      res.status(200).json({
+        status: 200,
+        success: true,
         workout,
-      },
-    };
-
-    const dayNewComment = await db
-      .collection("classes")
-      .updateOne(workoutQuery, workoutNewValue);
-    assert.equal(1, dayNewComment.matchedCount);
-    assert.equal(1, dayNewComment.modifiedCount);
-
-    res.status(200).json({
-      status: 200,
-      success: true,
-      workout,
-    });
+      });
+    }
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }
