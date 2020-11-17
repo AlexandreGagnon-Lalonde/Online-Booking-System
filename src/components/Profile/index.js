@@ -76,7 +76,7 @@ const Profile = () => {
     otherUser,
     messageState.status,
     messageState.toggleIndex,
-    workoutState.status,
+    workoutState,
   ]);
 
   return (
