@@ -151,7 +151,7 @@ const CommentFromCurrentUser = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 0 5px 5px 5px;
-  margin: 10px 0 0 0;
+  margin: 5px 0 0 0;
   border-radius: 10px;
 `;
 const CommentInfo = styled.div``;

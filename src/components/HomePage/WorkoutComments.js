@@ -30,8 +30,6 @@ const WorkoutComments = () => {
     const classId = Buffer.from(classDay).toString("base64");
     const userName = currentUser.firstName + " " + currentUser.lastName;
 
-    dispatch(requestComment());
-
     fetch(SERVER_URL + "/api/postcomment", {
       method: "PATCH",
       headers: {
