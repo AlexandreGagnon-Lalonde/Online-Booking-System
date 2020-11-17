@@ -24,7 +24,7 @@ const ProfileMessages = ({ currentUser, message }) => {
             );
           })
         ) : (
-          <p>No Conversations</p>
+          <ConversationTitle>No Conversations</ConversationTitle>
         )
       ) : null}
       {!currentUser && <SendMessage />}
@@ -38,6 +38,11 @@ const ConversationsContainer = styled.div`
   flex: 1;
   padding: 10px;
   margin: 25px 25px 0 0;
+`;
+const ConversationTitle = styled.p`
+  font-weight: bold;
+  font-size: 1.5em;
+  color: ${COLORS.lightGray};
 `;
 
 export default ProfileMessages;
