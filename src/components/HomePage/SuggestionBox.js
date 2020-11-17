@@ -28,8 +28,6 @@ const SuggestionBox = () => {
     const userName = currentUser.firstName + " " + currentUser.lastName;
     const authorId = currentUser._id;
 
-    dispatch(requestSuggestion());
-
     fetch(SERVER_URL + "/api/createsuggestion", {
       method: "POST",
       headers: {
