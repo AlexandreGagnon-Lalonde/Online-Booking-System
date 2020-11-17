@@ -8,6 +8,7 @@ import {
   requestUser,
   receiveUser,
   receiveUserError,
+  logoutUser,
 } from "../../reducers/action";
 import { COLORS } from "../../constant";
 
@@ -24,6 +25,7 @@ const SignUpForm = () => {
   const [zipcode, setZipcode] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
   const [relName, setRelName] = React.useState("");
   const [relation, setRelation] = React.useState("");
   const [relPhone, setRelPhone] = React.useState("");
@@ -55,6 +57,7 @@ const SignUpForm = () => {
         zipcode,
         email,
         password,
+        confirmPassword,
         admin: false,
         "Emergency Contact": {
           relName,
@@ -73,13 +76,17 @@ const SignUpForm = () => {
           history.push("/homepage");
         } else {
           dispatch(receiveUserError(data.message));
-          history.push("/signup");
+          // history.push("/signup");
         }
       })
       .catch((err) => {
         dispatch(receiveUserError(err.message));
       });
   };
+
+  React.useEffect(() => {
+    dispatch(logoutUser());
+  }, [])
 
   return (
     <SignUpContainer>
@@ -134,9 +141,9 @@ const SignUpForm = () => {
                 <option value="" disabled selected hidden>
                   Select your gender
                 </option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="idk">I don't know</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Who knows">I don't know</option>
               </StyledDropdown>
             </LeftSignUpForm>
             <RightSignUpForm>
@@ -198,6 +205,8 @@ const SignUpForm = () => {
               <StyledInput
                 type="password"
                 placeholder="Confirm Password"
+                onChange={(ev) => setConfirmPassword(ev.currentTarget.value)}
+
                 required
               />
             </RightSignUpForm>
