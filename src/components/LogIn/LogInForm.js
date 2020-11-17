@@ -7,6 +7,7 @@ import {
   requestUser,
   receiveUser,
   receiveUserError,
+  logoutUser,
 } from "../../reducers/action";
 import { COLORS } from "../../constant";
 import LoadingSpinner from "../LoadingSpinner";
@@ -47,6 +48,10 @@ const LogInForm = () => {
         dispatch(receiveUserError());
       });
   };
+
+  React.useEffect(() => {
+    dispatch(logoutUser())
+  }, [])
 
   return (
     <MainContainer>
