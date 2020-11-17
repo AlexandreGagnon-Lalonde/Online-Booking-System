@@ -409,7 +409,13 @@ const bookClass = async (req, res) => {
       const classesValues = Object.values(
         classes.find((classe) => classe._id === classId)
       ).slice(3);
+      const classesKeys = Object.keys(
+        classes.find((classe) => classe._id === classId)
+      ).slice(3);
 
+      const userClassIndex = classesValues.findIndex((subClass) => {
+        return subClass.find((user) => user._id === currentUser._id);
+      });
       isCurrentUserInDay = classesValues.find((subClass) => {
         return subClass.find((user) => user._id === currentUser._id);
       });
@@ -421,9 +427,11 @@ const bookClass = async (req, res) => {
       }
 
       if (isCurrentUserInDay) {
+        const UserClassTime = classesKeys[userClassIndex];
+
         return res.status(404).json({
           status: 404,
-          message: "You are already registered for a class today",
+          message: `You are already registered for the ${UserClassTime} class today`,
         });
       }
     }
@@ -479,7 +487,7 @@ const bookClass = async (req, res) => {
       }
 
       const userEditedData = users.find((user) => user._id === currentUser._id);
-console.log(userEditedData)
+
       res.status(201).json({
         status: 201,
         success: true,
