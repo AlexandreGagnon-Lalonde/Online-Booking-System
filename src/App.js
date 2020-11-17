@@ -33,7 +33,19 @@ import {
   requestMessage,
   receiveMessages,
   messageError,
+  changeWindowWidth,
 } from "./reducers/action";
+
+function debounce(handler, interval) {
+  let timer;
+  return (_) => {
+    clearTimeout(timer);
+    timer = setTimeout((_) => {
+      timer = null;
+      handler.apply(this, arguments);
+    }, interval);
+  };
+}
 
 function App() {
   const userState = useSelector((state) => state.user);
@@ -64,7 +76,7 @@ function App() {
         });
     }
 
-    if ((localStorage.getItem("currentUserId") && !userState.user)) {
+    if (localStorage.getItem("currentUserId") && !userState.user) {
       const email = Buffer.from(
         localStorage.getItem("currentUserId"),
         "base64"
@@ -134,9 +146,22 @@ function App() {
     }
   }, [userState.user, userState.status]);
 
+  React.useEffect(() => {
+    const debouncedHandleResize = debounce(() => {
+      dispatch(changeWindowWidth(window.innerWidth));
+    }, 1000);
+
+    window.addEventListener("resize", debouncedHandleResize);
+
+    return (_) => {
+      window.removeEventListener("resize", debouncedHandleResize);
+    };
+  });
+
   return (
     <>
-      {(userState.user && CommentStatusIsReady && SuggestionStatusIsReady) || !localStorage.getItem("currentUserId") ? (
+      {(userState.user && CommentStatusIsReady && SuggestionStatusIsReady) ||
+      !localStorage.getItem("currentUserId") ? (
         <>
           <Route exact path="/">
             <WelcomePage />

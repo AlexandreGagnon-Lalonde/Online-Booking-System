@@ -14,6 +14,7 @@ import { COLORS } from "../../constant";
 
 const SignUpForm = () => {
   const userState = useSelector((state) => state.user);
+  const windowState = useSelector((state) => state.window);
 
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
@@ -86,15 +87,19 @@ const SignUpForm = () => {
 
   React.useEffect(() => {
     dispatch(logoutUser());
-  }, [])
+  }, []);
 
   return (
     <SignUpContainer>
       {/* <LogoContainer>Some text to welcome new user</LogoContainer> */}
       <FormContainer>
         <SignupForm onSubmit={handleSignup}>
-          <SubSignUpForm>
-            <LeftSignUpForm>
+          <SubSignUpForm
+            style={windowState.width < 600 ? { display: "block" } : null}
+          >
+            <LeftSignUpForm
+              style={windowState.width < 600 ? { marginRight: "0" } : null}
+            >
               {/* <label htmlFor="first-name">First Name</label> */}
               <StyledInput
                 type="text"
@@ -146,7 +151,9 @@ const SignUpForm = () => {
                 <option value="Who knows">I don't know</option>
               </StyledDropdown>
             </LeftSignUpForm>
-            <RightSignUpForm>
+            <RightSignUpForm
+              style={windowState.width < 600 ? { marginLeft: "0" } : null}
+            >
               {/* <label htmlFor="city">City</label> */}
               <StyledInput
                 type="text"
@@ -206,7 +213,6 @@ const SignUpForm = () => {
                 type="password"
                 placeholder="Confirm Password"
                 onChange={(ev) => setConfirmPassword(ev.currentTarget.value)}
-
                 required
               />
             </RightSignUpForm>

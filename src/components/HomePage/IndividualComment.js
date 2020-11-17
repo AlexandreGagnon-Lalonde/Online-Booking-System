@@ -118,9 +118,16 @@ const IndividualComment = ({ comment }) => {
             )}
           </CommentContent>
           <CommentAuthor>
-            <StyledLink to={`/profile/${commentAuthorId}`}>
-              {comment.from}
-            </StyledLink>
+            {comment.fromId === currentUser._id ? (
+              <StyledLinkFromCurrentUser to={`/profile/${commentAuthorId}`}>
+                {comment.from}
+              </StyledLinkFromCurrentUser>
+            ) : (
+              <StyledLinkNotFromCurrentUser to={`/profile/${commentAuthorId}`}>
+                {comment.from}
+              </StyledLinkNotFromCurrentUser>
+            )}
+
             <EditedMention>
               {commentStatus === "edited" ? "  ·  edited" : null}
             </EditedMention>
@@ -183,8 +190,17 @@ const DeletedComment = styled.p`
 const ButtonContainer = styled.div`
   display: flex;
 `;
-const StyledLink = styled(Link)`
-  color: ${COLORS.mediumGray};
+const StyledLinkFromCurrentUser = styled(Link)`
+  color: ${COLORS.darkGray};
+  transition: all 0.3s;
+
+  &:hover {
+    color: ${COLORS.lightGray};
+    text-decoration: none;
+  }
+`;
+const StyledLinkNotFromCurrentUser = styled(Link)`
+  color: ${COLORS.orange};
   transition: all 0.3s;
 
   &:hover {

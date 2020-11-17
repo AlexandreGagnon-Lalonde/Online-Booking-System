@@ -116,3 +116,8 @@ export const receiveWorkoutError = (errorMessage) => ({
   type: "RECEIVE_WORKOUT_ERROR",
   errorMessage,
 });
+
+export const changeWindowWidth = (width) => ({
+  type: "CHANGE_WINDOW_WIDTH",
+  width,
+})
