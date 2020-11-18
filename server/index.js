@@ -14,7 +14,7 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
-const PORT = 1234;
+const PORT = process.env.PORT || 1234;
 
 const {
   createUser,
