@@ -18,6 +18,7 @@ yarn start:client
 - Workout of the day (WOD)
 - Interaction with the WOD
 - Suggestion Box
+- Day/Week view
 
 ## Tools
 
