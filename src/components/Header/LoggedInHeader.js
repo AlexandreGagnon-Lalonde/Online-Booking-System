@@ -14,7 +14,7 @@ const LoggedInHeader = () => {
 
   return (
     <NavContainer>
-      <StyledHomeLink to="/homepage">Home</StyledHomeLink>
+      <StyledHomeLink to="/homepage">OBA</StyledHomeLink>
       <ProfileCommands>
         <StyledProfileLink to={`/profile/${userState.user._id}`}>
           {userState.user.firstName}

@@ -6,7 +6,7 @@ import { COLORS } from "../../constant";
 const LoggedOutHeader = () => {
   return (
     <NavContainer>
-      <StyledLink to="/">Home</StyledLink>
+      <StyledLink to="/">OBA</StyledLink>
     </NavContainer>
   );
 };
