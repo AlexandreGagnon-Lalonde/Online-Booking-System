@@ -26,6 +26,7 @@ const Profile = () => {
   const messageState = useSelector((state) => state.message);
   const suggestionState = useSelector((state) => state.suggestion.suggestion);
   const workoutState = useSelector((state) => state.workout)
+  const windowState = useSelector((state) => state.window)
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -87,8 +88,8 @@ const Profile = () => {
       ) : (
         <>
           <LoggedInHeader />
-          <ProfileContainer>
-            <LeftGenericProfileContainer>
+          <ProfileContainer style={windowState.width < 600 ? { flexDirection: 'column-reverse'} : null}>
+            <LeftGenericProfileContainer style={windowState.width < 600 ? { width: '100%'} : null}>
               <ProfileInfo
                 user={
                   currentProfileId === currentUser._id ? currentUser : otherUser
@@ -104,7 +105,7 @@ const Profile = () => {
                 <ProfilSuggestion suggestions={suggestionState} />
               ) : null}
             </LeftGenericProfileContainer>
-            <RightGenericProfileContainer>
+            <RightGenericProfileContainer style={windowState.width < 600 ? { width: '100%'} : null}>
               <ProfileMessages
                 currentUser={
                   currentProfileId === currentUser._id ? currentUser : false

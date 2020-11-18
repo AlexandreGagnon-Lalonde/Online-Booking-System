@@ -8,9 +8,10 @@ import SendMessage from "./SendMessage";
 
 const ProfileMessages = ({ currentUser, message }) => {
   const messageState = useSelector((state) => state.message);
+  const windowState = useSelector((state) => state.window)
 
   return (
-    <ConversationsContainer>
+    <ConversationsContainer style={windowState.width < 600 ? { margin: '25px'} : null}>
       {currentUser ? (
         currentUser.conversations.length > 0 ? (
           message.map((conversation, convoIndex) => {

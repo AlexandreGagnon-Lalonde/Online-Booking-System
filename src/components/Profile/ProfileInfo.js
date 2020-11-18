@@ -9,8 +9,10 @@ import { FaTransgenderAlt } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 
 const ProfileInfo = ({ user }) => {
+  const windowState = useSelector((state) => state.window);
+
   return (
-    <StyledDiv>
+    <StyledDiv style={windowState.width < 600 ? { margin: '25px'} : null}>
       <FullName>
         <CgProfile style={{ color: `${COLORS.orange}`}} /> {user.firstName + " " + user.lastName}
       </FullName>

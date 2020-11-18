@@ -15,6 +15,7 @@ import LoadingSpinner from "../LoadingSpinner";
 const ProfileWorkout = () => {
   const workoutState = useSelector((state) => state.workout);
   const currentUser = useSelector((state) => state.user.user);
+  const windowState = useSelector((state) => state.window)
 
   const [workout, setWorkout] = React.useState("");
 
@@ -60,7 +61,7 @@ const ProfileWorkout = () => {
   }, [])
 
   return (
-    <PostWorkoutContainer>
+    <PostWorkoutContainer style={windowState.width < 600 ? { margin: '0 25px 0 25px'} : null}>
       <StyledWorkoutTitle>Post a workout for today</StyledWorkoutTitle>
       <WorkoutForm onSubmit={handlePost} id={"workout-form"}>
         <SubmitWorkoutInput
