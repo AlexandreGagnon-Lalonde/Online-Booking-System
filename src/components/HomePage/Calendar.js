@@ -1,12 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import Modal from "react-bootstrap/Modal";
 import StyledWrapper from "./CalendarStyles";
 import { SERVER_URL } from "../../constant";
 import { COLORS } from "../../constant";
@@ -36,6 +34,7 @@ const Calendar = (props) => {
   const calendarDisplayRef = useRef();
 
   const calendarDisplay = calendarState.calendarDisplay;
+  const calendarData = calendarState.calendar;
 
   const eventFormat = {
     hour: "2-digit",
@@ -43,48 +42,58 @@ const Calendar = (props) => {
     meridiem: false,
     hour12: false,
   };
+
   const handleDateChange = (arg) => {
-    const firstDayExist = firstDayOfCalendar ? firstDayOfCalendar.toString() : null;
+    const firstDayExist = firstDayOfCalendar
+      ? firstDayOfCalendar.toString()
+      : null;
+
+    const calendarViewStart = arg.view.activeStart;
+
     let calendarFirstDay;
 
-    if (calendarDisplay === 'timeGridWeek') {
-      calendarFirstDay = arg.view.activeStart.toString();
+    if (calendarDisplay === "timeGridWeek") {
+      calendarFirstDay = calendarViewStart.toString();
     } else {
-      calendarFirstDay = arg.view.activeStart.toString();
+      calendarFirstDay = calendarViewStart.toString();
     }
 
     const didWeekChange = calendarFirstDay !== firstDayExist;
 
     if (!firstDayOfCalendar || didWeekChange) {
       if (calendarDisplay === "timeGridWeek") {
-        setFirstDayOfCalendar(arg.view.activeStart);
+        setFirstDayOfCalendar(calendarViewStart);
       } else {
-        setFirstDayOfCalendar(arg.view.activeStart);
+        setFirstDayOfCalendar(calendarViewStart);
       }
     }
   };
+
   const handleShow = (eventInfo) => {
     const encryptedDay = Buffer.from(
       eventInfo.el.fcSeg.start.toString().slice(0, 15)
     ).toString("base64");
 
-    const isCalendarArray = Array.isArray(calendarState.calendar);
+    const dayInfo = eventInfo.el.fcSeg;
 
-    const currentDay = isCalendarArray ? calendarState.calendar.find(
-      (day) => day._id === encryptedDay
-    ) : calendarState.calendar
+    const isCalendarArray = Array.isArray(calendarData);
+
+    const currentDay = isCalendarArray
+      ? calendarData.find((day) => day._id === encryptedDay)
+      : calendarData;
 
     const classSchedule = eventInfo.el.innerText.toString().slice(0, 5);
 
     const currentClassMembers = currentDay ? currentDay[classSchedule] : [];
 
     setShow({
-      info: eventInfo.el.fcSeg,
+      info: dayInfo,
       modal: true,
       members: currentClassMembers,
       classSchedule,
     });
   };
+  
   const eventArray = [
     {
       title: "Class",
@@ -262,7 +271,6 @@ const StyledDiv = styled.div`
   flex: 2;
   border-radius: 5px;
   position: relative;
-
-  `;
+`;
 
 export default Calendar;

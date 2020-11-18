@@ -10,7 +10,7 @@ import {
 import { FiEdit2 } from "react-icons/fi";
 import { AiOutlineSend } from "react-icons/ai";
 import { COLORS } from "../../constant";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const IndividualMessage = ({ message, conversationId }) => {
   const currentUser = useSelector((state) => state.user.user);
@@ -18,7 +18,6 @@ const IndividualMessage = ({ message, conversationId }) => {
   const messageValueShortcut = message.message;
   const messageAuthor = message.from;
   const messageStatus = message.status;
-  const isAuthorCurrentUser = message.from === currentUser._id;
 
   const [toggleEditing, setToggleEditing] = React.useState(false);
   const [messageValue, setMessageValue] = React.useState(messageValueShortcut);

@@ -6,27 +6,30 @@ import { AiOutlinePhone } from "react-icons/ai";
 import { FiCalendar } from "react-icons/fi";
 import { FiHome } from "react-icons/fi";
 import { FaTransgenderAlt } from "react-icons/fa";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const ProfileInfo = ({ user }) => {
   const windowState = useSelector((state) => state.window);
 
   return (
-    <StyledDiv style={windowState.width < 600 ? { margin: '25px'} : null}>
+    <StyledDiv style={windowState.width < 600 ? { margin: "25px" } : null}>
       <FullName>
-        <CgProfile style={{ color: `${COLORS.orange}`}} /> {user.firstName + " " + user.lastName}
+        <CgProfile style={{ color: `${COLORS.orange}` }} />{" "}
+        {user.firstName + " " + user.lastName}
       </FullName>
       <PhoneNumber>
-        <AiOutlinePhone style={{ color: `${COLORS.orange}`}} /> {user.phone}
+        <AiOutlinePhone style={{ color: `${COLORS.orange}` }} /> {user.phone}
       </PhoneNumber>
       <DateOfBirth>
-        <FiCalendar style={{ color: `${COLORS.orange}`}} /> {user.DOB}
+        <FiCalendar style={{ color: `${COLORS.orange}` }} /> {user.DOB}
       </DateOfBirth>
       <Address>
-        <FiHome style={{ color: `${COLORS.orange}`}} /> {user.address + " " + user.city}
+        <FiHome style={{ color: `${COLORS.orange}` }} />{" "}
+        {user.address + " " + user.city}
       </Address>
       <Gender>
-        <FaTransgenderAlt style={{ color: `${COLORS.orange}`}} /> {user.gender ? user.gender : 'Unisex'}
+        <FaTransgenderAlt style={{ color: `${COLORS.orange}` }} />{" "}
+        {user.gender ? user.gender : "Unisex"}
       </Gender>
     </StyledDiv>
   );

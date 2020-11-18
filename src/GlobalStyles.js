@@ -1,6 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 
-import { COLORS } from './constant';
+import { COLORS } from "./constant";
 
 export default createGlobalStyle`
   *,

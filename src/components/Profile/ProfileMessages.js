@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { COLORS } from "../../constant";
 
 import IndividualConversation from "./IndiviudalConversation";
@@ -8,10 +8,12 @@ import SendMessage from "./SendMessage";
 
 const ProfileMessages = ({ currentUser, message }) => {
   const messageState = useSelector((state) => state.message);
-  const windowState = useSelector((state) => state.window)
+  const windowState = useSelector((state) => state.window);
 
   return (
-    <ConversationsContainer style={windowState.width < 600 ? { margin: '25px'} : null}>
+    <ConversationsContainer
+      style={windowState.width < 600 ? { margin: "25px" } : null}
+    >
       {currentUser ? (
         currentUser.conversations.length > 0 ? (
           message.map((conversation, convoIndex) => {
@@ -32,7 +34,7 @@ const ProfileMessages = ({ currentUser, message }) => {
     </ConversationsContainer>
   );
 };
-// !currentUser && <SendMessage /> === currentUser ? null : <SendMessage />
+
 const ConversationsContainer = styled.div`
   background-color: ${COLORS.mediumGray};
   border-radius: 5px;

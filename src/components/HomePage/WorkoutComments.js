@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { SERVER_URL } from "../../constant";
 import moment from "moment";
 import {
-  requestComment,
   receiveComment,
   receiveCommentError,
 } from "../../reducers/action";
@@ -110,7 +109,7 @@ const WorkoutCommentButton = styled.button`
   }
 `;
 const WorkoutCommentInput = styled.input`
-border: none;
+  border: none;
   border-radius: 5px;
   padding: 1px 5px 5px 5px;
   background-color: ${COLORS.lightGray};

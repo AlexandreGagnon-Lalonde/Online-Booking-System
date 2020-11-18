@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import Header from "../Header/index";
 import Calendar from "./Calendar";
@@ -9,11 +8,14 @@ import WorkoutBox from "./WorkoutBox";
 import SuggestionBox from "./SuggestionBox";
 
 const HomePage = () => {
-  const windowState = useSelector((state) => state.window)
+  const windowState = useSelector((state) => state.window);
+
   return (
     <>
       <Header />
-      <ContentContainer style={windowState.width < 600 ? {display: 'block'} : null}>
+      <ContentContainer
+        style={windowState.width < 600 ? { display: "block" } : null}
+      >
         <Calendar />
         <RightContainer>
           <WorkoutBox />

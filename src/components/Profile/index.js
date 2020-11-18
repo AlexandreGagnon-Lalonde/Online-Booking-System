@@ -5,9 +5,6 @@ import {
   requestUser,
   receiveOtherUser,
   receiveUserError,
-  requestMessage,
-  receiveMessages,
-  messageError,
 } from "../../reducers/action";
 import { useHistory, useParams } from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner";
@@ -25,8 +22,8 @@ const Profile = () => {
   const otherUser = useSelector((state) => state.user.otherUser);
   const messageState = useSelector((state) => state.message);
   const suggestionState = useSelector((state) => state.suggestion.suggestion);
-  const workoutState = useSelector((state) => state.workout)
-  const windowState = useSelector((state) => state.window)
+  const workoutState = useSelector((state) => state.workout);
+  const windowState = useSelector((state) => state.window);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -44,7 +41,7 @@ const Profile = () => {
   );
 
   React.useEffect(() => {
-    console.log(workoutState.status)
+    console.log(workoutState.status);
     if (!otherUser || currentProfileId !== otherUser._id) {
       dispatch(requestUser());
 
@@ -58,19 +55,6 @@ const Profile = () => {
           dispatch(receiveUserError());
         });
     }
-
-    // if (!messageState.message) {
-    //   dispatch(requestMessage());
-
-    //   fetch(SERVER_URL + `/api/getmessages/${currentUser._id}`)
-    //     .then((res) => res.json())
-    //     .then((data) => {
-    //       dispatch(receiveMessages(data.message));
-    //     })
-    //     .catch((err) => {
-    //       dispatch(messageError());
-    //     });
-    // }
   }, [
     currentProfileId,
     userState.status,
@@ -88,8 +72,16 @@ const Profile = () => {
       ) : (
         <>
           <LoggedInHeader />
-          <ProfileContainer style={windowState.width < 600 ? { flexDirection: 'column-reverse'} : null}>
-            <LeftGenericProfileContainer style={windowState.width < 600 ? { width: '100%'} : null}>
+          <ProfileContainer
+            style={
+              windowState.width < 600
+                ? { flexDirection: "column-reverse" }
+                : null
+            }
+          >
+            <LeftGenericProfileContainer
+              style={windowState.width < 600 ? { width: "100%" } : null}
+            >
               <ProfileInfo
                 user={
                   currentProfileId === currentUser._id ? currentUser : otherUser
@@ -105,7 +97,9 @@ const Profile = () => {
                 <ProfilSuggestion suggestions={suggestionState} />
               ) : null}
             </LeftGenericProfileContainer>
-            <RightGenericProfileContainer style={windowState.width < 600 ? { width: '100%'} : null}>
+            <RightGenericProfileContainer
+              style={windowState.width < 600 ? { width: "100%" } : null}
+            >
               <ProfileMessages
                 currentUser={
                   currentProfileId === currentUser._id ? currentUser : false
@@ -128,10 +122,11 @@ const LeftGenericProfileContainer = styled.div`
 `;
 const RightGenericProfileContainer = styled.div`
   flex: 2;
-`
+`;
 const ProfileContainer = styled.div`
   display: flex;
   width: 100%;
   align-items: flex-start;
 `;
+
 export default Profile;

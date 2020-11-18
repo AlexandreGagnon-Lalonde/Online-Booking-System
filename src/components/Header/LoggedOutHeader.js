@@ -21,11 +21,11 @@ const StyledLink = styled(Link)`
   font-weight: bold;
   margin: 10px;
   transition: all 0.3s;
-  
+
   &:hover {
     color: ${COLORS.orange};
     text-decoration: none;
   }
-`
+`;
 
 export default LoggedOutHeader;

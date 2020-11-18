@@ -50,8 +50,6 @@ function debounce(handler, interval) {
 function App() {
   const userState = useSelector((state) => state.user);
   const suggestionState = useSelector((state) => state.suggestion);
-  const messageState = useSelector((state) => state.message);
-  const calendarState = useSelector((state) => state.calendar);
   const commentState = useSelector((state) => state.comment);
   const workoutState = useSelector((state) => state.workout);
 

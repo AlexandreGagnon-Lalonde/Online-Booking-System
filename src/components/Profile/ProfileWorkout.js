@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { useHistory, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { SERVER_URL } from "../../constant";
 import moment from "moment";
@@ -10,12 +9,10 @@ import {
   receiveWorkoutError,
 } from "../../reducers/action";
 import { COLORS } from "../../constant";
-import LoadingSpinner from "../LoadingSpinner";
 
 const ProfileWorkout = () => {
   const workoutState = useSelector((state) => state.workout);
-  const currentUser = useSelector((state) => state.user.user);
-  const windowState = useSelector((state) => state.window)
+  const windowState = useSelector((state) => state.window);
 
   const [workout, setWorkout] = React.useState("");
 
@@ -24,7 +21,6 @@ const ProfileWorkout = () => {
   const date = new Date();
   const classDay = moment(date).format("ddd MMM DD YYYY").toString();
   const classId = Buffer.from(classDay).toString("base64");
-  const workoutExist = workoutState.workout;
 
   const handlePost = (ev) => {
     ev.preventDefault();
@@ -57,11 +53,13 @@ const ProfileWorkout = () => {
   };
 
   React.useEffect(() => {
-    dispatch(receiveWorkout(workoutState.workout))
-  }, [])
+    dispatch(receiveWorkout(workoutState.workout));
+  }, []);
 
   return (
-    <PostWorkoutContainer style={windowState.width < 600 ? { margin: '0 25px 0 25px'} : null}>
+    <PostWorkoutContainer
+      style={windowState.width < 600 ? { margin: "0 25px 0 25px" } : null}
+    >
       <StyledWorkoutTitle>Post a workout for today</StyledWorkoutTitle>
       <WorkoutForm onSubmit={handlePost} id={"workout-form"}>
         <SubmitWorkoutInput

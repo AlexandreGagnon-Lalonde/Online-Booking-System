@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { createBrowserHistory } from "history";
 import { SERVER_URL } from "../../constant";
 import {
   requestUser,
@@ -27,9 +26,6 @@ const SignUpForm = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
-  const [relName, setRelName] = React.useState("");
-  const [relation, setRelation] = React.useState("");
-  const [relPhone, setRelPhone] = React.useState("");
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -60,11 +56,6 @@ const SignUpForm = () => {
         password,
         confirmPassword,
         admin: false,
-        "Emergency Contact": {
-          relName,
-          relation,
-          relPhone,
-        },
         conversations: [],
         classes: [],
       }),
@@ -77,7 +68,6 @@ const SignUpForm = () => {
           history.push("/homepage");
         } else {
           dispatch(receiveUserError(data.message));
-          // history.push("/signup");
         }
       })
       .catch((err) => {
@@ -91,7 +81,6 @@ const SignUpForm = () => {
 
   return (
     <SignUpContainer>
-      {/* <LogoContainer>Some text to welcome new user</LogoContainer> */}
       <FormContainer>
         <SignupForm onSubmit={handleSignup}>
           <SubSignUpForm
@@ -100,7 +89,6 @@ const SignUpForm = () => {
             <LeftSignUpForm
               style={windowState.width < 600 ? { marginRight: "0" } : null}
             >
-              {/* <label htmlFor="first-name">First Name</label> */}
               <StyledInput
                 type="text"
                 placeholder="First Name"
@@ -109,7 +97,6 @@ const SignUpForm = () => {
                 onChange={(ev) => setFirstName(ev.currentTarget.value)}
                 required
               />
-              {/* <label htmlFor="last-name">Last Name</label> */}
               <StyledInput
                 type="text"
                 placeholder="Last Name"
@@ -118,7 +105,6 @@ const SignUpForm = () => {
                 onChange={(ev) => setLastName(ev.currentTarget.value)}
                 required
               />
-              {/* <label htmlFor="phone">Phone Number</label> */}
               <StyledInput
                 type="tel"
                 id="phone"
@@ -137,7 +123,6 @@ const SignUpForm = () => {
                 onChange={(ev) => setDOB(ev.currentTarget.value)}
                 required
               />
-              {/* <label htmlFor="gender">Gender</label> */}
               <StyledDropdown
                 id="gender"
                 name="gender"
@@ -154,7 +139,6 @@ const SignUpForm = () => {
             <RightSignUpForm
               style={windowState.width < 600 ? { marginLeft: "0" } : null}
             >
-              {/* <label htmlFor="city">City</label> */}
               <StyledInput
                 type="text"
                 placeholder="City"
@@ -163,7 +147,6 @@ const SignUpForm = () => {
                 onChange={(ev) => setCity(ev.currentTarget.value)}
                 required
               />
-              {/* <label htmlFor="address">Address</label> */}
               <StyledInput
                 type="text"
                 placeholder="Address"
@@ -172,7 +155,6 @@ const SignUpForm = () => {
                 onChange={(ev) => setAddress(ev.currentTarget.value)}
                 required
               />
-              {/* <label htmlFor="zipcode">Zip Code</label> */}
               <StyledInput
                 type="text"
                 placeholder="Zip Code"
@@ -181,7 +163,6 @@ const SignUpForm = () => {
                 onChange={(ev) => setZipcode(ev.currentTarget.value)}
                 required
               />
-              {/* <label htmlFor="email">Email</label> */}
               <StyledInput
                 type="text"
                 placeholder="Email"
@@ -190,14 +171,13 @@ const SignUpForm = () => {
                 onChange={(ev) => setEmail(ev.currentTarget.value)}
                 required
               />
-              {/* <label htmlFor="password">Password</label> */}
               <StyledInput
                 type="password"
                 placeholder="Password"
                 id="password"
                 name="password"
                 minlength="8"
-                //pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"
+                pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"
                 onChange={(ev) => setPassword(ev.currentTarget.value)}
                 required
               />
@@ -208,7 +188,6 @@ const SignUpForm = () => {
                   <li>can contain a special character</li>
                 </ul>
               </PasswordConstraint>
-              {/* <label>Confirm Password</label> */}
               <StyledInput
                 type="password"
                 placeholder="Confirm Password"
@@ -217,42 +196,6 @@ const SignUpForm = () => {
               />
             </RightSignUpForm>
           </SubSignUpForm>
-          {/* Emergency Contact
-          <label htmlFor="relation-name">Name</label>
-          <StyledInput
-            type="text"
-            placeholder="Name"
-            id="relation-name"
-            name="relation-name"
-            onChange={(ev) => setRelName(ev.currentTarget.value)}
-          />
-          <label htmlFor="relation">Relation</label>
-          <select
-            id="relation"
-            name="relation"
-            onChange={(ev) => setRelation(ev.currentTarget.value)}
-          >
-            <option value="" disabled selected hidden>
-              Select your relation
-            </option>
-            <option value="parent" hidden>
-              Parent
-            </option>
-            <option value="grandparent">Grand parent</option>
-            <option value="sibling">Sibling</option>
-            <option value="uncleAunt">Uncle / Aunt</option>
-            <option value="friend">Friend</option>
-            <option value="significantOther">Significant Other</option>
-          </select>
-          <label htmlFor="relation-number">Phone Number</label>
-          <StyledInput
-            type="tel"
-            id="relation-number"
-            name="relation-number"
-            pattern="[0-9]{10}"
-            placeholder="123-456-7890"
-            onChange={(ev) => setRelPhone(ev.currentTarget.value)}
-          /> */}
           <SignUpButton type="submit">Register</SignUpButton>
           {userState.status === "error" ? (
             <ErrorSubmitMessage>{userState.errorMessage}</ErrorSubmitMessage>
@@ -273,11 +216,6 @@ const SignUpContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-`;
-const LogoContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
 `;
 const FormContainer = styled.div`
   margin-top: 50px;

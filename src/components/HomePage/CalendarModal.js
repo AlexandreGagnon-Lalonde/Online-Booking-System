@@ -3,21 +3,12 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { COLORS } from "../../constant";
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
 import Modal from "react-bootstrap/Modal";
 import { SERVER_URL } from "../../constant";
 import {
-  calendarDay,
-  calendarWeek,
   receiveCalendar,
   receiveCalendarError,
   requestCalendar,
-  requestUser,
-  receiveUser,
-  receiveUserError,
 } from "../../reducers/action";
 import LoadingSpinner from "../LoadingSpinner";
 
@@ -26,7 +17,6 @@ const CalendarModal = ({ show, setShow }) => {
   const calendarState = useSelector((state) => state.calendar);
 
   const dispatch = useDispatch();
-  const history = useHistory();
 
   // days of the week in the same format as fullcalendar
   const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri"];

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { SERVER_URL } from "../../constant";
 import {
@@ -50,8 +50,8 @@ const LogInForm = () => {
   };
 
   React.useEffect(() => {
-    dispatch(logoutUser())
-  }, [])
+    dispatch(logoutUser());
+  }, []);
 
   return (
     <MainContainer>
@@ -97,11 +97,6 @@ const MainContainer = styled.div`
   width: 100vw;
   height: calc(100vh - 50px);
 `;
-const LogoContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
 const FormContainer = styled.div`
   width: 100%;
   display: flex;
@@ -126,9 +121,6 @@ const StyledInput = styled.input`
   &:focus {
     outline: none;
   }
-`;
-const StyledLabel = styled.label`
-  padding-left: 20px;
 `;
 const LogInButton = styled.button`
   padding: 15px;

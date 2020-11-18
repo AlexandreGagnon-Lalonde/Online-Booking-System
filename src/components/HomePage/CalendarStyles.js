@@ -1,12 +1,13 @@
 import styled from "styled-components";
-import { COLORS } from '../../constant';
+import { COLORS } from "../../constant";
 
 const StyledWrapper = styled.div`
   .fc {
     background-color: ${COLORS.mediumGray};
   }
 
-  .fc-timegrid-event, .fc-timegrid-event-harness {
+  .fc-timegrid-event,
+  .fc-timegrid-event-harness {
     background-color: ${COLORS.lightGray};
     border: none;
     border-radius: 5px;
@@ -18,11 +19,13 @@ const StyledWrapper = styled.div`
     }
   }
 
-  .fc-event-time, .fc-event-title {
+  .fc-event-time,
+  .fc-event-title {
     color: ${COLORS.darkGray};
   }
 
-  .fc-prev-button, .fc-next-button {
+  .fc-prev-button,
+  .fc-next-button {
     background-color: ${COLORS.beige};
     color: ${COLORS.orange};
     height: 40px;
@@ -30,7 +33,7 @@ const StyledWrapper = styled.div`
     &:hover {
       background-color: ${COLORS.orange};
       color: ${COLORS.beige};
-      }
+    }
   }
 
   .fc-today-button {
@@ -42,7 +45,7 @@ const StyledWrapper = styled.div`
     &:hover {
       background-color: ${COLORS.orange};
       color: ${COLORS.beige};
-      }
+    }
     &:disabled {
       background-color: ${COLORS.lightGray};
       color: ${COLORS.darkGray};
@@ -65,6 +68,6 @@ const StyledWrapper = styled.div`
     border: 1px solid ${COLORS.beige};
     border-radius: 5px;
   }
-`
+`;
 
 export default StyledWrapper;

@@ -9,8 +9,8 @@ import {
 } from "../../reducers/action";
 import { SERVER_URL } from "../../constant";
 import LoadingSpinner from "../LoadingSpinner";
-import { Link, useHistory } from "react-router-dom";
-import { FiDelete } from 'react-icons/fi';
+import { Link } from "react-router-dom";
+import { FiDelete } from "react-icons/fi";
 
 const IndividualSuggestion = ({ suggestion }) => {
   const suggestionState = useSelector((state) => state.suggestion);
@@ -53,7 +53,7 @@ const IndividualSuggestion = ({ suggestion }) => {
               suggestionAuthor
             ) : (
               <AuthorDiv>
-                from{' '}
+                from{" "}
                 <StyledAuthorLink to={`/profile/${suggestion.authorId}`}>
                   {suggestion.author}
                 </StyledAuthorLink>
@@ -95,18 +95,18 @@ const SuggestionAuthor = styled.div`
   color: ${COLORS.mediumGray};
 `;
 const StyledAuthorLink = styled(Link)`
-font-size: 1em;
-color: ${COLORS.orange};
-transition: all 0.2s;
+  font-size: 1em;
+  color: ${COLORS.orange};
+  transition: all 0.2s;
 
-&:hover {
-  text-decoration: none;
-  color: ${COLORS.darkGray};
-}
-`
+  &:hover {
+    text-decoration: none;
+    color: ${COLORS.darkGray};
+  }
+`;
 const AuthorDiv = styled.div`
   font-size: 0.8em;
-`
+`;
 const SuggestionDeleteButton = styled.button`
   color: ${COLORS.orange};
   border: none;

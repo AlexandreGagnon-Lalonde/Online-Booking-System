@@ -2,15 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { SERVER_URL } from "../../constant";
-import { AiOutlineSend } from 'react-icons/ai';
-import { COLORS } from '../../constant'
+import { AiOutlineSend } from "react-icons/ai";
+import { COLORS } from "../../constant";
 import {
   requestMessage,
   sendMessage,
   messageError,
   receiveMessages,
 } from "../../reducers/action";
-
 
 const SendMessage = ({ otherUserId }) => {
   const currentUser = useSelector((state) => state.user.user);
@@ -27,8 +26,8 @@ const SendMessage = ({ otherUserId }) => {
     const date = new Date();
     const dateId = Buffer.from(date.toString()).toString("base64");
 
-    const currentUserName = currentUser.firstName + ' ' + currentUser.lastName;
-    const otherUserName = otherUser.firstName + ' ' + otherUser.lastName;
+    const currentUserName = currentUser.firstName + " " + currentUser.lastName;
+    const otherUserName = otherUser.firstName + " " + otherUser.lastName;
 
     const receivingUserId = otherUserId ? otherUserId : otherUser._id;
 
@@ -52,8 +51,8 @@ const SendMessage = ({ otherUserId }) => {
       .then((res) => res.json())
       .then((data) => {
         dispatch(sendMessage());
-        setMessage('');
-        document.getElementById('message-form').reset()
+        setMessage("");
+        document.getElementById("message-form").reset();
       })
       .catch((err) => {
         dispatch(messageError());
@@ -61,27 +60,29 @@ const SendMessage = ({ otherUserId }) => {
   };
 
   React.useEffect(() => {
-    if (messageState.status === 'Sent') {
+    if (messageState.status === "Sent") {
       dispatch(requestMessage());
 
-    fetch(SERVER_URL + `/api/getmessages/${currentUser._id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        dispatch(receiveMessages(data.message));
-      })
-      .catch((err) => {
-        dispatch(messageError());
-      });
+      fetch(SERVER_URL + `/api/getmessages/${currentUser._id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(receiveMessages(data.message));
+        })
+        .catch((err) => {
+          dispatch(messageError());
+        });
     }
-  }, [messageState.status])
+  }, [messageState.status]);
 
   return (
-    <SendMessageForm onSubmit={handleSendMessage} id={'message-form'}>
+    <SendMessageForm onSubmit={handleSendMessage} id={"message-form"}>
       <SendMessageInput
         placeholder={"Send a message"}
         onChange={(ev) => setMessage(ev.currentTarget.value)}
       ></SendMessageInput>
-      <SendMessageButton type={"submit"} disabled={!message} ><AiOutlineSend /></SendMessageButton>
+      <SendMessageButton type={"submit"} disabled={!message}>
+        <AiOutlineSend />
+      </SendMessageButton>
     </SendMessageForm>
   );
 };
@@ -89,7 +90,7 @@ const SendMessage = ({ otherUserId }) => {
 const SendMessageForm = styled.form`
   display: flex;
   height: 30px;
-`
+`;
 const SendMessageInput = styled.textarea`
   flex: 7;
   border-radius: 5px;
@@ -100,7 +101,7 @@ const SendMessageInput = styled.textarea`
   &::placeholder {
     color: ${COLORS.darkGray};
   }
-`
+`;
 const SendMessageButton = styled.button`
   flex: 1;
   border: none;
@@ -117,6 +118,6 @@ const SendMessageButton = styled.button`
   &:hover {
     color: ${COLORS.lightGray};
   }
-`
+`;
 
 export default SendMessage;

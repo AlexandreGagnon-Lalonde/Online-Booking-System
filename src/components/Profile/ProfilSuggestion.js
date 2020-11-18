@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { COLORS } from '../../constant';
+import { COLORS } from "../../constant";
 
 import IndividualSuggestion from "./IndividualSuggestion";
 import LoadingSpinner from "../LoadingSpinner";

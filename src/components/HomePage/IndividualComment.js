@@ -8,12 +8,11 @@ import {
   receiveComment,
   receiveCommentError,
 } from "../../reducers/action";
-import LoadingSpinner from "../LoadingSpinner";
 import { COLORS } from "../../constant";
 import { FiEdit2 } from "react-icons/fi";
 import { FiDelete } from "react-icons/fi";
 import { AiOutlineSend } from "react-icons/ai";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const IndividualComment = ({ comment }) => {
   const currentUser = useSelector((state) => state.user.user);

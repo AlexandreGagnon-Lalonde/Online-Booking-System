@@ -4,7 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../../reducers/action";
 import { COLORS } from "../../constant";
-import { FiLogOut } from 'react-icons/fi';
+import { FiLogOut } from "react-icons/fi";
 
 const LoggedInHeader = () => {
   const userState = useSelector((state) => state.user);
@@ -44,28 +44,28 @@ const ProfileCommands = styled.div`
   align-items: center;
 `;
 const StyledHomeLink = styled(Link)`
-color: ${COLORS.beige};
-font-size: 2em;
-font-weight: bold;
-margin: 5px 10px;
-transition: all 0.3s;
+  color: ${COLORS.beige};
+  font-size: 2em;
+  font-weight: bold;
+  margin: 5px 10px;
+  transition: all 0.3s;
 
-&:hover {
-  color: ${COLORS.orange};
-  text-decoration: none;
-}
+  &:hover {
+    color: ${COLORS.orange};
+    text-decoration: none;
+  }
 `;
 const StyledProfileLink = styled(Link)`
-color: ${COLORS.beige};
-font-size: 1.2em;
-font-weight: bold;
-margin: 10px;
-transition: all 0.3s;
+  color: ${COLORS.beige};
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 10px;
+  transition: all 0.3s;
 
-&:hover {
-  color: ${COLORS.orange};
-  text-decoration: none;
-}
+  &:hover {
+    color: ${COLORS.orange};
+    text-decoration: none;
+  }
 `;
 const LogOutButton = styled.button`
   color: ${COLORS.orange};
@@ -82,6 +82,6 @@ const LogOutButton = styled.button`
     background-color: ${COLORS.orange};
     color: ${COLORS.beige};
   }
-`
+`;
 
 export default LoggedInHeader;

@@ -1,8 +1,6 @@
 import React from "react";
-import styled from "styled-components";
-
-import Header from '../Header/index';
-import SignUpForm from './SignUpForm';
+import Header from "../Header/index";
+import SignUpForm from "./SignUpForm";
 
 const SignUp = () => {
   return (
@@ -10,7 +8,7 @@ const SignUp = () => {
       <Header />
       <SignUpForm />
     </>
-  )
-}
+  );
+};
 
-export default SignUp
+export default SignUp;
