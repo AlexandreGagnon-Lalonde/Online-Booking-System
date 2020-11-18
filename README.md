@@ -12,5 +12,16 @@ yarn start:server
 yarn start:client
 ```
 
-## Usage
+## Features
 
+- Messages between members
+- Workout of the day (WOD)
+- Interaction with the WOD
+- Suggestion Box
+
+## Tools
+
+- React
+- Redux
+- NodeJS
+- FullCalendar
