@@ -15,7 +15,7 @@ export default function suggestionReducer(state = initialState, action) {
       return {
         ...state,
         status: "idle",
-        suggestion: action.suggestion
+        suggestion: action.suggestion,
       };
     }
     case "RECEIVE_SUGGESTION_ERROR": {

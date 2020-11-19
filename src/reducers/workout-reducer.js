@@ -27,7 +27,7 @@ export default function workoutReducer(state = initialState, action) {
         allWorkouts: action.allWorkouts,
       };
     }
-    
+
     case "RECEIVE_WORKOUT_ERROR": {
       return {
         ...state,

@@ -61,13 +61,13 @@ export const receiveMessages = (messages) => ({
   messages,
 })
 
+export const deleteMessages = () => ({
+  type: "DELETE_MESSAGES"
+})
+
 export const toggleIndex = (newIndex) => ({
   type: "CHANGE_TOGGLE",
   newIndex,
-})
-
-export const deleteMessages = () => ({
-  type: "DELETE_MESSAGES"
 })
 
 export const requestSuggestion = () => ({

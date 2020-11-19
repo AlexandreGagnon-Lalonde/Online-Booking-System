@@ -38,9 +38,9 @@ import {
 
 function debounce(handler, interval) {
   let timer;
-  return (_) => {
+  return () => {
     clearTimeout(timer);
-    timer = setTimeout((_) => {
+    timer = setTimeout(() => {
       timer = null;
       handler.apply(this, arguments);
     }, interval);
@@ -151,7 +151,7 @@ function App() {
 
     window.addEventListener("resize", debouncedHandleResize);
 
-    return (_) => {
+    return () => {
       window.removeEventListener("resize", debouncedHandleResize);
     };
   });

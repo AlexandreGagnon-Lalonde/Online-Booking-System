@@ -1,5 +1,5 @@
 const initialState = {
-  width: window.innerWidth
+  width: window.innerWidth,
 };
 
 export default function windowReducer(state = initialState, action) {

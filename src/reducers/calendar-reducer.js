@@ -1,10 +1,8 @@
 const initialState = {
   calendar: null,
-  calendarDisplay: 'timeGridWeek',
+  calendarDisplay: "timeGridWeek",
   status: "idle",
 };
-
-// add boolean for isLoading
 
 export default function calendarReducer(state = initialState, action) {
   switch (action.type) {
@@ -14,12 +12,11 @@ export default function calendarReducer(state = initialState, action) {
         status: "Loading",
       };
     }
-    // Will have to play around here once the app is a little bit more complete
     case "RECEIVE_CALENDAR": {
       return {
         ...state,
         status: "idle",
-        calendar: action.calendar
+        calendar: action.calendar,
       };
     }
     case "RECEIVE_CALENDAR_ERROR": {
@@ -33,14 +30,14 @@ export default function calendarReducer(state = initialState, action) {
       return {
         ...state,
         status: "idle",
-        calendarDisplay: 'timeGridDay',
+        calendarDisplay: "timeGridDay",
       };
     }
     case "CALENDAR_WEEK": {
       return {
         ...state,
         status: "idle",
-        calendarDisplay: 'timeGridWeek',
+        calendarDisplay: "timeGridWeek",
       };
     }
     default: {

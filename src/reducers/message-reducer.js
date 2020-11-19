@@ -35,13 +35,13 @@ export default function messageReducer(state = initialState, action) {
       return {
         ...state,
         toggleIndex: action.newIndex,
-      }
+      };
     }
     case "DELETE_MESSAGES": {
-      return { 
-        ...state, 
-        message: null, 
-        status: "idle" 
+      return {
+        ...state,
+        message: null,
+        status: "idle",
       };
     }
     default: {
