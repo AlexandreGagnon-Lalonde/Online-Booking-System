@@ -1,27 +1,23 @@
 import React from "react";
 import styled from "styled-components";
+import LoadingSpinner from "../LoadingSpinner";
+import LoggedInHeader from "../Header/LoggedInHeader";
+import LeftProfile from "./LeftProfile";
+import RightProfile from "./RightProfile";
+import { useHistory, useParams } from "react-router-dom";
+import { SERVER_URL } from "../../constant";
 import { useSelector, useDispatch } from "react-redux";
 import {
   requestUser,
   receiveOtherUser,
   receiveUserError,
 } from "../../reducers/action";
-import { useHistory, useParams } from "react-router-dom";
-import LoadingSpinner from "../LoadingSpinner";
-import { SERVER_URL } from "../../constant";
-import ProfileWorkout from "./ProfileWorkout";
-import LoggedInHeader from "../Header/LoggedInHeader";
-import ProfileInfo from "./ProfileInfo";
-import ProfileMessages from "./ProfileMessages";
-import ProfileClasses from "./ProfileClasses";
-import ProfilSuggestion from "./ProfilSuggestion";
 
 const Profile = () => {
   const userState = useSelector((state) => state.user);
   const currentUser = useSelector((state) => state.user.user);
   const otherUser = useSelector((state) => state.user.otherUser);
   const messageState = useSelector((state) => state.message);
-  const suggestionState = useSelector((state) => state.suggestion.suggestion);
   const workoutState = useSelector((state) => state.workout);
   const windowState = useSelector((state) => state.window);
 
@@ -33,9 +29,9 @@ const Profile = () => {
     history.push("/");
   }
 
-  // gets me the _id of user from url
+  const isUserOnMobile = windowState.width < 600;
   const currentProfileId = params.id;
-  // change id to email
+  const currentUserId = currentUser._id;
   const currentProfileEmail = Buffer.from(currentProfileId, "base64").toString(
     "ascii"
   );
@@ -67,49 +63,24 @@ const Profile = () => {
   return (
     <>
       {!messageState.message ||
-      (!otherUser && currentProfileId !== currentUser._id) ? (
+      (!otherUser && currentProfileId !== currentUserId) ? (
         <LoadingSpinner size={"lg"} />
       ) : (
         <>
           <LoggedInHeader />
           <ProfileContainer
-            style={
-              windowState.width < 600
-                ? { flexDirection: "column-reverse" }
-                : null
-            }
+            style={isUserOnMobile ? { flexDirection: "column-reverse" } : null}
           >
-            <LeftGenericProfileContainer
-              style={windowState.width < 600 ? { width: "100%" } : null}
-            >
-              <ProfileInfo
-                user={
-                  currentProfileId === currentUser._id ? currentUser : otherUser
-                }
-              />
-
-              <ProfileClasses
-                user={
-                  currentProfileId === currentUser._id ? currentUser : otherUser
-                }
-              />
-              {currentUser.admin && currentProfileId === currentUser._id ? (
-                <ProfilSuggestion suggestions={suggestionState} />
-              ) : null}
-            </LeftGenericProfileContainer>
-            <RightGenericProfileContainer
-              style={windowState.width < 600 ? { width: "100%" } : null}
-            >
-              <ProfileMessages
-                currentUser={
-                  currentProfileId === currentUser._id ? currentUser : false
-                }
-                message={messageState.message}
-              />
-              {currentUser.admin && currentProfileId === currentUser._id ? (
-                <ProfileWorkout suggestions={suggestionState} />
-              ) : null}
-            </RightGenericProfileContainer>
+            <LeftProfile
+              currentProfileId={currentProfileId}
+              currentUserId={currentUserId}
+              style={isUserOnMobile ? { width: "100%" } : null}
+            />
+            <RightProfile
+              currentProfileId={currentProfileId}
+              currentUserId={currentUserId}
+              style={isUserOnMobile ? { width: "100%" } : null}
+            />
           </ProfileContainer>
         </>
       )}
@@ -117,12 +88,6 @@ const Profile = () => {
   );
 };
 
-const LeftGenericProfileContainer = styled.div`
-  flex: 3;
-`;
-const RightGenericProfileContainer = styled.div`
-  flex: 2;
-`;
 const ProfileContainer = styled.div`
   display: flex;
   width: 100%;
