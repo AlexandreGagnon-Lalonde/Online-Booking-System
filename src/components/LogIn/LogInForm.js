@@ -1,16 +1,16 @@
 import React from "react";
 import styled from "styled-components";
+import LoadingSpinner from "../LoadingSpinner";
+import LogInputs from "./LogInputs";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { SERVER_URL } from "../../constant";
+import { SERVER_URL, COLORS } from "../../constant";
 import {
   requestUser,
   receiveUser,
   receiveUserError,
   logoutUser,
 } from "../../reducers/action";
-import { COLORS } from "../../constant";
-import LoadingSpinner from "../LoadingSpinner";
 
 const LogInForm = () => {
   const userState = useSelector((state) => state.user);
@@ -54,73 +54,26 @@ const LogInForm = () => {
   }, []);
 
   return (
-    <MainContainer>
-      <FormContainer>
-        <StyledForm onSubmit={handleLogin}>
-          <StyledInput
-            type="text"
-            placeholder="Email"
-            id="email"
-            name="email"
-            onChange={(ev) => setEmail(ev.currentTarget.value)}
-            required
-          />
-          <StyledInput
-            type="password"
-            placeholder="Password"
-            id="password"
-            name="password"
-            onChange={(ev) => setPassword(ev.currentTarget.value)}
-            required
-          />
-
-          <LogInButton type="submit">
-            {userState.status === "Loading" ? <LoadingSpinner /> : "Log In"}
-          </LogInButton>
-          {userState.status === "error" ? (
-            <ErrorSubmitMessage>{userState.errorMessage}</ErrorSubmitMessage>
-          ) : null}
-        </StyledForm>
-      </FormContainer>
-    </MainContainer>
+    <Form onSubmit={handleLogin}>
+      <LogInputs setEmail={setEmail} setPassword={setPassword} />
+      <LogInButton type="submit">
+        {userState.status === "Loading" ? <LoadingSpinner /> : "Log In"}
+      </LogInButton>
+      {userState.status === "error" ? (
+        <ErrorSubmitMessage>{userState.errorMessage}</ErrorSubmitMessage>
+      ) : null}
+    </Form>
   );
 };
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  margin: 50px;
-`;
-const MainContainer = styled.div`
-  display: flex;
   align-items: center;
+  justify-content: center;
   width: 100vw;
   height: calc(100vh - 50px);
-`;
-const FormContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
-const StyledForm = styled(Form)`
-  width: 60%;
-`;
-const StyledInput = styled.input`
-  border: none;
-  border-bottom: 2px solid ${COLORS.orange};
-  padding: 10px 20px;
-  margin-bottom: 20px;
-  background-color: ${COLORS.mediumGray};
-  border-radius: 5px;
-
-  &,
-  select,
-  textarea {
-    color: ${COLORS.beige};
-  }
-  &:focus {
-    outline: none;
-  }
+  margin-top: -50px;
 `;
 const LogInButton = styled.button`
   padding: 15px;
@@ -132,6 +85,7 @@ const LogInButton = styled.button`
   background-color: ${COLORS.darkGray};
   color: ${COLORS.orange};
   transition: all 0.3s;
+  width: 40%;
 
   &:hover {
     background-color: ${COLORS.mediumGray};
