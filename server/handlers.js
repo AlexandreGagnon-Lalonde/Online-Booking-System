@@ -29,7 +29,7 @@ const createUser = async (req, res) => {
     if (todayDateTime < DOBTime) {
       return res
         .status(404)
-        .json({ status: 404, message: "Make sure you're born !" });
+        .json({ status: 404, message: "Make sure you're born" });
     }
 
     if (password !== confirmPassword) {
@@ -41,7 +41,7 @@ const createUser = async (req, res) => {
     if (userExist) {
       return res.status(404).json({
         status: 404,
-        message: "Someone is already using this email !",
+        message: "Someone is already using this email",
       });
     }
 

@@ -2,18 +2,17 @@ import React from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { SERVER_URL } from "../../constant";
+import { SERVER_URL, COLORS } from "../../constant";
 import {
   requestUser,
   receiveUser,
   receiveUserError,
   logoutUser,
 } from "../../reducers/action";
-import { COLORS } from "../../constant";
+import FormInputs from "./FormInputs";
 
 const SignUpForm = () => {
   const userState = useSelector((state) => state.user);
-  const windowState = useSelector((state) => state.window);
 
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
@@ -80,188 +79,46 @@ const SignUpForm = () => {
   }, []);
 
   return (
-    <SignUpContainer>
-      <FormContainer>
-        <SignupForm onSubmit={handleSignup}>
-          <SubSignUpForm
-            style={windowState.width < 600 ? { display: "block" } : null}
-          >
-            <LeftSignUpForm
-              style={windowState.width < 600 ? { marginRight: "0" } : null}
-            >
-              <StyledInput
-                type="text"
-                placeholder="First Name"
-                id="first-name"
-                name="first-name"
-                onChange={(ev) => setFirstName(ev.currentTarget.value)}
-                required
-              />
-              <StyledInput
-                type="text"
-                placeholder="Last Name"
-                id="last-name"
-                name="last-name"
-                onChange={(ev) => setLastName(ev.currentTarget.value)}
-                required
-              />
-              <StyledInput
-                type="tel"
-                id="phone"
-                name="phone"
-                pattern="[0-9]{10}"
-                placeholder="123-456-7890"
-                onChange={(ev) => setPhone(ev.currentTarget.value)}
-                required
-              />
-              <label htmlFor="dob">Date Of Birth</label>
-              <StyledInput
-                type="date"
-                id="dob"
-                name="dob"
-                placeholder={"Date Of Birth"}
-                onChange={(ev) => setDOB(ev.currentTarget.value)}
-                required
-              />
-              <StyledDropdown
-                id="gender"
-                name="gender"
-                onChange={(ev) => setGender(ev.currentTarget.value)}
-              >
-                <option value="" disabled selected hidden>
-                  Select your gender
-                </option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Who knows">I don't know</option>
-              </StyledDropdown>
-            </LeftSignUpForm>
-            <RightSignUpForm
-              style={windowState.width < 600 ? { marginLeft: "0" } : null}
-            >
-              <StyledInput
-                type="text"
-                placeholder="City"
-                id="city"
-                name="city"
-                onChange={(ev) => setCity(ev.currentTarget.value)}
-                required
-              />
-              <StyledInput
-                type="text"
-                placeholder="Address"
-                id="address"
-                name="address"
-                onChange={(ev) => setAddress(ev.currentTarget.value)}
-                required
-              />
-              <StyledInput
-                type="text"
-                placeholder="Zip Code"
-                id="zipcode"
-                name="zipcode"
-                onChange={(ev) => setZipcode(ev.currentTarget.value)}
-                required
-              />
-              <StyledInput
-                type="text"
-                placeholder="Email"
-                id="email"
-                name="email"
-                onChange={(ev) => setEmail(ev.currentTarget.value)}
-                required
-              />
-              <StyledInput
-                type="password"
-                placeholder="Password"
-                id="password"
-                name="password"
-                minlength="8"
-                pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"
-                onChange={(ev) => setPassword(ev.currentTarget.value)}
-                required
-              />
-              <PasswordConstraint>
-                <ul>
-                  <li>At least 8 characters</li>
-                  <li>1 uppercase letter, 1 lowercase letter and 1 number</li>
-                  <li>can contain a special character</li>
-                </ul>
-              </PasswordConstraint>
-              <StyledInput
-                type="password"
-                placeholder="Confirm Password"
-                onChange={(ev) => setConfirmPassword(ev.currentTarget.value)}
-                required
-              />
-            </RightSignUpForm>
-          </SubSignUpForm>
-          <SignUpButton type="submit">Register</SignUpButton>
-          {userState.status === "error" ? (
-            <ErrorSubmitMessage>{userState.errorMessage}</ErrorSubmitMessage>
-          ) : null}
-        </SignupForm>
-      </FormContainer>
-    </SignUpContainer>
+    <SignupForm onSubmit={handleSignup}>
+      <FormInputs
+        setFirstName={setFirstName}
+        setLastName={setLastName}
+        setPhone={setPhone}
+        setCity={setCity}
+        setDOB={setDOB}
+        setGender={setGender}
+        setAddress={setAddress}
+        setZipcode={setZipcode}
+        setEmail={setEmail}
+        setPassword={setPassword}
+        setConfirmPassword={setConfirmPassword}
+      />
+      <SignUpButton type="submit">Register</SignUpButton>
+      {userState.status === "error" && (
+        <ErrorSubmitMessage>{userState.errorMessage}</ErrorSubmitMessage>
+      )}
+    </SignupForm>
   );
 };
 
 const SignupForm = styled.form`
   display: flex;
   flex-direction: column;
-  width: 80%;
-`;
-const SignUpContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  margin-top: 50px;
+  justify-content: center;
   align-items: center;
   width: 100%;
 `;
-const FormContainer = styled.div`
-  margin-top: 50px;
-  width: 100%;
-  display: flex;
-  flex-direction: folumn;
-  justify-content: center;
-`;
-const PasswordConstraint = styled.div``;
 const ErrorSubmitMessage = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 50px;
+  width: 50%;
   color: ${COLORS.errorRed};
   border: 1px solid ${COLORS.errorRed};
+  border-radius: 5px;
   margin: 0 270px 0 270px;
-`;
-const StyledDropdown = styled.select`
-  background-color: ${COLORS.mediumGray};
-  border: none;
-  border-bottom: 2px solid ${COLORS.orange};
-  border-radius: 5px;
-  padding: 10px 20px;
-  margin-bottom: 20px;
-  color: ${COLORS.beige};
-`;
-const StyledInput = styled.input`
-  background-color: ${COLORS.mediumGray};
-  border: none;
-  border-bottom: 2px solid ${COLORS.orange};
-  border-radius: 5px;
-  padding: 10px 20px;
-  margin-bottom: 20px;
-
-  &,
-  select,
-  textarea {
-    color: ${COLORS.beige};
-  }
-  &:focus {
-    outline: none;
-  }
-  &::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-  }
 `;
 const SignUpButton = styled.button`
   padding: 15px;
@@ -270,6 +127,7 @@ const SignUpButton = styled.button`
   border: 1px solid ${COLORS.orange};
   font-weight: bold;
   font-size: 2em;
+  width: 50%;
   background-color: ${COLORS.darkGray};
   color: ${COLORS.orange};
   transition: all 0.3s;
@@ -279,22 +137,6 @@ const SignUpButton = styled.button`
     color: ${COLORS.lightGray};
     border: 1px solid ${COLORS.lightGray};
   }
-`;
-const LeftSignUpForm = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-  margin-right: 10px;
-`;
-const RightSignUpForm = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin-left: 10px;
-`;
-const SubSignUpForm = styled.div`
-  display: flex;
 `;
 
 export default SignUpForm;
