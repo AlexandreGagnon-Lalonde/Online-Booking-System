@@ -19,7 +19,6 @@ const PORT = 1234;
 const {
   createUser,
   getUser,
-  updateUser,
   getAllWorkouts,
   getWorkout,
   postWorkout,
@@ -77,10 +76,9 @@ express()
   .patch("/api/sendmessage", sendMessage)
   .patch("/api/editmessage", editMessage)
   .patch("/api/deletemessage", deleteMessage)
-  .patch("/api/updateuser/:param/:value", updateUser)
   .patch("/api/bookclass/:classId", bookClass)
   .patch("/api/unbookclass/:classId", unbookClass)
-  .patch('/api/postworkout', postWorkout)
+  .patch("/api/postworkout", postWorkout)
 
   .delete("/api/suggestion/delete/:id", deleteSuggestion)
 

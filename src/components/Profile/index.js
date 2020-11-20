@@ -37,7 +37,6 @@ const Profile = () => {
   );
 
   React.useEffect(() => {
-    console.log(workoutState.status);
     if (!otherUser || currentProfileId !== otherUser._id) {
       dispatch(requestUser());
 

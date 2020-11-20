@@ -82,49 +82,15 @@ const getUser = async (req, res) => {
   client.close();
 };
 
-const updateUser = async (req, res) => {
-  const client = await MongoClient(MONGO_URI, options);
-
-  // const { userId, field, updatedField } = req.body;
-  try {
-    await client.connect();
-
-    const db = client.db("online-booking-system");
-
-    const query = { _id: userId };
-
-    const newValue = {
-      $set: {
-        [field]: updatedField,
-      },
-    };
-
-    const user = await db.collection("users").updateOne(query, newValue);
-    assert.equal(1, user.matchedCount);
-    assert.equal(1, user.modifiedCount);
-
-    res.status(200).json({
-      status: 200,
-      _id: userId,
-      message: updatedField,
-    });
-  } catch (err) {
-    res.status(500).json({ status: 500, message: err.message });
-  }
-  client.close();
-};
-
 const sendMessage = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
 
   const {
-    dateId,
     currentUserId,
     otherUserId,
     currentUserName,
     otherUserName,
     message,
-    date,
   } = req.body;
   try {
     await client.connect();
@@ -896,14 +862,14 @@ const deleteComment = async (req, res) => {
     const todayClass = await db.collection("classes").findOne({ _id });
 
     const commentQuery = { _id };
-    console.log(todayClass.comments);
+
     todayClass.comments.map((comment) => {
       if (comment.commentId === commentId) {
         comment.status = "deleted";
       }
       return comment;
     });
-    console.log(todayClass.comments);
+
     const commentEditedValue = {
       $set: {
         comments: todayClass.comments,
@@ -956,7 +922,6 @@ const getComments = async (req, res) => {
 module.exports = {
   createUser,
   getUser,
-  updateUser,
   sendMessage,
   editMessage,
   deleteMessage,
