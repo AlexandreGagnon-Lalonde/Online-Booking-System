@@ -1,20 +1,19 @@
 import React from "react";
 import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import StyledWrapper from "./CalendarStyles";
-import { SERVER_URL } from "../../constant";
-import { COLORS } from "../../constant";
+import CalendarDisplayCommand from "./CalendarDisplayCommand";
+import CalendarModal from "./CalendarModal";
+import { SERVER_URL, COLORS, eventArray, eventFormat } from "../../constant";
+import { useSelector, useDispatch } from "react-redux";
 import {
   receiveCalendar,
   receiveCalendarError,
   requestCalendar,
 } from "../../reducers/action";
-import CalendarDisplayCommand from "./CalendarDisplayCommand";
-import CalendarModal from "./CalendarModal";
 
 const Calendar = (props) => {
   const calendarState = useSelector((state) => state.calendar);
@@ -27,21 +26,12 @@ const Calendar = (props) => {
   });
   const [firstDayOfCalendar, setFirstDayOfCalendar] = React.useState(null);
 
-  const dispatch = useDispatch();
-
   const { useRef } = React;
-
   const calendarDisplayRef = useRef();
+  const dispatch = useDispatch();
 
   const calendarDisplay = calendarState.calendarDisplay;
   const calendarData = calendarState.calendar;
-
-  const eventFormat = {
-    hour: "2-digit",
-    minute: "2-digit",
-    meridiem: false,
-    hour12: false,
-  };
 
   const handleDateChange = (arg) => {
     const firstDayExist = firstDayOfCalendar
@@ -93,111 +83,6 @@ const Calendar = (props) => {
       classSchedule,
     });
   };
-  
-  const eventArray = [
-    {
-      title: "Class",
-      startTime: "6:00",
-      endTime: "7:00",
-      daysOfWeek: [1, 2, 3, 4, 5],
-    },
-    {
-      title: "Class",
-      startTime: "7:00",
-      endTime: "8:00",
-      daysOfWeek: [1, 2, 3, 4, 5],
-    },
-    {
-      title: "Class",
-      startTime: "8:00",
-      endTime: "9:00",
-      daysOfWeek: [1, 2, 3, 4, 5],
-    },
-    {
-      title: "Class",
-      startTime: "9:00",
-      endTime: "10:00",
-      daysOfWeek: [1, 2, 3, 4, 5],
-    },
-    {
-      title: "Open Gym",
-      startTime: "10:00",
-      endTime: "12:00",
-      daysOfWeek: [1, 2, 3, 4, 5],
-    },
-    {
-      title: "Class",
-      startTime: "12:00",
-      endTime: "13:00",
-      daysOfWeek: [1, 2, 3, 4, 5],
-    },
-    {
-      title: "Open Gym",
-      startTime: "13:00",
-      endTime: "16:00",
-      daysOfWeek: [1, 2, 3, 4, 5],
-    },
-    {
-      title: "Class",
-      startTime: "16:00",
-      endTime: "17:00",
-      daysOfWeek: [1, 2, 3, 4, 5],
-    },
-    {
-      title: "Class",
-      startTime: "17:00",
-      endTime: "18:00",
-      daysOfWeek: [1, 2, 3, 4, 5],
-    },
-    {
-      title: "Class",
-      startTime: "18:00",
-      endTime: "19:00",
-      daysOfWeek: [1, 2, 3, 4, 5],
-    },
-    {
-      title: "Class",
-      startTime: "19:00",
-      endTime: "20:00",
-      daysOfWeek: [1, 2, 3, 4, 5],
-    },
-    {
-      title: "Class",
-      startTime: "20:00",
-      endTime: "21:00",
-      daysOfWeek: [1, 2, 3, 4, 5],
-    },
-    {
-      title: "Specialty Class",
-      startTime: "8:00",
-      endTime: "9:00",
-      daysOfWeek: [0, 6],
-    },
-    {
-      title: "Class",
-      startTime: "9:00",
-      endTime: "10:00",
-      daysOfWeek: [0, 6],
-    },
-    {
-      title: "Class",
-      startTime: "10:00",
-      endTime: "11:00",
-      daysOfWeek: [0, 6],
-    },
-    {
-      title: "Class",
-      startTime: "11:00",
-      endTime: "12:00",
-      daysOfWeek: [0, 6],
-    },
-    {
-      title: "Open Gym",
-      startTime: "12:00",
-      endTime: "15:00",
-      daysOfWeek: [0, 6],
-    },
-  ];
 
   React.useEffect(() => {
     calendarDisplayRef.current.getApi().changeView(calendarDisplay);
